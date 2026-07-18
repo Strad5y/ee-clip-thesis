@@ -1,0 +1,11 @@
+.venv/
+data/
+__pycache__/
+*.pyc
+.idea/
+*.parquet
+*.tif
+*.tiff
+*.npy
+*.osm.pbf
+*.cache

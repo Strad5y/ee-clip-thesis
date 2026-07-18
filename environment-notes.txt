@@ -1,0 +1,13 @@
+pyrosm
+geopandas
+rasterio
+exactextract
+shapely
+pyarrow
+pandas
+numpy
+tqdm
+requests
+geotessera
+torch
+sentence-transformers
