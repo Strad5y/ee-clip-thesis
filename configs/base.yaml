@@ -1,0 +1,28 @@
+# Basis-Template. Backbone und Ablation sind Parameter, KEIN Config-pro-Skript-Fork
+# (settled decision, CLAUDE.md: ein train.py, per Config gesteuert).
+# Konkrete Instanzen: siehe tessera_v1.yaml, ae_v1.yaml.
+
+backbone: tessera   # tessera (128-dim) | ae (64-dim) - settled: separate Two-Tower-Modelle pro Backbone
+ablation: v1         # v1 | v2 | v3 (siehe build_ablation_sets.py) - V2/V3 brauchen den Crosswalk, aktuell nur v1 nutzbar
+
+ee_dim: 128
+text_dim: 1024       # Qwen3-Embedding-4B, MRL-Truncation 2560->1024 (settled decision)
+latent_dim: 256       # shared latent dim d=256 (settled decision)
+hidden_dim: 256
+dropout: 0.1
+
+data:
+  pairs_path: data/processed/pairs_tessera.parquet
+  text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
+
+train:
+  batch_size: 256
+  lr: 1.0e-4
+  weight_decay: 0.01
+  epochs: 20
+  device: cpu
+  coverage_sampling: true
+
+loss:
+  init_t: 10.0
+  init_b: -10.0

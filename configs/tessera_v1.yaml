@@ -1,0 +1,24 @@
+backbone: tessera
+ablation: v1
+
+ee_dim: 128
+text_dim: 1024
+latent_dim: 256
+hidden_dim: 256
+dropout: 0.1
+
+data:
+  pairs_path: data/processed/pairs_tessera.parquet
+  text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
+
+train:
+  batch_size: 256
+  lr: 1.0e-4
+  weight_decay: 0.01
+  epochs: 20
+  device: cpu
+  coverage_sampling: true
+
+loss:
+  init_t: 10.0
+  init_b: -10.0
