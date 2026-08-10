@@ -1,0 +1,58 @@
+# class_table.py  – laedt die gefilterte Klassenliste und haengt Labels an POIs
+from pathlib import Path
+import pandas as pd
+from openpyxl import load_workbook
+
+BASE_COLS = {"key", "value", "keep", "note"}  # alles andere gilt als Label-Spalte
+
+def load_class_table(xlsx_path: str | Path, name: str = "Table_True") -> pd.DataFrame:
+    """Liest 'Table_True' – ob Blatt oder Excel-Tabellenobjekt – und gibt nur keep=True zurueck."""
+    xlsx_path = Path(xlsx_path)
+    try:                                   # Fall A: es ist ein Arbeitsblatt
+        df = pd.read_excel(xlsx_path, sheet_name=name)
+    except ValueError:                     # Fall B: es ist ein benanntes Tabellenobjekt
+        wb = load_workbook(xlsx_path, data_only=True)
+        for ws in wb.worksheets:
+            if name in ws.tables:
+                ref = ws.tables[name].ref            # z.B. "A1:E276"
+                cells = ws[ref]
+                header = [c.value for c in cells[0]]
+                rows = [[c.value for c in row] for row in cells[1:]]
+                df = pd.DataFrame(rows, columns=header)
+                break
+        else:
+            raise ValueError(f"'{name}' weder als Blatt noch als Tabelle gefunden")
+
+    df.columns = [str(c).strip() for c in df.columns]
+
+    # keep robust normalisieren (Bool ODER Text 'WAHR'/'FALSCH' aus Excel-Handedits)
+    if "keep" in df.columns:
+        df["keep"] = df["keep"].astype(str).str.upper().isin(["TRUE", "WAHR", "1"])
+        df = df[df["keep"]].copy()
+
+    # key/value saeubern (fuer sauberen Merge)
+    for c in ("key", "value"):
+        df[c] = df[c].astype(str).str.strip()
+
+    df = df.drop_duplicates(subset=["key", "value"]).reset_index(drop=True)
+    return df
+
+
+def attach_labels(poi_long: pd.DataFrame, class_df: pd.DataFrame) -> pd.DataFrame:
+    """Inner-Join auf (key,value): filtert POI-Tags auf die behaltenen Klassen UND haengt deren Labels an."""
+    label_cols = [c for c in class_df.columns if c not in BASE_COLS]  # feinlabel/hilucs_*/class_qid – was da ist
+    keep_map = class_df[["key", "value", *label_cols]].copy()
+
+    poi = poi_long.copy()
+    poi["key"] = poi["key"].astype(str).str.strip()
+    poi["value"] = poi["value"].astype(str).str.strip()
+
+    merged = poi.merge(keep_map, on=["key", "value"], how="inner")  # inner => nicht-behaltene Tags fallen raus
+    return merged
+
+
+if __name__ == "__main__":
+    cls = load_class_table("data/OSM_Classes_final.xlsx")
+    print(f"{len(cls)} behaltene Klassen | Label-Spalten: "
+          f"{[c for c in cls.columns if c not in BASE_COLS]}")
+    print(cls.head())

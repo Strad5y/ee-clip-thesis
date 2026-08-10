@@ -121,7 +121,14 @@ def join_pois_to_raster(gdf: gpd.GeoDataFrame, raster_path, id_col=ID_COL, carry
 def main():
     print(f"Lese POIs: {POIS_IN}")
     gdf = gpd.read_parquet(POIS_IN)
-    print(f"  {len(gdf)} POIs, Typen: {dict(gdf.geometry.geom_type.value_counts())}")
+
+    # Geometrien pro poi_id deduplizieren: das Long-Format enthaelt mehrere Tag-Zeilen
+    # je poi_id (gleiche Geometrie). Fuer den Join zaehlt nur die eindeutige Geometrie;
+    # die Tags (key/value) werden erst NACH dem Join separat ueber poi_id gemergt.
+    n_raw = len(gdf)
+    gdf = gdf.drop_duplicates(subset=ID_COL).reset_index(drop=True)
+    print(f"  {n_raw} Tag-Zeilen -> {len(gdf)} eindeutige POI-Geometrien")
+    print(f"  Typen: {dict(gdf.geometry.geom_type.value_counts())}")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
