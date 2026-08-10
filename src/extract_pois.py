@@ -28,8 +28,11 @@ def extract(bbox, pbf):
         gdf["key"] = key
         gdf["value"] = gdf[key].astype(str)
         gdf["poi_id"] = gdf["osm_type"].astype(str) + "/" + gdf["id"].astype(str)
+        # "name" ist pro poi_id konstant (id_var), keine eigene key/value-Zeile -
+        # manche Keys (z.B. landuse) liefern gar keine "name"-Spalte von pyrosm
+        gdf["name"] = gdf["name"] if "name" in gdf.columns else pd.NA
 
-        frames.append(gdf[["poi_id", "key", "value", "geometry"]])
+        frames.append(gdf[["poi_id", "key", "value", "name", "geometry"]])
         print(f"  {key}: {len(gdf)} POIs")
 
     out = gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), crs="EPSG:4326")
