@@ -4,6 +4,7 @@ import pandas as pd
 from openpyxl import load_workbook
 
 BASE_COLS = {"key", "value", "keep", "note"}  # alles andere gilt als Label-Spalte
+QID_PATTERN = r"(Q\d+)"  # zum Bereinigen von Excel-Tippfehlern wie "Q1139861)"
 
 def load_class_table(xlsx_path: str | Path, name: str = "Table_True") -> pd.DataFrame:
     """Liest 'Table_True' – ob Blatt oder Excel-Tabellenobjekt – und gibt nur keep=True zurueck."""
@@ -33,6 +34,16 @@ def load_class_table(xlsx_path: str | Path, name: str = "Table_True") -> pd.Data
     # key/value saeubern (fuer sauberen Merge)
     for c in ("key", "value"):
         df[c] = df[c].astype(str).str.strip()
+
+    # wikidata saeubern: Excel enthaelt vereinzelt Tippfehler wie "Q1139861)" oder
+    # fuehrende Leerzeichen - QID-Substring extrahieren, sonst schlagen spaetere
+    # wikidata-Merges (Wikidata-API, build_poi_text.py) fuer diese Zeilen still fehl
+    if "wikidata" in df.columns:
+        cleaned = df["wikidata"].astype(str).str.strip().str.extract(QID_PATTERN, expand=False)
+        n_bad = int((df["wikidata"].notna() & cleaned.isna()).sum())
+        if n_bad > 0:
+            print(f"  Warnung: {n_bad} 'wikidata'-Werte ohne gueltiges QID-Muster (Q\\d+), auf NaN gesetzt")
+        df["wikidata"] = cleaned
 
     df = df.drop_duplicates(subset=["key", "value"]).reset_index(drop=True)
     return df
