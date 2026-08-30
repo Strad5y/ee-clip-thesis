@@ -7,6 +7,10 @@ latent_dim: 256
 hidden_dim: 256
 dropout: 0.1
 
+# AlphaEarth ist bereits L2-normalisiert - No-Op, aber explizit gesetzt (nicht durch
+# Weglassen); ein Z-Score wuerde die Einheitsnorm zerstoeren. Siehe normalize.py.
+normalization: none
+
 data:
   pairs_path: data/processed/pairs_ae.parquet   # TODO: entsteht erst, sobald ein AlphaEarth-Raster vorliegt
   text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py

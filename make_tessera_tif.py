@@ -1,14 +1,23 @@
 import argparse
 from pathlib import Path
 
+import geopandas as gpd
 import rasterio
 import numpy as np
 from geotessera import GeoTessera
 
-# Greater London als Standard-BBox (w, s, e, n) — per --bbox überschreibbar,
-# z.B. für einen Mini-Testlauf auf einer kleinen Teilregion.
-BBOX = (-0.51, 51.28, 0.33, 51.69)
+import config as cfg
+
 OUT = "data/ee/tessera_london.tif"
+
+
+def default_bbox() -> tuple:
+    """WGS84-BBox aus der London-AOI-Geometrie (data/aoi/london.gpkg, siehe src/extract_aoi.py)
+    abgeleitet - keine hartcodierte Bounding Box mehr."""
+    aoi_path = cfg.AOI_DIR / "london.gpkg"
+    gdf = gpd.read_file(aoi_path).to_crs("EPSG:4326")
+    minx, miny, maxx, maxy = gdf.total_bounds
+    return (minx, miny, maxx, maxy)
 
 
 def progress(current, total, status):
@@ -17,14 +26,15 @@ def progress(current, total, status):
 
 def main():
     parser = argparse.ArgumentParser(description="Tessera-Mosaik für eine BBox als GeoTIFF speichern.")
-    parser.add_argument("--bbox", type=float, nargs=4, default=list(BBOX),
-                         metavar=("MIN_LON", "MIN_LAT", "MAX_LON", "MAX_LAT"))
-    parser.add_argument("--year", type=int, default=2024)
+    parser.add_argument("--bbox", type=float, nargs=4, default=None,
+                         metavar=("MIN_LON", "MIN_LAT", "MAX_LON", "MAX_LAT"),
+                         help="Default: aus data/aoi/london.gpkg abgeleitet (siehe default_bbox())")
+    parser.add_argument("--year", type=int, default=2025)
     parser.add_argument("--crs", default="EPSG:32630", help="Ziel-CRS (default: UTM 30N für London)")
     parser.add_argument("--out", default=OUT)
     args = parser.parse_args()
 
-    bbox = tuple(args.bbox)
+    bbox = tuple(args.bbox) if args.bbox is not None else default_bbox()
     gt = GeoTessera()
 
     n_tiles = gt.embeddings_count(bbox, year=args.year)

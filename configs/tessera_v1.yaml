@@ -7,9 +7,13 @@ latent_dim: 256
 hidden_dim: 256
 dropout: 0.1
 
+# TESSERA: kanalweiser Z-Score, gefittet auf dem Trainings-Split (siehe normalize.py)
+normalization: zscore
+
 data:
   pairs_path: data/processed/pairs_tessera.parquet
   text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
+  norm_stats_path: data/processed/norm_stats_tessera.json
 
 train:
   batch_size: 256

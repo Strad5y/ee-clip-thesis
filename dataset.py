@@ -2,8 +2,9 @@
 dataset.py
 
 PyTorch Dataset fuer die Two-Tower-Trainingspaare: EE-Pixel-Embedding (aus spatial_join.py) x
-Text-Embedding (aus compute_text_embeddings.py), gejoint ueber poi_id. coverage wird sowohl als
-Sampling-Gewicht (WeightedRandomSampler) als auch als Loss-Gewicht (siehe losses.py) vorgesehen.
+Text-Embedding (aus compute_text_embeddings.py), gejoint ueber poi_id. Sampling-Gewicht ist
+coverage / n_pixels_poi (WeightedRandomSampler) - macht das Gewicht naeherungsweise unabhaengig
+von der Polygongroesse. Der Loss (losses.py) ist ungewichtet.
 """
 import tempfile
 from pathlib import Path
@@ -30,6 +31,8 @@ class PairDataset(Dataset):
         self.ee = np.stack(merged["embedding_ee"].to_numpy()).astype(np.float32)
         self.text = np.stack(merged["embedding_text"].to_numpy()).astype(np.float32)
         self.coverage = merged["coverage"].to_numpy(dtype=np.float32)
+        self.n_pixels_poi = merged["n_pixels_poi"].to_numpy(dtype=np.float32)
+        self.sample_weight = self.coverage / self.n_pixels_poi
         self.poi_id = merged[id_col].to_numpy()
 
     def __len__(self) -> int:
@@ -45,8 +48,9 @@ class PairDataset(Dataset):
 
 
 def make_coverage_sampler(dataset: PairDataset) -> WeightedRandomSampler:
-    """coverage als Sampling-Gewicht: Paare mit hoher POI-Pixel-Ueberdeckung werden haeufiger gezogen."""
-    weights = torch.from_numpy(dataset.coverage.copy())
+    """coverage / n_pixels_poi als Sampling-Gewicht: haelt den Gesamtzug pro POI naeherungsweise
+    unabhaengig von dessen Pixelzahl (Polygongroesse), statt grosse Polygone zu ueberrepraesentieren."""
+    weights = torch.from_numpy(dataset.sample_weight.copy())
     return WeightedRandomSampler(weights=weights, num_samples=len(dataset), replacement=True)
 
 
@@ -62,6 +66,7 @@ def _smoke_test():
         "row": rng.integers(0, 100, n),
         "col": rng.integers(0, 100, n),
         "coverage": rng.random(n).astype(np.float32),
+        "n_pixels_poi": rng.integers(1, 5, n).astype(np.float32),
         "embedding": list(rng.standard_normal((n, ee_dim)).astype(np.float32)),
     })
     text = pd.DataFrame({

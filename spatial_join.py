@@ -107,6 +107,11 @@ def join_pois_to_raster(gdf: gpd.GeoDataFrame, raster_path, id_col=ID_COL, carry
     if len(pairs) == 0:
         return pairs
 
+    # Pixelzahl je POI (fuer das Sampling-Gewicht coverage / n_pixels_poi, siehe dataset.py):
+    # macht das Gewicht naeherungsweise unabhaengig von der Polygongroesse, statt grosse
+    # Polygone (viele Pixel) im Sampler ueberzurepraesentieren.
+    pairs["n_pixels_poi"] = pairs.groupby(id_col)[id_col].transform("size")
+
     # Embedding-Werte je Pixel nachschlagen (ein voller Array-Read; fuer die Mini-Region
     # vertretbar, fuer grosse Regionen spaeter durch windowed reads ersetzen)
     with rasterio.open(raster_path) as src:

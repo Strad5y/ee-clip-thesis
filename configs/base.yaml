@@ -11,9 +11,14 @@ latent_dim: 256       # shared latent dim d=256 (settled decision)
 hidden_dim: 256
 dropout: 0.1
 
+# zscore (TESSERA) | none (AlphaEarth, bereits L2-normalisiert) - siehe normalize.py.
+# Stats werden AUSSCHLIESSLICH auf dem Trainings-Split gefittet, nie auf dem Gesamtdatensatz.
+normalization: zscore
+
 data:
   pairs_path: data/processed/pairs_tessera.parquet
   text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
+  norm_stats_path: data/processed/norm_stats_tessera.json   # nur bei normalization: zscore genutzt
 
 train:
   batch_size: 256

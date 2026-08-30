@@ -67,14 +67,14 @@ Diese Entscheidungen sind settled und stehen in `CLAUDE.md`. Sie gelten für all
 ## 2. Phase 2 — AlphaEarth beschaffen & joinen
 
 ### 2.1 AlphaEarth-COGs herunterladen (empfohlener Weg: GCS)
-- **Ziel:** AlphaEarth Satellite Embedding V1 (Annual), Jahr **2024**, 64-dim, 10 m für beide Studienregionen lokal als COG.
+- **Ziel:** AlphaEarth Satellite Embedding V1 (Annual), Jahr **2025**, 64-dim, 10 m für beide Studienregionen lokal als COG.
 - **Warum GCS statt GEE-Export:** Öffentlicher Bucket `gs://alphaearth_foundations`, seit Juli 2026 *provider-pays* (kein Egress-Kostenrisiko), COG-Format → identisch zur bestehenden rasterio/exactextract-TESSERA-Pipeline, kein GEE-Export-Job/Quota nötig.
 - **Umsetzung:**
   1. `gcloud` CLI (ARM64-Linux, läuft auf DGX Spark) oder `gsutil`; ggf. `gcloud auth login`.
   2. Bucket-Struktur: `Jahr/UTM-Zone/…` (Top-Level pro Jahr, darunter 120 UTM-Zonen-Unterordner).
      - **Niedersachsen:** UTM-Zone **32N**.
      - **Greater London:** liegt am 0-Meridian → **30N und 31N** (beide Zonen ziehen).
-  3. Nur die Kacheln laden, die die jeweilige Region-Bounding-Box schneiden (`gcloud storage cp` bzw. gezieltes Listing), nach `data/raw/alphaearth/2024/`.
+  3. Nur die Kacheln laden, die die jeweilige Region-Bounding-Box schneiden (`gcloud storage cp` bzw. gezieltes Listing), nach `data/raw/alphaearth/2025/`.
   4. Alternativen falls GCS klemmt: EE-ImageCollection `GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL` + `Export.image.toDrive/toCloudStorage` (dein ursprünglich notierter Weg); oder AWS Registry of Open Data Mirror (`aef-source`, Source Cooperative).
 - **Erwarteter Output:** Lokale COGs, 64 Bänder, 10 m, die beide Regionen abdecken.
 - **Abnahme:** `rasterio` liest Datei, `count == 64`, CRS = passende UTM-Zone, Auflösung 10 m. Attribution im Thesis-Datenkapitel vermerken: „The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind."

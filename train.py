@@ -19,6 +19,7 @@ from torch.utils.data import DataLoader, Subset
 from dataset import PairDataset
 from losses import SigLIPLoss
 from model import TwoTower
+from normalize import NONE, VALID_MODES, ZSCORE, apply_zscore, fit_zscore, save_stats
 
 CHECKPOINT_DIR = Path("checkpoints")
 
@@ -44,11 +45,31 @@ def split_train_val(ds: PairDataset, val_frac: float, seed: int = 0):
     return Subset(ds, train_idx), Subset(ds, val_idx), train_idx
 
 
+def apply_normalization(ds: PairDataset, train_idx: np.ndarray, cfg: dict) -> None:
+    """Normalisiert ds.ee IN-PLACE, Modus ueber cfg['normalization'] (siehe normalize.py) -
+    backbone-abhaengig konfigurierbar, nicht an dieser Stelle hartcodiert. Stats werden
+    AUSSCHLIESSLICH auf ds.ee[train_idx] gefittet (nie auf dem Gesamtdatensatz, sonst Leakage)
+    und - falls 'zscore' - als Artefakt gespeichert, damit Val/Test/Inferenz dieselbe
+    Statistik verwenden."""
+    mode = cfg.get("normalization", NONE)
+    if mode not in VALID_MODES:
+        raise ValueError(f"Unbekannter normalization-Modus: {mode!r} (erwartet {VALID_MODES})")
+
+    if mode == NONE:
+        return  # No-Op: z.B. AlphaEarth ist bereits L2-normalisiert (siehe normalize.py)
+
+    stats = fit_zscore(ds.ee[train_idx])
+    stats_path = cfg["data"].get("norm_stats_path")
+    if stats_path:
+        save_stats(stats, stats_path)
+    ds.ee = apply_zscore(ds.ee, stats)
+
+
 def make_subset_coverage_sampler(ds: PairDataset, train_idx: np.ndarray):
-    """WeightedRandomSampler ueber die coverage-Werte NUR der Trainings-Teilmenge - Gewichte
+    """WeightedRandomSampler ueber coverage / n_pixels_poi NUR der Trainings-Teilmenge - Gewichte
     muessen relativ zu den lokalen Subset-Indizes (0..len(train_idx)-1) stehen, sonst zieht
     der Sampler falsch gewichtete Beispiele."""
-    weights = torch.from_numpy(ds.coverage[train_idx].copy())
+    weights = torch.from_numpy(ds.sample_weight[train_idx].copy())
     return torch.utils.data.WeightedRandomSampler(weights=weights, num_samples=len(train_idx), replacement=True)
 
 
@@ -61,9 +82,8 @@ def evaluate(model, criterion, dl, device) -> float | None:
     for batch in dl:
         ee = batch["ee_embedding"].to(device)
         text = batch["text_embedding"].to(device)
-        coverage = batch["coverage"].to(device)
         ee_z, text_z = model(ee, text)
-        total += criterion(ee_z, text_z, weights=coverage).item()
+        total += criterion(ee_z, text_z).item()
         n_batches += 1
     model.train()
     return total / n_batches
@@ -81,6 +101,7 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
 
     ds = PairDataset(cfg["data"]["pairs_path"], cfg["data"]["text_embeddings_path"])
     train_ds, val_ds, train_idx = split_train_val(ds, cfg["train"].get("val_frac", 0.1))
+    apply_normalization(ds, train_idx, cfg)
 
     sampler = make_subset_coverage_sampler(ds, train_idx) if cfg["train"].get("coverage_sampling", True) else None
     train_dl = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler, shuffle=(sampler is None))
@@ -96,10 +117,9 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
         for batch in train_dl:
             ee = batch["ee_embedding"].to(device)
             text = batch["text_embedding"].to(device)
-            coverage = batch["coverage"].to(device)
 
             ee_z, text_z = model(ee, text)
-            loss = criterion(ee_z, text_z, weights=coverage)
+            loss = criterion(ee_z, text_z)
 
             optimizer.zero_grad()
             loss.backward()
@@ -139,13 +159,12 @@ def smoke_test() -> None:
 
     ee = torch.randn(batch_size, ee_dim)
     text = torch.randn(batch_size, text_dim)
-    coverage = torch.rand(batch_size)
 
     ee_z, text_z = model(ee, text)
     assert ee_z.shape == (batch_size, latent_dim)
     assert torch.allclose(ee_z.norm(dim=-1), torch.ones(batch_size), atol=1e-5)
 
-    loss = criterion(ee_z, text_z, weights=coverage)
+    loss = criterion(ee_z, text_z)
     assert loss.ndim == 0
 
     loss.backward()

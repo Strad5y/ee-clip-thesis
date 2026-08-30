@@ -1,5 +1,4 @@
 .venv/
-data/
 __pycache__/
 *.pyc
 .idea/
@@ -9,3 +8,14 @@ __pycache__/
 *.npy
 *.osm.pbf
 *.cache
+
+data/*
+!data/raw/
+data/raw/*
+!data/raw/alphaearth/
+data/raw/alphaearth/*
+!data/raw/alphaearth/ae_index_*.gpkg
+!data/raw/alphaearth/needed_*.txt
+!data/raw/alphaearth/tiles_*.txt
+!data/aoi/
+!data/splits/

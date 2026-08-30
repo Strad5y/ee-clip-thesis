@@ -1,0 +1,9 @@
+# AOI-Quellen (siehe src/extract_aoi.py)
+#
+# Snapshot-Datum ist die Dateisystem-mtime der .osm.pbf-Datei (Download-Zeitpunkt),
+# NICHT der exakte OSM-Replication-Timestamp aus dem PBF-Header - dafuer war kein
+# osmium/pyosmium im eeclip-Env verfuegbar. Fuer die Thesis-Zitation ggf. den echten
+# Header-Timestamp separat nachtragen.
+
+london: greater_london-latest.osm.pbf (mtime 2026-08-08), admin_level=5, name='Greater London', area=1595.5 km²
+niedersachsen: niedersachsen-latest.osm.pbf (mtime 2026-08-08), admin_level=4, name='Niedersachsen', area=53435.9 km²
