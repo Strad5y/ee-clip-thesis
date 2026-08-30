@@ -18,4 +18,5 @@ data/raw/alphaearth/*
 !data/raw/alphaearth/needed_*.txt
 !data/raw/alphaearth/tiles_*.txt
 !data/aoi/
-!data/splits/
+!data/splits/.mcp.json
+.mcp.json
