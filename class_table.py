@@ -63,7 +63,7 @@ def attach_labels(poi_long: pd.DataFrame, class_df: pd.DataFrame) -> pd.DataFram
 
 
 if __name__ == "__main__":
-    cls = load_class_table("data/OSM_Classes_final.xlsx")
+    cls = load_class_table("crosswalk/OSM_Classes_final.xlsx")
     print(f"{len(cls)} behaltene Klassen | Label-Spalten: "
           f"{[c for c in cls.columns if c not in BASE_COLS]}")
     print(cls.head())

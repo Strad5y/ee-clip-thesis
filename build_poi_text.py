@@ -13,7 +13,7 @@ from class_table import attach_labels, load_class_table
 from spatial_join import BACKBONES
 
 POIS_IN = cfg.DATA / "interim" / "pois_london_test_filtered.parquet"
-CLASS_TABLE = cfg.DATA / "OSM_Classes_final.xlsx"
+CLASS_TABLE = cfg.CLASS_TABLE
 QID_DESCRIPTIONS = cfg.DATA / "interim" / "qid_descriptions.parquet"
 POI_TEXT_OUT = cfg.DATA / "interim" / "poi_text.parquet"
 

@@ -14,14 +14,17 @@ data:
   pairs_path: data/processed/pairs_tessera.parquet
   text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
   norm_stats_path: data/processed/norm_stats_tessera.json
+  splits_path: data/splits/splits_london.csv
 
 train:
   batch_size: 256
   lr: 1.0e-4
   weight_decay: 0.01
-  epochs: 20
+  epochs: 100
+  patience: 10   # Early Stopping auf val_loss
   device: cpu
   coverage_sampling: true
+  num_workers: 0   # DGX Spark: unified CPU/GPU-Memory, Worker forken den Prozess - nicht ohne Grund erhoehen
 
 loss:
   init_t: 10.0

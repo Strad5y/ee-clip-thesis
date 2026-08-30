@@ -20,6 +20,7 @@ from dataset import PairDataset
 from losses import SigLIPLoss
 from model import TwoTower
 from normalize import NONE, VALID_MODES, ZSCORE, apply_zscore, fit_zscore, save_stats
+from splits import load_split_assignment, split_indices
 
 CHECKPOINT_DIR = Path("checkpoints")
 
@@ -34,15 +35,14 @@ def build_model(cfg: dict) -> TwoTower:
     )
 
 
-def split_train_val(ds: PairDataset, val_frac: float, seed: int = 0):
-    """Zufaelliger Index-Split; coverage-Sampler (siehe unten) braucht die lokalen
-    Trainings-Indizes, um pro Split die richtigen Gewichte zu ziehen."""
-    n = len(ds)
-    rng = np.random.default_rng(seed)
-    idx = rng.permutation(n)
-    n_val = int(n * val_frac) if val_frac > 0 else 0
-    val_idx, train_idx = idx[:n_val], idx[n_val:]
-    return Subset(ds, train_idx), Subset(ds, val_idx), train_idx
+def spatial_split(ds: PairDataset, splits_path) -> tuple:
+    """Raeumlich geblockter Split (F1, siehe build_splits.py/splits.py) statt zufaelligem
+    Zeilensplit - Gitterzellen wurden vorab einmalig zufaellig auf train/val/test verteilt,
+    POIs erben den Split ihrer Zelle. split_indices() prueft bereits intern, dass die
+    poi_id-Mengen der Splits disjunkt sind (bricht sonst mit AssertionError ab)."""
+    assignment = load_split_assignment(splits_path)
+    idx = split_indices(ds.poi_id, assignment)
+    return Subset(ds, idx["train"]), Subset(ds, idx["val"]), idx["train"], idx["test"]
 
 
 def apply_normalization(ds: PairDataset, train_idx: np.ndarray, cfg: dict) -> None:
@@ -100,18 +100,26 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
     )
 
     ds = PairDataset(cfg["data"]["pairs_path"], cfg["data"]["text_embeddings_path"])
-    train_ds, val_ds, train_idx = split_train_val(ds, cfg["train"].get("val_frac", 0.1))
+    train_ds, val_ds, train_idx, _test_idx = spatial_split(ds, cfg["data"]["splits_path"])
     apply_normalization(ds, train_idx, cfg)
 
+    # num_workers=0 (Default): DGX Spark teilt sich CPU/GPU 128 GB Unified Memory, und
+    # DataLoader-Worker forken den kompletten Prozessstatus (inkl. bereits allokierter
+    # CUDA-/Unified-Memory-Buffer) - >0 Worker sind hier ein reales Speicherrisiko, kein reines
+    # Performance-Detail. Nur bewusst ueber die Config erhoehen, nicht als Default.
+    num_workers = cfg["train"].get("num_workers", 0)
     sampler = make_subset_coverage_sampler(ds, train_idx) if cfg["train"].get("coverage_sampling", True) else None
-    train_dl = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler, shuffle=(sampler is None))
-    val_dl = DataLoader(val_ds, batch_size=cfg["train"]["batch_size"])
+    train_dl = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler,
+                           shuffle=(sampler is None), num_workers=num_workers)
+    val_dl = DataLoader(val_ds, batch_size=cfg["train"]["batch_size"], num_workers=num_workers)
 
     run_name = f"{cfg.get('backbone', 'backbone')}_{cfg.get('ablation', 'v1')}"
     ckpt_dir = checkpoint_dir / run_name
     ckpt_dir.mkdir(parents=True, exist_ok=True)
 
+    patience = cfg["train"].get("patience", 10)
     best_val = float("inf")
+    epochs_no_improve = 0
     for epoch in range(cfg["train"]["epochs"]):
         last_loss = None
         for batch in train_dl:
@@ -141,9 +149,18 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
             "cfg": cfg,
         }
         torch.save(ckpt, ckpt_dir / "last.pt")
-        if val_loss is not None and val_loss < best_val:
-            best_val = val_loss
-            torch.save(ckpt, ckpt_dir / "best.pt")
+
+        if val_loss is not None:
+            if val_loss < best_val:
+                best_val = val_loss
+                epochs_no_improve = 0
+                torch.save(ckpt, ckpt_dir / "best.pt")
+            else:
+                epochs_no_improve += 1
+                if epochs_no_improve >= patience:
+                    print(f"Early Stopping: val_loss seit {patience} Epochen nicht verbessert "
+                          f"(bestes val_loss={best_val:.4f}).")
+                    break
 
     return model
 
