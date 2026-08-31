@@ -86,7 +86,7 @@ def merge_into_pairs(poi_text: pd.DataFrame):
     """Fuer jeden vorhandenen Backbone: text per Inner-Join auf poi_id an pairs_{backbone} haengen."""
     text_map = poi_text[["poi_id", "text"]]
 
-    for name, raster_path in BACKBONES.items():
+    for name in BACKBONES:
         pairs_path = PAIRS_DIR / f"pairs_{name}.parquet"
         if not pairs_path.exists():
             print(f"\n=== {name}: übersprungen (kein {pairs_path.name}) ===")

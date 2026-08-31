@@ -8,8 +8,11 @@ from pyrosm import OSM
 import config as cfg
 
 
-def extract(bbox, pbf):
-    osm = OSM(str(pbf), bounding_box=list(bbox))
+def extract(bbox_or_geom, pbf):
+    # pyrosm.OSM(bounding_box=...) akzeptiert entweder [minx,miny,maxx,maxy] ODER direkt ein
+    # Shapely Polygon/MultiPolygon - list(...) wuerde ein Polygon falsch/gar nicht iterieren
+    bounding_box = list(bbox_or_geom) if isinstance(bbox_or_geom, (list, tuple)) else bbox_or_geom
+    osm = OSM(str(pbf), bounding_box=bounding_box)
     frames = []
 
     for key in cfg.OSM_KEYS:
@@ -47,14 +50,17 @@ def extract(bbox, pbf):
 
 
 if __name__ == "__main__":
-    print("Lese OSM-Daten...")
-    pois = extract(cfg.BBOX_TEST, cfg.PBF_LONDON)
+    aoi = gpd.read_file(cfg.AOI_DIR / "london.gpkg").to_crs("EPSG:4326")
+    aoi_geom = aoi.geometry.iloc[0]  # pyrosm.OSM(bounding_box=...) akzeptiert Polygon/MultiPolygon direkt
+    print(f"Lese OSM-Daten gegen AOI-Polygon (nicht BBOX_TEST): {cfg.AOI_DIR / 'london.gpkg'}")
+    pois = extract(aoi_geom, cfg.PBF_LONDON)
 
     pois["gtype"] = pois.geometry.geom_type
     print()
     print(pois.groupby(["key", "gtype"]).size())
     print()
-    print("Gesamt:", len(pois))
+    print("Gesamt Zeilen:", len(pois))
+    print("Eindeutige poi_id:", pois["poi_id"].nunique())
 
     out = cfg.DATA / "interim" / "pois_london_test.parquet"
     pois.drop(columns=["gtype"]).to_parquet(out)

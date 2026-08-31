@@ -1,0 +1,2 @@
+gs://alphaearth_foundations/satellite_embedding/v1/annual/2025/30N/xv3kz2lbcvqtied12-0000008192-0000000000.tiff
+gs://alphaearth_foundations/satellite_embedding/v1/annual/2025/31N/xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff

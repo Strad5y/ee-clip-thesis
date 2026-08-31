@@ -1,0 +1,96 @@
+=== run_ae_join.py gestartet ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/ae_join_20260831_163752.log
+Chunk-Groesse: 20000
+Lese POIs: /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pois_london_test_filtered.parquet
+  280730 Tag-Zeilen -> 279988 eindeutige POI-Geometrien
+14 Bloecke a maximal 20000 POIs
+Block 1/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 16079/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 3921/20000 POIs zugeordnet)
+Block 1/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0000.parquet
+[Fortschritt] Block 1/14: 20000/279988 POIs, 20000 Paare bisher, verstrichen=0.1 min, geschaetzte Restzeit=1.6 min
+Block 2/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 16885/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 3115/20000 POIs zugeordnet)
+Block 2/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0001.parquet
+[Fortschritt] Block 2/14: 40000/279988 POIs, 40000 Paare bisher, verstrichen=0.2 min, geschaetzte Restzeit=1.4 min
+Block 3/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 17059/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 2941/20000 POIs zugeordnet)
+Block 3/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0002.parquet
+[Fortschritt] Block 3/14: 60000/279988 POIs, 60000 Paare bisher, verstrichen=0.4 min, geschaetzte Restzeit=1.3 min
+Block 4/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 18114/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 1886/20000 POIs zugeordnet)
+Block 4/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0003.parquet
+[Fortschritt] Block 4/14: 80000/279988 POIs, 80000 Paare bisher, verstrichen=0.5 min, geschaetzte Restzeit=1.2 min
+Block 5/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 17576/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 2424/20000 POIs zugeordnet)
+Block 5/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0004.parquet
+[Fortschritt] Block 5/14: 100000/279988 POIs, 100000 Paare bisher, verstrichen=0.6 min, geschaetzte Restzeit=1.1 min
+Block 6/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 18241/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 1759/20000 POIs zugeordnet)
+Block 6/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0005.parquet
+[Fortschritt] Block 6/14: 120000/279988 POIs, 120000 Paare bisher, verstrichen=0.7 min, geschaetzte Restzeit=1.0 min
+Block 7/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 16488/20000 POIs zugeordnet)
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 3512/20000 POIs zugeordnet)
+Block 7/14 fertig: 20000 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0006.parquet
+[Fortschritt] Block 7/14: 140000/279988 POIs, 140000 Paare bisher, verstrichen=0.8 min, geschaetzte Restzeit=0.8 min
+Block 8/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 12218/20000 POIs zugeordnet)
+[Fortschritt] Block 7/14: 140000/279988 POIs, 140000 Paare bisher, verstrichen=1.0 min, geschaetzte Restzeit=1.0 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 7782/20000 POIs zugeordnet)
+[Fortschritt] Block 7/14: 140000/279988 POIs, 140000 Paare bisher, verstrichen=2.0 min, geschaetzte Restzeit=2.0 min
+Block 8/14 fertig: 875651 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0007.parquet
+[Fortschritt] Block 8/14: 160000/279988 POIs, 1015651 Paare bisher, verstrichen=2.2 min, geschaetzte Restzeit=1.7 min
+Block 9/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 17379/20000 POIs zugeordnet)
+[Fortschritt] Block 8/14: 160000/279988 POIs, 1015651 Paare bisher, verstrichen=3.0 min, geschaetzte Restzeit=2.3 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 2621/20000 POIs zugeordnet)
+[Fortschritt] Block 8/14: 160000/279988 POIs, 1015651 Paare bisher, verstrichen=4.0 min, geschaetzte Restzeit=3.0 min
+Block 9/14 fertig: 121732 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0008.parquet
+[Fortschritt] Block 9/14: 180000/279988 POIs, 1137383 Paare bisher, verstrichen=4.1 min, geschaetzte Restzeit=2.3 min
+Block 10/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 12337/20000 POIs zugeordnet)
+[Fortschritt] Block 9/14: 180000/279988 POIs, 1137383 Paare bisher, verstrichen=5.0 min, geschaetzte Restzeit=2.8 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 7663/20000 POIs zugeordnet)
+Block 10/14 fertig: 295609 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0009.parquet
+[Fortschritt] Block 10/14: 200000/279988 POIs, 1432992 Paare bisher, verstrichen=5.9 min, geschaetzte Restzeit=2.4 min
+Block 11/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 16802/20000 POIs zugeordnet)
+[Fortschritt] Block 10/14: 200000/279988 POIs, 1432992 Paare bisher, verstrichen=6.0 min, geschaetzte Restzeit=2.4 min
+[Fortschritt] Block 10/14: 200000/279988 POIs, 1432992 Paare bisher, verstrichen=7.0 min, geschaetzte Restzeit=2.8 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 3198/20000 POIs zugeordnet)
+Block 11/14 fertig: 925248 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0010.parquet
+[Fortschritt] Block 11/14: 220000/279988 POIs, 2358240 Paare bisher, verstrichen=7.9 min, geschaetzte Restzeit=2.1 min
+Block 12/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 17205/20000 POIs zugeordnet)
+[Fortschritt] Block 11/14: 220000/279988 POIs, 2358240 Paare bisher, verstrichen=8.0 min, geschaetzte Restzeit=2.2 min
+[Fortschritt] Block 11/14: 220000/279988 POIs, 2358240 Paare bisher, verstrichen=9.0 min, geschaetzte Restzeit=2.5 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 2795/20000 POIs zugeordnet)
+Block 12/14 fertig: 1458413 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0011.parquet
+[Fortschritt] Block 12/14: 240000/279988 POIs, 3816653 Paare bisher, verstrichen=9.8 min, geschaetzte Restzeit=1.6 min
+Block 13/14: 20000 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 14788/20000 POIs zugeordnet)
+[Fortschritt] Block 12/14: 240000/279988 POIs, 3816653 Paare bisher, verstrichen=10.0 min, geschaetzte Restzeit=1.7 min
+[Fortschritt] Block 12/14: 240000/279988 POIs, 3816653 Paare bisher, verstrichen=11.0 min, geschaetzte Restzeit=1.8 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 5212/20000 POIs zugeordnet)
+Block 13/14 fertig: 827820 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0012.parquet
+[Fortschritt] Block 13/14: 260000/279988 POIs, 4644473 Paare bisher, verstrichen=11.7 min, geschaetzte Restzeit=0.9 min
+Block 14/14: 19988 POIs, starte Join...
+    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 9036/19988 POIs zugeordnet)
+[Fortschritt] Block 13/14: 260000/279988 POIs, 4644473 Paare bisher, verstrichen=12.0 min, geschaetzte Restzeit=0.9 min
+    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 10952/19988 POIs zugeordnet)
+[Fortschritt] Block 13/14: 260000/279988 POIs, 4644473 Paare bisher, verstrichen=13.0 min, geschaetzte Restzeit=1.0 min
+Block 14/14 fertig: 293907 Paare, gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pairs_ae_chunks/chunk_0013.parquet
+[Fortschritt] Block 14/14: 279988/279988 POIs, 4938380 Paare bisher, verstrichen=13.5 min, geschaetzte Restzeit=0.0 min
+
+Merge aller Bloecke...
+  14 Block-Dateien gefunden
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pairs_ae.parquet
+  Zeilen: 4938380
+  Eindeutige poi_id: 279988
+=== run_ae_join.py fertig ===
