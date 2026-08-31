@@ -7,12 +7,18 @@ BASE_COLS = {"key", "value", "keep", "note"}  # alles andere gilt als Label-Spal
 QID_PATTERN = r"(Q\d+)"  # zum Bereinigen von Excel-Tippfehlern wie "Q1139861)"
 
 def load_class_table(xlsx_path: str | Path, name: str = "Table_True") -> pd.DataFrame:
-    """Liest 'Table_True' – ob Blatt oder Excel-Tabellenobjekt – und gibt nur keep=True zurueck."""
+    """Liest 'Table_True' - ob Blatt oder Excel-Tabellenobjekt. Falls keins von beidem
+    existiert, wird als Fallback das einzige Sheet der Datei gelesen (fuer eine bereits
+    kuratierte, flache Klassenliste ohne Table_True-Struktur, z.B. osm_wikidata_keys.xlsx) -
+    nur bei GENAU EINEM Sheet, sonst waere die Auswahl geraten statt explizit. Gibt nur
+    keep=True zurueck, falls eine keep-Spalte vorhanden ist - sonst gelten alle Zeilen als
+    aktiv (die Datei ist dann bereits die kuratierte Liste)."""
     xlsx_path = Path(xlsx_path)
     try:                                   # Fall A: es ist ein Arbeitsblatt
         df = pd.read_excel(xlsx_path, sheet_name=name)
     except ValueError:                     # Fall B: es ist ein benanntes Tabellenobjekt
         wb = load_workbook(xlsx_path, data_only=True)
+        df = None
         for ws in wb.worksheets:
             if name in ws.tables:
                 ref = ws.tables[name].ref            # z.B. "A1:E276"
@@ -21,8 +27,14 @@ def load_class_table(xlsx_path: str | Path, name: str = "Table_True") -> pd.Data
                 rows = [[c.value for c in row] for row in cells[1:]]
                 df = pd.DataFrame(rows, columns=header)
                 break
-        else:
-            raise ValueError(f"'{name}' weder als Blatt noch als Tabelle gefunden")
+        if df is None:
+            # Fall C: weder Blatt noch Tabellenobjekt "Table_True" gefunden
+            if len(wb.sheetnames) != 1:
+                raise ValueError(
+                    f"'{name}' weder als Blatt noch als Tabelle gefunden, und {xlsx_path} hat "
+                    f"{len(wb.sheetnames)} Sheets statt genau einem - Fallback nicht eindeutig."
+                )
+            df = pd.read_excel(xlsx_path, sheet_name=wb.sheetnames[0])
 
     df.columns = [str(c).strip() for c in df.columns]
 
@@ -63,7 +75,7 @@ def attach_labels(poi_long: pd.DataFrame, class_df: pd.DataFrame) -> pd.DataFram
 
 
 if __name__ == "__main__":
-    cls = load_class_table("crosswalk/OSM_Classes_final.xlsx")
+    cls = load_class_table("wikidata tags/osm_wikidata_keys.xlsx")
     print(f"{len(cls)} behaltene Klassen | Label-Spalten: "
           f"{[c for c in cls.columns if c not in BASE_COLS]}")
     print(cls.head())

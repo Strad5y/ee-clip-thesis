@@ -18,4 +18,6 @@ OSM_KEYS = ["amenity", "shop", "tourism", "leisure"]  # landuse bewusst nicht ak
                                                         # sind gestrichen, Eval-Ground-Truth ist
                                                         # Copernicus Urban Atlas
 CROSSWALK = ROOT / "crosswalk" / "osm_hilucs_crosswalk.csv"
-CLASS_TABLE = ROOT / "crosswalk" / "OSM_Classes_final.xlsx"  # crosswalk/ ist versioniert, data/ nicht
+# Finale kuratierte Klassenliste (key, value, wikidata) - flaches Sheet, keine Table_True-
+# Struktur, keine keep-Spalte (alle Zeilen sind bereits die gewollten aktiven Klassen).
+CLASS_TABLE = ROOT / "wikidata tags" / "osm_wikidata_keys.xlsx"

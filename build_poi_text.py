@@ -61,7 +61,10 @@ def _load_tagged(pois_path=POIS_IN, class_table_path=CLASS_TABLE,
     cls = load_class_table(class_table_path)
     tagged = attach_labels(poi_tags, cls)  # inner join (key,value) -> haengt "wikidata" an
 
-    qid_desc = pd.read_parquet(qid_descriptions_path)
+    # nur wikidata/description ziehen - qid_descriptions.parquet fuehrt inzwischen auch
+    # key/value mit (siehe wikidata_extraction.py), die wuerden sonst mit den bereits aus
+    # attach_labels() vorhandenen key/value-Spalten kollidieren und zu key_x/key_y gesuffixt
+    qid_desc = pd.read_parquet(qid_descriptions_path, columns=["wikidata", "description"])
     tagged = tagged.merge(qid_desc, on="wikidata", how="left")
 
     # (key,value) je poi_id deduplizieren + deterministisch sortieren (fuer stabile Texte)
