@@ -135,7 +135,12 @@ def _join_points(points: gpd.GeoDataFrame, raster_path, id_col, carry) -> pd.Dat
         in_bounds = (rows >= 0) & (rows < src.height) & (cols >= 0) & (cols < src.width)
         n_out = int((~in_bounds).sum())
         if n_out > 0:
-            print(f"  Points: {n_out} außerhalb der Rasterbounds verworfen")
+            # Kein Datenverlust-Hinweis: bei kachelweisem Join (siehe join_pois_to_tiles) ist
+            # ein Punkt fuer JEDE Kachel seiner Zone ausser der einen, die ihn tatsaechlich
+            # enthaelt, "ausserhalb" - das ist der Normalfall, nicht ein Fehlschlag. Ein echter
+            # Fehlschlag (POI in KEINER Kachel) zeigt sich stattdessen in "POIs ohne Pixel"
+            # auf Gesamtergebnis-Ebene (siehe validate_pairs.py Check 4).
+            print(f"  Points: {n_out} nicht in dieser Kachel (normal bei kachelweisem Join)")
 
         out = pd.DataFrame({
             id_col: points[id_col].to_numpy()[in_bounds],
@@ -179,7 +184,15 @@ def _join_polygons(polys: gpd.GeoDataFrame, raster_path, id_col, carry) -> pd.Da
         records.append(pd.DataFrame(rec))
 
     if not records:
-        return pd.DataFrame(columns=[id_col, "row", "col", "coverage", *carry])
+        # Explizite dtypes noetig: ein leeres pd.DataFrame(columns=[...]) hat sonst object-dtype
+        # fuer row/col. Beim spaeteren pd.concat() mit einem nicht-leeren Punkte-Ergebnis
+        # (int64) castet pandas die Spalte insgesamt auf object hoch, auch wenn alle echten
+        # Werte Integer sind - numpy verweigert dann object-Arrays als Fancy-Index
+        # ("arrays used as indices must be of integer (or boolean) type"). Trifft in der Praxis
+        # genau die kleinen TESSERA-Kacheln, die fuer eine Teilmenge Punkte aber keine
+        # Polygone (oder umgekehrt) enthalten.
+        empty = pd.DataFrame(columns=[id_col, "row", "col", "coverage", *carry])
+        return empty.astype({"row": "int64", "col": "int64", "coverage": "float64"})
     return pd.concat(records, ignore_index=True)
 
 
@@ -519,10 +532,60 @@ def _smoke_test_north_up():
           "exact_extract funktioniert danach), bereits-north-up-Kachel unveraendert durchgereicht.")
 
 
+def _smoke_test_empty_geom_type():
+    """Regressionstest fuer den dtype-Bug (Kachel 46/50 im TESSERA-Benchmark): eine Kachel mit
+    NUR Punkt- oder NUR Polygon-Treffern (die jeweils andere Geometrieart liefert 0 Treffer)
+    darf nicht mit 'arrays used as indices must be of integer (or boolean) type' abstuerzen -
+    das leere pd.DataFrame(columns=[...]) aus _join_polygons() hatte sonst object-dtype fuer
+    row/col, was pd.concat() mit dem nicht-leeren Punkte-Ergebnis auf object hochcastete."""
+    import tempfile
+
+    from shapely.geometry import Point, box
+
+    crs = "EPSG:3857"
+    n_bands = 2
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        transform = rasterio.transform.from_origin(west=0, north=100, xsize=10, ysize=10)
+        tile_path = tmp / "tile.tif"
+        rng = np.random.default_rng(0)
+        with rasterio.open(tile_path, "w", driver="GTiff", height=10, width=10, count=n_bands,
+                            dtype="float32", crs=crs, transform=transform) as dst:
+            dst.write(rng.standard_normal((n_bands, 10, 10)).astype(np.float32))
+
+        # Fall 1: nur ein Punkt trifft, keine Polygone (der urspruengliche Absturzfall)
+        points_only = gpd.GeoDataFrame({ID_COL: ["p0"]}, geometry=[Point(50, 50)], crs=crs)
+        pairs = join_pois_to_raster(points_only, tile_path)
+        assert len(pairs) == 1 and pairs["row"].dtype.kind in "iu"
+        assert len(pairs["embedding"].iloc[0]) == n_bands
+
+        # Fall 2: nur ein Polygon trifft, keine Punkte (umgekehrter Fall)
+        polys_only = gpd.GeoDataFrame({ID_COL: ["p1"]}, geometry=[box(20, 20, 40, 40)], crs=crs)
+        pairs = join_pois_to_raster(polys_only, tile_path)
+        assert len(pairs) > 0 and pairs["row"].dtype.kind in "iu"
+
+        # Fall 3: gemischt in einem Aufruf (Punkt UND Polygon gleichzeitig, wie im echten Lauf)
+        mixed = gpd.GeoDataFrame(
+            {ID_COL: ["p0", "p1"]},
+            geometry=[Point(50, 50), box(20, 20, 40, 40)],
+            crs=crs,
+        )
+        pairs = join_pois_to_raster(mixed, tile_path)
+        assert pairs["row"].dtype.kind in "iu" and pairs["col"].dtype.kind in "iu"
+        # das war exakt der urspruengliche Crash: fancy-indexing mit object-dtype row/col
+        arr_test = np.zeros((n_bands, 10, 10))
+        _ = arr_test[:, pairs["row"].to_numpy(), pairs["col"].to_numpy()]
+
+    print("Smoke-Test OK: Punkt-only, Polygon-only und gemischte Treffer liefern durchgehend "
+          "int-dtype row/col - kein object-dtype-Absturz mehr bei leeren Teil-Ergebnissen.")
+
+
 if __name__ == "__main__":
     if "--smoke-test" in sys.argv:
         _smoke_test()
         _smoke_test_utm_zone()
         _smoke_test_north_up()
+        _smoke_test_empty_geom_type()
     else:
         main()
