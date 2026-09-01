@@ -24,7 +24,7 @@ data:
 
 train:
   batch_size: 256
-  lr: 1.0e-4
+  lr: 1.0e-3
   weight_decay: 0.01
   epochs: 100
   patience: 10   # Early Stopping auf val_loss

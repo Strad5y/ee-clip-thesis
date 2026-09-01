@@ -1,0 +1,16 @@
+=== train.py gestartet (ae_v1) ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/train_ae_v1_20260901_112113.log
+Device: cuda
+3828384 Trainings-/449218 Val-Zeilen, Checkpoints unter checkpoints/ae_v1
+epoch 1/12: train_loss_mean=16.8278 train_loss_std=2.2409 val_loss=22.1504 val_recall@1=0.1208 val_recall@10=0.1657 lr=1.00e-04 temp=12.9383 bias=-9.6440 dauer=86.8s
+epoch 2/12: train_loss_mean=16.3000 train_loss_std=1.9360 val_loss=21.9432 val_recall@1=0.1238 val_recall@10=0.1751 lr=1.00e-04 temp=13.5203 bias=-9.4425 dauer=86.3s
+epoch 3/12: train_loss_mean=16.1886 train_loss_std=1.9402 val_loss=22.3907 val_recall@1=0.1255 val_recall@10=0.1827 lr=1.00e-04 temp=13.7933 bias=-9.2579 dauer=93.6s
+epoch 4/12: train_loss_mean=16.1552 train_loss_std=1.9277 val_loss=21.5466 val_recall@1=0.1313 val_recall@10=0.1950 lr=1.00e-04 temp=13.9375 bias=-9.0804 dauer=89.4s
+epoch 5/12: train_loss_mean=16.1090 train_loss_std=1.9257 val_loss=22.2116 val_recall@1=0.1374 val_recall@10=0.2040 lr=1.00e-04 temp=14.0121 bias=-8.9117 dauer=86.4s
+epoch 6/12: train_loss_mean=16.0665 train_loss_std=1.9218 val_loss=22.5314 val_recall@1=0.1366 val_recall@10=0.1987 lr=1.00e-04 temp=14.0438 bias=-8.7586 dauer=89.3s
+epoch 7/12: train_loss_mean=16.0432 train_loss_std=1.9211 val_loss=21.4840 val_recall@1=0.1397 val_recall@10=0.2083 lr=1.00e-04 temp=14.0579 bias=-8.6089 dauer=89.9s
+epoch 8/12: train_loss_mean=16.0286 train_loss_std=1.9060 val_loss=22.5147 val_recall@1=0.1374 val_recall@10=0.2135 lr=1.00e-04 temp=14.0368 bias=-8.4638 dauer=88.1s
+epoch 9/12: train_loss_mean=16.0124 train_loss_std=1.9192 val_loss=22.2108 val_recall@1=0.1384 val_recall@10=0.2048 lr=1.00e-04 temp=14.0209 bias=-8.3213 dauer=83.9s
+epoch 10/12: train_loss_mean=15.9967 train_loss_std=1.9324 val_loss=21.6909 val_recall@1=0.1412 val_recall@10=0.2060 lr=1.00e-04 temp=13.9845 bias=-8.1819 dauer=82.7s
+epoch 11/12: train_loss_mean=16.0008 train_loss_std=1.8960 val_loss=21.7693 val_recall@1=0.1431 val_recall@10=0.2102 lr=1.00e-04 temp=13.9484 bias=-8.0475 dauer=86.8s
+epoch 12/12: train_loss_mean=15.9487 train_loss_std=1.9105 val_loss=22.0225 val_recall@1=0.1427 val_recall@10=0.2119 lr=1.00e-04 temp=13.9296 bias=-7.9191 dauer=87.8s

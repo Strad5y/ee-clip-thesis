@@ -1,0 +1,9 @@
+=== train.py gestartet (tessera_lr1e4_5ep) ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/train_tessera_lr1e4_5ep_20260901_154443.log
+Device: cuda
+4105455 Trainings-/480817 Val-Zeilen, Checkpoints unter checkpoints/tessera_lr1e4_5ep
+epoch 1/5: train_loss_mean=16.0660 train_loss_std=2.2834 val_loss=22.1632 val_recall@1=0.1268 val_recall@10=0.1815 val_recall@1_diag=0.0157 val_recall@10_diag=0.1334 lr=1.00e-04 temp=13.1541 bias=-9.6179 dauer=100.6s
+epoch 2/5: train_loss_mean=15.1661 train_loss_std=1.7919 val_loss=22.4450 val_recall@1=0.1294 val_recall@10=0.1897 val_recall@1_diag=0.0178 val_recall@10_diag=0.1420 lr=1.00e-04 temp=13.9475 bias=-9.3888 dauer=105.2s
+epoch 3/5: train_loss_mean=14.8503 train_loss_std=1.7272 val_loss=22.1812 val_recall@1=0.1293 val_recall@10=0.1983 val_recall@1_diag=0.0196 val_recall@10_diag=0.1496 lr=1.00e-04 temp=14.5021 bias=-9.1848 dauer=97.1s
+epoch 4/5: train_loss_mean=14.5854 train_loss_std=1.6864 val_loss=21.6278 val_recall@1=0.1336 val_recall@10=0.2003 val_recall@1_diag=0.0206 val_recall@10_diag=0.1514 lr=1.00e-04 temp=14.9882 bias=-9.0024 dauer=85.7s
+epoch 5/5: train_loss_mean=14.3620 train_loss_std=1.6529 val_loss=22.0786 val_recall@1=0.1343 val_recall@10=0.2066 val_recall@1_diag=0.0211 val_recall@10_diag=0.1562 lr=1.00e-04 temp=15.4333 bias=-8.8468 dauer=90.4s

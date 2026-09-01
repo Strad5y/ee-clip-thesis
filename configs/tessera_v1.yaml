@@ -19,11 +19,18 @@ data:
 
 train:
   batch_size: 256
-  lr: 1.0e-4
+  lr: 3.0e-4   # backbone-spezifisch kalibriert (LR-Sweep 1e-4/3e-4/1e-3, je 5 Epochen): bei TESSERA
+               # liefern alle drei Raten nach 5 Epochen praktisch identisches recall@10_diag (~0.155-0.157),
+               # aber 1e-3 laesst die Temperatur beschleunigt steigen (Delta +0.67->+1.55/Epoche, im
+               # 100-Epochen-Vollauf bis 24.16 nahe dem temp_guard von 25.0) - 3e-4 zeigt denselben Recall
+               # bei linearer, nicht beschleunigender Temperaturkurve. Siehe ae_v1.yaml, wo AlphaEarth mit
+               # derselben 1e-3-Rate stabil UND klar besseren Recall erreicht - die Raten sind bewusst
+               # unterschiedlich, nicht versehentlich.
   weight_decay: 0.01
   epochs: 100
-  patience: 10   # Early Stopping auf val_loss
-  device: cpu
+  patience: 10
+  early_stopping_metric: recall@10_diag   # nicht val_loss - haengt bei SigLIP an lernbarer Temp/Bias, kein verlaessliches Stoppkriterium
+  device: cuda   # torch 2.13.0+cu130 verifiziert, GB10 verfuegbar (siehe ae_v1.yaml)
   coverage_sampling: true
   num_workers: 0   # DGX Spark: unified CPU/GPU-Memory, Worker forken den Prozess - nicht ohne Grund erhoehen
 

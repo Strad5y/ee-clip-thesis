@@ -12,18 +12,21 @@ dropout: 0.1
 normalization: none
 
 data:
-  pairs_path: data/processed/pairs_ae.parquet   # TODO: entsteht erst, sobald ein AlphaEarth-Raster vorliegt
+  pairs_path: data/processed/pairs_ae.parquet
   text_embeddings_path: data/processed/text_embeddings.parquet
   poi_text_path: data/interim/poi_text.parquet   # fuer pos_mask (byte-identischer Textvergleich, siehe train.py::build_pos_mask)
   splits_path: data/splits/splits_london.csv
 
 train:
   batch_size: 256
-  lr: 1.0e-4
+  lr: 1.0e-3   # backbone-spezifisch kalibriert (LR-Sweep 1e-4/3e-4/1e-3, je 5 Epochen): fuer AlphaEarth
+               # bringt 1e-3 klar besseren recall@10_diag bei stabiler Temperatur - siehe tessera_v1.yaml,
+               # wo dieselbe Rate stattdessen die Temperatur beschleunigt weglaufen liess, ohne Recall-Vorteil
   weight_decay: 0.01
   epochs: 100
-  patience: 10   # Early Stopping auf val_loss
-  device: cpu
+  patience: 10
+  early_stopping_metric: recall@10_diag   # nicht val_loss - haengt bei SigLIP an lernbarer Temp/Bias, kein verlaessliches Stoppkriterium
+  device: cuda   # torch 2.13.0+cu130 verifiziert, GB10 verfuegbar
   coverage_sampling: true
   num_workers: 0   # DGX Spark: unified CPU/GPU-Memory, Worker forken den Prozess - nicht ohne Grund erhoehen
 

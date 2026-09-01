@@ -23,38 +23,35 @@ def load_ground_truth(path=URBAN_ATLAS_PATH):
     raise NotImplementedError(f"Urban-Atlas-GT fehlt noch unter {path}.")
 
 
-def linear_probe(embeddings: np.ndarray, labels: np.ndarray, train_frac: float = 1.0, seed: int = 0) -> dict:
-    """Logistic-Regression-Probe auf gefrorenen Embeddings, mit Trainingsanteil fuer die
-    Label-Efficiency-Kurve."""
-    rng = np.random.default_rng(seed)
-    n = len(embeddings)
-    idx = rng.permutation(n)
-    n_train = max(1, int(n * train_frac))
-    train_idx, test_idx = idx[:n_train], idx[n_train:]
-    if len(test_idx) == 0:
-        test_idx = train_idx
-
-    clf = LogisticRegression(max_iter=1000)
-    clf.fit(embeddings[train_idx], labels[train_idx])
-    pred = clf.predict(embeddings[test_idx])
+def linear_probe(X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray,
+                  X_test: np.ndarray, y_test: np.ndarray, C: float = 1.0, max_iter: int = 200) -> dict:
+    """Logistic-Regression-Probe auf gefrorenen Embeddings, raeumlich geblockter Split
+    (train/val/test kommen vom Aufrufer, siehe build_landuse_pairs.py - NICHT mehr der
+    zufaellige train_frac-Split von vorher, der bei pixelweisen Paaren voll leakage-behaftet
+    waere, genau wie der urspruenglich zufaellige Zeilensplit im Training). Multinomial ergibt
+    sich mit dem Default-Solver (lbfgs) automatisch ab sklearn >=0.22 fuer mehr als 2 Klassen -
+    kein expliziter multi_class-Parameter mehr (in aktuellen sklearn-Versionen entfernt).
+    Trainiert NUR auf X_train/y_train; C wird vom Aufrufer ueber val_macro_f1 gewaehlt."""
+    clf = LogisticRegression(C=C, max_iter=max_iter)
+    clf.fit(X_train, y_train)
+    pred_val = clf.predict(X_val)
+    pred_test = clf.predict(X_test)
 
     return {
-        "train_frac": train_frac,
-        "n_train": n_train,
-        "oa": accuracy_score(labels[test_idx], pred),
-        "macro_f1": f1_score(labels[test_idx], pred, average="macro"),
+        "C": C,
+        "val_oa": accuracy_score(y_val, pred_val),
+        "val_macro_f1": f1_score(y_val, pred_val, average="macro"),
+        "test_oa": accuracy_score(y_test, pred_test),
+        "test_macro_f1": f1_score(y_test, pred_test, average="macro"),
     }
 
 
-def label_efficiency_curve(embeddings, labels, fracs=(0.01, 0.05, 0.1, 0.25, 0.5, 1.0)) -> list:
-    return [linear_probe(embeddings, labels, f) for f in fracs]
-
-
 def main():
-    # TODO: NICHT ausfuehren - siehe load_ground_truth().
+    # TODO: NICHT ausfuehren - siehe load_ground_truth(). Der eigentliche Phase-3-Ablauf
+    # (sechs Konfigurationen, raeumlich geblockter Split, C-Suche auf Val) steht in
+    # run_landuse_probe.py, das linear_probe() von hier importiert.
     embeddings, labels = load_ground_truth()
-    for point in label_efficiency_curve(embeddings, labels):
-        print(point)
+    print(linear_probe(embeddings, labels, embeddings, labels, embeddings, labels))
 
 
 if __name__ == "__main__":

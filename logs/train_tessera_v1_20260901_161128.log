@@ -1,0 +1,20 @@
+=== train.py gestartet (tessera_v1) ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/train_tessera_v1_20260901_161128.log
+Device: cuda
+4105455 Trainings-/480817 Val-Zeilen, Checkpoints unter checkpoints/tessera_v1
+epoch 1/100: train_loss_mean=15.5926 train_loss_std=2.0446 val_loss=21.9253 val_recall@1=0.1293 val_recall@10=0.1854 val_recall@1_diag=0.0179 val_recall@10_diag=0.1382 lr=3.00e-04 temp=13.3621 bias=-9.1879 dauer=94.3s
+epoch 2/100: train_loss_mean=14.6149 train_loss_std=1.7169 val_loss=21.7897 val_recall@1=0.1325 val_recall@10=0.2032 val_recall@1_diag=0.0203 val_recall@10_diag=0.1532 lr=3.00e-04 temp=13.9675 bias=-8.6173 dauer=101.1s
+epoch 3/100: train_loss_mean=14.0839 train_loss_std=1.6042 val_loss=22.6706 val_recall@1=0.1314 val_recall@10=0.2029 val_recall@1_diag=0.0203 val_recall@10_diag=0.1537 lr=3.00e-04 temp=14.6273 bias=-8.1735 dauer=94.6s
+epoch 4/100: train_loss_mean=13.7171 train_loss_std=1.5677 val_loss=22.5549 val_recall@1=0.1356 val_recall@10=0.2038 val_recall@1_diag=0.0206 val_recall@10_diag=0.1544 lr=3.00e-04 temp=15.2865 bias=-7.8575 dauer=107.6s
+epoch 5/100: train_loss_mean=13.4601 train_loss_std=1.5252 val_loss=22.1417 val_recall@1=0.1369 val_recall@10=0.2064 val_recall@1_diag=0.0210 val_recall@10_diag=0.1563 lr=3.00e-04 temp=15.9181 bias=-7.6381 dauer=96.8s
+epoch 6/100: train_loss_mean=13.2101 train_loss_std=1.4871 val_loss=22.8058 val_recall@1=0.1342 val_recall@10=0.2050 val_recall@1_diag=0.0213 val_recall@10_diag=0.1552 lr=3.00e-04 temp=16.4976 bias=-7.4936 dauer=99.8s
+epoch 7/100: train_loss_mean=13.0596 train_loss_std=1.4697 val_loss=22.6166 val_recall@1=0.1344 val_recall@10=0.2046 val_recall@1_diag=0.0211 val_recall@10_diag=0.1561 lr=3.00e-04 temp=17.1152 bias=-7.4031 dauer=94.2s
+epoch 8/100: train_loss_mean=12.9152 train_loss_std=1.4638 val_loss=22.6783 val_recall@1=0.1344 val_recall@10=0.2013 val_recall@1_diag=0.0213 val_recall@10_diag=0.1522 lr=3.00e-04 temp=17.6248 bias=-7.3430 dauer=95.9s
+epoch 9/100: train_loss_mean=12.7724 train_loss_std=1.4473 val_loss=22.2778 val_recall@1=0.1351 val_recall@10=0.2020 val_recall@1_diag=0.0215 val_recall@10_diag=0.1537 lr=3.00e-04 temp=18.2017 bias=-7.3097 dauer=95.8s
+epoch 10/100: train_loss_mean=12.6689 train_loss_std=1.4452 val_loss=22.2216 val_recall@1=0.1354 val_recall@10=0.2002 val_recall@1_diag=0.0216 val_recall@10_diag=0.1521 lr=3.00e-04 temp=18.7030 bias=-7.2868 dauer=102.5s
+epoch 11/100: train_loss_mean=12.5634 train_loss_std=1.4441 val_loss=22.2737 val_recall@1=0.1364 val_recall@10=0.2010 val_recall@1_diag=0.0220 val_recall@10_diag=0.1532 lr=3.00e-04 temp=19.2524 bias=-7.2742 dauer=102.9s
+epoch 12/100: train_loss_mean=12.4620 train_loss_std=1.4249 val_loss=22.2655 val_recall@1=0.1363 val_recall@10=0.1999 val_recall@1_diag=0.0218 val_recall@10_diag=0.1519 lr=3.00e-04 temp=19.7597 bias=-7.2748 dauer=92.9s
+epoch 13/100: train_loss_mean=12.3738 train_loss_std=1.4221 val_loss=23.5172 val_recall@1=0.1349 val_recall@10=0.1986 val_recall@1_diag=0.0218 val_recall@10_diag=0.1515 lr=3.00e-04 temp=20.3032 bias=-7.2744 dauer=98.1s
+epoch 14/100: train_loss_mean=12.3057 train_loss_std=1.4040 val_loss=22.5926 val_recall@1=0.1356 val_recall@10=0.2006 val_recall@1_diag=0.0220 val_recall@10_diag=0.1523 lr=3.00e-04 temp=20.7346 bias=-7.2801 dauer=94.6s
+epoch 15/100: train_loss_mean=12.2203 train_loss_std=1.4050 val_loss=23.3329 val_recall@1=0.1386 val_recall@10=0.2031 val_recall@1_diag=0.0231 val_recall@10_diag=0.1554 lr=3.00e-04 temp=21.2243 bias=-7.2816 dauer=100.6s
+Early Stopping: recall@10_diag seit 10 Epochen nicht verbessert (bestes recall@10_diag=0.1563).

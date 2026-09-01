@@ -9,6 +9,8 @@ Ohne --config laeuft nur der CPU-Smoke-Test mit Dummy-Tensoren (Forward/Loss/Bac
 da echte Text-Embeddings noch nicht existieren (compute_text_embeddings.py ist nur ein Geruest).
 """
 import argparse
+import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -17,6 +19,7 @@ import torch.nn.functional as F
 import yaml
 from torch.utils.data import DataLoader, Subset
 
+from chunked_join_runner import LOG_DIR, _Tee
 from dataset import PairDataset
 from losses import SigLIPLoss
 from model import TwoTower
@@ -83,25 +86,70 @@ def build_pos_mask(text_id: torch.Tensor) -> torch.Tensor:
     return text_id.unsqueeze(0) == text_id.unsqueeze(1)
 
 
+def recall_at_k(ee_z: torch.Tensor, text_z: torch.Tensor, pos_mask: torch.Tensor, k: int) -> float:
+    """In-Batch-Retrieval: fuer jede Zeile i, ist IRGENDEIN wahrer Positiv (pos_mask[i,:]) unter
+    den Top-k aehnlichsten Text-Vektoren? Multi-Positive-bewusst (nicht nur die Diagonale) -
+    bei geteilten Texten (siehe build_pos_mask) zaehlt jeder Treffer unter den Duplikaten."""
+    n = ee_z.shape[0]
+    k = min(k, n)
+    sim = ee_z @ text_z.T
+    topk = sim.topk(k, dim=1).indices  # (n, k)
+    hit = pos_mask.gather(1, topk).any(dim=1)  # (n,) - mind. ein Treffer unter Top-k?
+    return hit.float().mean().item()
+
+
 @torch.no_grad()
-def evaluate(model, criterion, dl, device) -> float | None:
+def evaluate(model, criterion, dl, device, use_pos_mask: bool = True) -> dict | None:
+    """Recall wird zweifach berichtet: recall@k gegen die (ggf. Multi-Positive-) pos_mask, UND
+    recall@k_diag ausschliesslich gegen die Diagonale (echte 1:1-Paare). Grund: bei pos_mask
+    zaehlen Duplikat-Texte als zusaetzliche Treffer, was recall@k systematisch anhebt, unabhaengig
+    von der eigentlichen Modellguete - recall@k_diag ist dadurch der einzige Wert, der zwischen
+    einem Lauf mit und einem Lauf ohne pos_mask fair vergleichbar ist."""
     if len(dl.dataset) == 0:
         return None
     model.eval()
-    total, n_batches = 0.0, 0
+    total_loss = 0.0
+    total_r1, total_r10 = 0.0, 0.0
+    total_r1_diag, total_r10_diag = 0.0, 0.0
+    n_batches = 0
     for batch in dl:
         ee = batch["ee_embedding"].to(device)
         text = batch["text_embedding"].to(device)
-        pos_mask = build_pos_mask(batch["text_id"].to(device)) if "text_id" in batch else None
+        n = ee.shape[0]
+        diag_mask = torch.eye(n, device=device, dtype=torch.bool)
+        pos_mask = (build_pos_mask(batch["text_id"].to(device)) if use_pos_mask and "text_id" in batch
+                    else diag_mask)
         ee_z, text_z = model(ee, text)
-        total += criterion(ee_z, text_z, pos_mask=pos_mask).item()
+        total_loss += criterion(ee_z, text_z, pos_mask=pos_mask).item()
+        total_r1 += recall_at_k(ee_z, text_z, pos_mask, k=1)
+        total_r10 += recall_at_k(ee_z, text_z, pos_mask, k=10)
+        total_r1_diag += recall_at_k(ee_z, text_z, diag_mask, k=1)
+        total_r10_diag += recall_at_k(ee_z, text_z, diag_mask, k=10)
         n_batches += 1
     model.train()
-    return total / n_batches
+    return {
+        "loss": total_loss / n_batches,
+        "recall@1": total_r1 / n_batches,
+        "recall@10": total_r10 / n_batches,
+        "recall@1_diag": total_r1_diag / n_batches,
+        "recall@10_diag": total_r10_diag / n_batches,
+    }
 
 
-def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
+def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR, log_to_file: bool = True) -> TwoTower:
+    run_name = f"{cfg.get('backbone', 'backbone')}_{cfg.get('ablation', 'v1')}"
+
+    if log_to_file:
+        LOG_DIR.mkdir(parents=True, exist_ok=True)
+        log_path = LOG_DIR / f"train_{run_name}_{time.strftime('%Y%m%d_%H%M%S')}.log"
+        log_file = open(log_path, "a")
+        sys.stdout = _Tee(sys.stdout, log_file)
+        sys.stderr = _Tee(sys.stderr, log_file)
+        print(f"=== train.py gestartet ({run_name}) ===")
+        print(f"Log-Datei: {log_path}")
+
     device = torch.device(cfg["train"].get("device", "cpu"))
+    print(f"Device: {device}")
     model = build_model(cfg).to(device)
     criterion = SigLIPLoss(**cfg.get("loss", {})).to(device)
     optimizer = torch.optim.AdamW(
@@ -123,21 +171,54 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
     sampler = make_subset_coverage_sampler(ds, train_idx) if cfg["train"].get("coverage_sampling", True) else None
     train_dl = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler,
                            shuffle=(sampler is None), num_workers=num_workers)
-    val_dl = DataLoader(val_ds, batch_size=cfg["train"]["batch_size"], num_workers=num_workers)
+    # shuffle=True ist hier Pflicht, nicht Kosmetik: pairs_{backbone}.parquet ist nach poi_id
+    # gruppiert (im Schnitt ~17-18 aufeinanderfolgende Zeilen je POI, siehe spatial_join.py) -
+    # ohne Shuffle bestuenden Val-Batches fast nur aus einer Handvoll POIs (viele Pixel je POI),
+    # was fuer den Batch-Contrastive-Loss praktisch keine echten Negative uebriglaesst und
+    # val_loss massiv verzerrt (beobachtet: ~40x hoeher als train_loss im Dry-Run).
+    val_dl = DataLoader(val_ds, batch_size=cfg["train"]["batch_size"], shuffle=True, num_workers=num_workers)
 
-    run_name = f"{cfg.get('backbone', 'backbone')}_{cfg.get('ablation', 'v1')}"
     ckpt_dir = checkpoint_dir / run_name
     ckpt_dir.mkdir(parents=True, exist_ok=True)
+    print(f"{len(train_ds)} Trainings-/{len(val_ds)} Val-Zeilen, "
+          f"Checkpoints unter {ckpt_dir}")
+
+    # use_pos_mask=False fuer Kontrolllaeufe (Loss-Skalenvergleich) - sonst identisch, die
+    # Maske wird dann nie gebaut/uebergeben, SigLIPLoss faellt auf die Default-Diagonalmaske
+    # zurueck (wie vor der pos_mask-Einfuehrung).
+    use_pos_mask = cfg["train"].get("use_pos_mask", True)
 
     patience = cfg["train"].get("patience", 10)
-    best_val = float("inf")
+
+    # Nutzervorgabe: Early Stopping ist per Config-Feld auf eine beliebige val_metrics-Groesse
+    # umstellbar (Default weiterhin val_loss). Grund: bei SigLIP haengt der Loss an lernbarer
+    # Temperatur/Bias, die sich waehrend des Trainings mitveraendern - er ist deshalb kein
+    # verlaessliches Stoppkriterium, waehrend Retrieval-Metriken davon unabhaengig sind.
+    # "val_loss" wird auf val_metrics["loss"] gemappt (minimieren), alle anderen Keys
+    # (z.B. "recall@10_diag") direkt aus val_metrics gelesen und maximiert.
+    early_stopping_metric = cfg["train"].get("early_stopping_metric", "val_loss")
+    early_stopping_key = "loss" if early_stopping_metric == "val_loss" else early_stopping_metric
+    maximize_metric = early_stopping_metric != "val_loss"
+    best_metric = float("-inf") if maximize_metric else float("inf")
     epochs_no_improve = 0
+
+    # Nutzervorgabe: harte Stop-Bedingungen ausserhalb des regulaeren Early-Stoppings (das nur
+    # auf val_loss reagiert) - Temperatur, die wegzulaufen droht, oder Retrieval, das sich ueber
+    # mehrere Epochen konsistent verschlechtert, sollen den Lauf sofort abbrechen, nicht erst
+    # nachtraeglich im Log auffallen.
+    temp_guard = cfg["train"].get("temp_guard", 25.0)
+    recall_fall_patience = cfg["train"].get("recall_fall_patience", 5)
+    recall_fall_streak = 0
+    prev_recall10_diag = None
+
     for epoch in range(cfg["train"]["epochs"]):
-        last_loss = None
+        t_epoch = time.time()
+        epoch_losses = []
         for batch in train_dl:
             ee = batch["ee_embedding"].to(device)
             text = batch["text_embedding"].to(device)
-            pos_mask = build_pos_mask(batch["text_id"].to(device)) if "text_id" in batch else None
+            pos_mask = (build_pos_mask(batch["text_id"].to(device))
+                        if use_pos_mask and "text_id" in batch else None)
 
             ee_z, text_z = model(ee, text)
             loss = criterion(ee_z, text_z, pos_mask=pos_mask)
@@ -145,15 +226,27 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            last_loss = loss.item()
+            epoch_losses.append(loss.item())
 
-        val_loss = evaluate(model, criterion, val_dl, device)
+        train_loss_mean = float(np.mean(epoch_losses))
+        train_loss_std = float(np.std(epoch_losses))
+
+        val_metrics = evaluate(model, criterion, val_dl, device, use_pos_mask=use_pos_mask)
+        epoch_s = time.time() - t_epoch
         temp = criterion.log_t.exp().item()
         bias = criterion.b.item()
         lr = optimizer.param_groups[0]["lr"]
-        val_str = f"{val_loss:.4f}" if val_loss is not None else "n/a"
+        if val_metrics is not None:
+            val_str = (f"val_loss={val_metrics['loss']:.4f} "
+                       f"val_recall@1={val_metrics['recall@1']:.4f} "
+                       f"val_recall@10={val_metrics['recall@10']:.4f} "
+                       f"val_recall@1_diag={val_metrics['recall@1_diag']:.4f} "
+                       f"val_recall@10_diag={val_metrics['recall@10_diag']:.4f}")
+        else:
+            val_str = "val_loss=n/a"
         print(f"epoch {epoch + 1}/{cfg['train']['epochs']}: "
-              f"loss={last_loss:.4f} val_loss={val_str} lr={lr:.2e} temp={temp:.4f} bias={bias:.4f}")
+              f"train_loss_mean={train_loss_mean:.4f} train_loss_std={train_loss_std:.4f} "
+              f"{val_str} lr={lr:.2e} temp={temp:.4f} bias={bias:.4f} dauer={epoch_s:.1f}s")
 
         ckpt = {
             "epoch": epoch + 1,
@@ -163,16 +256,31 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
         }
         torch.save(ckpt, ckpt_dir / "last.pt")
 
-        if val_loss is not None:
-            if val_loss < best_val:
-                best_val = val_loss
+        if temp > temp_guard:
+            print(f"STOP (Nutzervorgabe): Temperatur {temp:.4f} > {temp_guard} - Lauf wird abgebrochen.")
+            break
+
+        if val_metrics is not None:
+            r10d = val_metrics["recall@10_diag"]
+            recall_fall_streak = recall_fall_streak + 1 if (prev_recall10_diag is not None and r10d < prev_recall10_diag) else 0
+            prev_recall10_diag = r10d
+            if recall_fall_streak >= recall_fall_patience:
+                print(f"STOP (Nutzervorgabe): val_recall@10_diag faellt seit {recall_fall_streak} "
+                      f"aufeinanderfolgenden Epochen (aktuell {r10d:.4f}) - Lauf wird abgebrochen.")
+                break
+
+        if val_metrics is not None:
+            current_metric = val_metrics[early_stopping_key]
+            improved = current_metric > best_metric if maximize_metric else current_metric < best_metric
+            if improved:
+                best_metric = current_metric
                 epochs_no_improve = 0
                 torch.save(ckpt, ckpt_dir / "best.pt")
             else:
                 epochs_no_improve += 1
                 if epochs_no_improve >= patience:
-                    print(f"Early Stopping: val_loss seit {patience} Epochen nicht verbessert "
-                          f"(bestes val_loss={best_val:.4f}).")
+                    print(f"Early Stopping: {early_stopping_metric} seit {patience} Epochen nicht "
+                          f"verbessert (bestes {early_stopping_metric}={best_metric:.4f}).")
                     break
 
     return model
