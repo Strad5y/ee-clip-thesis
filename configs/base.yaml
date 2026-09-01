@@ -17,7 +17,8 @@ normalization: zscore
 
 data:
   pairs_path: data/processed/pairs_tessera.parquet
-  text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
+  text_embeddings_path: data/processed/text_embeddings.parquet
+  poi_text_path: data/interim/poi_text.parquet   # fuer pos_mask (byte-identischer Textvergleich, siehe train.py::build_pos_mask)
   norm_stats_path: data/processed/norm_stats_tessera.json   # nur bei normalization: zscore genutzt
   splits_path: data/splits/splits_london.csv   # raeumlich geblockter Split (F1), siehe build_splits.py
 

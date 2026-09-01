@@ -13,7 +13,8 @@ normalization: none
 
 data:
   pairs_path: data/processed/pairs_ae.parquet   # TODO: entsteht erst, sobald ein AlphaEarth-Raster vorliegt
-  text_embeddings_path: data/processed/text_embeddings.parquet   # TODO: entsteht erst durch compute_text_embeddings.py
+  text_embeddings_path: data/processed/text_embeddings.parquet
+  poi_text_path: data/interim/poi_text.parquet   # fuer pos_mask (byte-identischer Textvergleich, siehe train.py::build_pos_mask)
   splits_path: data/splits/splits_london.csv
 
 train:

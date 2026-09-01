@@ -13,6 +13,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 import yaml
 from torch.utils.data import DataLoader, Subset
 
@@ -73,6 +74,15 @@ def make_subset_coverage_sampler(ds: PairDataset, train_idx: np.ndarray):
     return torch.utils.data.WeightedRandomSampler(weights=weights, num_samples=len(train_idx), replacement=True)
 
 
+def build_pos_mask(text_id: torch.Tensor) -> torch.Tensor:
+    """(n,) Ganzzahl-Gruppen (siehe PairDataset.text_id, aus pd.factorize auf dem echten
+    Text-String - byte-identischer Vergleich, kein Aehnlichkeitsmass/Schwellwert) -> (n,n)
+    Bool-Maske, True wo zwei Batch-Eintraege EXAKT denselben Text haben. Diagonale ist immer
+    True. Grund: 54,8% der POIs teilen sich nur 46 Texte (der haeufigste allein 31.230 POIs) -
+    ohne diese Maske wertet SigLIPLoss solche Duplikate faelschlich als harte Negative."""
+    return text_id.unsqueeze(0) == text_id.unsqueeze(1)
+
+
 @torch.no_grad()
 def evaluate(model, criterion, dl, device) -> float | None:
     if len(dl.dataset) == 0:
@@ -82,8 +92,9 @@ def evaluate(model, criterion, dl, device) -> float | None:
     for batch in dl:
         ee = batch["ee_embedding"].to(device)
         text = batch["text_embedding"].to(device)
+        pos_mask = build_pos_mask(batch["text_id"].to(device)) if "text_id" in batch else None
         ee_z, text_z = model(ee, text)
-        total += criterion(ee_z, text_z).item()
+        total += criterion(ee_z, text_z, pos_mask=pos_mask).item()
         n_batches += 1
     model.train()
     return total / n_batches
@@ -99,7 +110,8 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
         weight_decay=cfg["train"].get("weight_decay", 0.0),
     )
 
-    ds = PairDataset(cfg["data"]["pairs_path"], cfg["data"]["text_embeddings_path"])
+    ds = PairDataset(cfg["data"]["pairs_path"], cfg["data"]["text_embeddings_path"],
+                      poi_text_path=cfg["data"].get("poi_text_path"))
     train_ds, val_ds, train_idx, _test_idx = spatial_split(ds, cfg["data"]["splits_path"])
     apply_normalization(ds, train_idx, cfg)
 
@@ -125,9 +137,10 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR) -> TwoTower:
         for batch in train_dl:
             ee = batch["ee_embedding"].to(device)
             text = batch["text_embedding"].to(device)
+            pos_mask = build_pos_mask(batch["text_id"].to(device)) if "text_id" in batch else None
 
             ee_z, text_z = model(ee, text)
-            loss = criterion(ee_z, text_z)
+            loss = criterion(ee_z, text_z, pos_mask=pos_mask)
 
             optimizer.zero_grad()
             loss.backward()
@@ -192,6 +205,46 @@ def smoke_test() -> None:
           f"(Forward/Loss/Backward laufen durch).")
 
 
+def _smoke_test_pos_mask() -> None:
+    """Nutzervorgabe: Batch mit absichtlich doppelten Texten -> pos_mask muss die
+    entsprechenden Positionen als positiv markieren, UND der Loss mit korrekter Maske muss
+    niedriger ausfallen als mit der Default-Diagonalmaske (die identische Texte faelschlich
+    als harte Negative behandelt)."""
+    torch.manual_seed(0)
+    n, latent_dim = 8, 16
+
+    # poi 0&3 teilen sich Text A, poi 2&5 teilen sich Text B, Rest hat eindeutige Texte
+    text_id = torch.tensor([0, 1, 2, 0, 4, 2, 6, 7])
+    pos_mask = build_pos_mask(text_id)
+
+    assert bool(pos_mask[0, 3]) and bool(pos_mask[3, 0]), "Duplikat-Paar (0,3) muss positiv markiert sein"
+    assert bool(pos_mask[2, 5]) and bool(pos_mask[5, 2]), "Duplikat-Paar (2,5) muss positiv markiert sein"
+    assert not bool(pos_mask[0, 1]), "unterschiedliche Texte duerfen nicht positiv markiert werden"
+    assert bool(pos_mask.diagonal().all()), "Diagonale muss immer positiv sein"
+    assert int(pos_mask.sum()) == n + 4, "erwartet: 8 Diagonale + 2x2 symmetrische Duplikat-Paare"
+
+    # ee_z == text_z konstruiert (bevor die Duplikate ueberschrieben werden): die 'wahren'
+    # Paare (Diagonale) haben dadurch garantiert maximale Kosinus-Aehnlichkeit (=1), damit der
+    # Effekt der Maskenkorrektur eindeutig und nicht vom Zufall der Initialisierung abhaengt.
+    ee_z = F.normalize(torch.randn(n, latent_dim), dim=-1)
+    text_z = ee_z.clone()
+    text_z[3] = text_z[0]  # poi 3 teilt sich den Text-Vektor mit poi 0 (identischer Text)
+    text_z[5] = text_z[2]  # poi 5 teilt sich den Text-Vektor mit poi 2
+
+    criterion = SigLIPLoss(init_t=10.0, init_b=0.0)
+    loss_with_mask = criterion(ee_z, text_z, pos_mask=pos_mask).item()
+    loss_default = criterion(ee_z, text_z).item()  # Default: nur Diagonale positiv
+
+    assert loss_with_mask < loss_default, (
+        f"Loss mit korrekter pos_mask ({loss_with_mask:.4f}) sollte niedriger sein als mit der "
+        f"Default-Diagonalmaske ({loss_default:.4f}), die identische Texte faelschlich bestraft"
+    )
+
+    print(f"Smoke-Test OK: pos_mask markiert doppelte Texte korrekt als positiv "
+          f"({int(pos_mask.sum())} positive Eintraege statt {n} bei Diagonale-only), "
+          f"Loss mit Maske ({loss_with_mask:.4f}) < Loss ohne Maske ({loss_default:.4f}).")
+
+
 def overfit_sanity_check(n: int = 200, epochs: int = 300, lr: float = 1e-2, seed: int = 0) -> None:
     """Abnahme-Kriterium Task 3.2: Loop auf 200 fixen (synthetischen) Paaren ueberfitten -
     Loss muss klar sinken, Retrieval-Recall@1 auf denselben 200 Paaren nahe 1.0 gehen.
@@ -252,6 +305,7 @@ def main() -> None:
 
     if args.smoke_test or args.config is None:
         smoke_test()
+        _smoke_test_pos_mask()
         return
 
     with open(args.config) as f:
