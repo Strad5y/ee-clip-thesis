@@ -1,9 +1,9 @@
 """
 compute_text_embeddings.py
 
-GERUEST - Code vollstaendig, aber bewusst NICHT auf dieser CPU-Maschine ausgefuehrt:
-Qwen3-Embedding-4B wird hier NICHT geladen oder heruntergeladen (zu gross fuer CPU-only,
-laeuft spaeter auf Spark).
+load_text_encoder() ist auf dem DGX Spark (CUDA verfuegbar) lauffaehig und wird von
+compute_poi_text_embeddings.py wiederverwendet. main() hier ist weiterhin GERUEST - nicht
+wegen der Maschine, sondern weil PROMPT_TEMPLATES noch Platzhalter sind (siehe TODO unten).
 
 Berechnet Text-Embeddings fuer alle Prompt-Templates je HILUCS-Klasse, MRL-Truncation
 2560 -> 1024 (settled decision, CLAUDE.md). Modell FROZEN.
@@ -39,16 +39,18 @@ def build_prompts(crosswalk: pd.DataFrame, templates=PROMPT_TEMPLATES) -> pd.Dat
 
 
 def load_text_encoder():
-    """TODO: NICHT auf dieser Maschine ausfuehren (CPU-only, kein Spark hier).
+    """Laedt Qwen3-Embedding-4B mit MRL-Truncation auf MRL_DIM=1024. Braucht CUDA - auf einer
+    reinen CPU-Maschine waere die Laufzeit fuer ein 4B-Modell unpraktikabel, also lieber laut
+    scheitern als still auf CPU zurueckfallen und eine falsche Laufzeitschaetzung liefern."""
+    import torch
+    from sentence_transformers import SentenceTransformer
 
-    Vorgesehener Ladepfad auf Spark/GPU:
-        from sentence_transformers import SentenceTransformer
-        return SentenceTransformer(MODEL_NAME, truncate_dim=MRL_DIM)
-    """
-    raise NotImplementedError(
-        f"{MODEL_NAME} wird bewusst nicht auf dieser CPU-Maschine geladen/heruntergeladen - "
-        "laeuft auf Spark. Siehe Docstring von load_text_encoder() fuer den vorgesehenen Ladepfad."
-    )
+    if not torch.cuda.is_available():
+        raise RuntimeError(
+            f"{MODEL_NAME} braucht CUDA fuer eine praktikable Laufzeit - "
+            "torch.cuda.is_available() ist False auf dieser Maschine."
+        )
+    return SentenceTransformer(MODEL_NAME, truncate_dim=MRL_DIM, device="cuda")
 
 
 def compute_embeddings(prompts: pd.DataFrame, model) -> pd.DataFrame:
