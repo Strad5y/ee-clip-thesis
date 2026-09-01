@@ -3,7 +3,7 @@
 Arbeitsanweisung für Claude Code. Reihenfolge = Abhängigkeitsreihenfolge. Jede Aufgabe:
 **Ziel → Umsetzung → Erwarteter Output → Abnahme-Check**. Immer *einen* Schritt umsetzen,
 erwarteten Output nennen, dann ausführen. Bei echten methodischen Zweifelsfällen: **nicht selbst
-entscheiden, an Sebastian eskalieren** (Punkte unten markiert mit `⚠ SEBASTIAN`).
+entscheiden, an Kai eskalieren** (Punkte unten markiert mit `⚠ KAI`).
 
 ---
 
@@ -39,7 +39,7 @@ Diese Entscheidungen sind settled und stehen in `CLAUDE.md`. Sie gelten für all
 
 ### 1.1 Wikidata-Beschreibungen holen
 - **Ziel:** `qid_descriptions.parquet` für alle QIDs aus der Klassentabelle.
-- **Umsetzung:** Eindeutige QIDs aus `Table_True` (`class_table.load_class_table()`, Spalte `wikidata`) sammeln. Beschreibungen per Wikidata (SPARQL `wikibase:description` @ `de` bzw. `en`, oder REST `wbgetentities`) batchen. Sprache konsistent wählen (Empfehlung: `de` mit `en`-Fallback — falls unklar `⚠ SEBASTIAN`, welche Sprache in den Text-Templates). Geteilte QIDs über mehrere Klassen sind **gewollt**, kein Fehler.
+- **Umsetzung:** Eindeutige QIDs aus `Table_True` (`class_table.load_class_table()`, Spalte `wikidata`) sammeln. Beschreibungen per Wikidata (SPARQL `wikibase:description` @ `de` bzw. `en`, oder REST `wbgetentities`) batchen. Sprache konsistent wählen (Empfehlung: `de` mit `en`-Fallback — falls unklar `⚠ KAI`, welche Sprache in den Text-Templates). Geteilte QIDs über mehrere Klassen sind **gewollt**, kein Fehler.
 - **Erwarteter Output:** `data/interim/qid_descriptions.parquet`, Spalten `wikidata, description`.
 - **Abnahme:** Zeilenzahl = Anzahl eindeutiger QIDs; keine leeren `description` (bzw. dokumentierter Fallback-String für fehlende).
 
@@ -148,7 +148,7 @@ Grundprinzip überall: **linear probe / zero-shot auf frozen Embeddings**, gemes
 
 ---
 
-## ⚠ Nicht-Code — an Sebastian eskalieren (nicht selbst entscheiden)
+## ⚠ Nicht-Code — an Kai eskalieren (nicht selbst entscheiden)
 - HILUCS-Crosswalk Zweifelsfälle: `allotments, meadow, grass, cemetery, military, garages`.
 - Textsprache der Wikidata-Beschreibungen (de vs. en), falls nicht eindeutig.
 - Jede sonstige methodische Grenzentscheidung → dokumentieren + fragen, nicht annehmen.
