@@ -1,136 +1,189 @@
 """
 dataset.py
 
-PyTorch Dataset fuer die Two-Tower-Trainingspaare: EE-Pixel-Embedding (aus spatial_join.py) x
-Text-Embedding (aus compute_text_embeddings.py), gejoint ueber poi_id. Sampling-Gewicht ist
-coverage / n_pixels_poi (WeightedRandomSampler) - macht das Gewicht naeherungsweise unabhaengig
-von der Polygongroesse. Der Loss (losses.py) ist ungewichtet.
+Phase 7 (CLAUDE_CODE_TASKS_phase4_7.md): PyTorch Dataset fuer die Two-Tower-Trainingspaare auf
+PIXEL-Ebene (Phase 5, aggregate_pixel_pairs.py) - EE-Pixel-Embedding x Text-Embedding, gejoint
+ueber 'pixel_text' (nicht mehr poi_id: ein Pixel ist jetzt bereits die kleinste Einheit, kein
+Join mehr ueber mehrere Tag-Zeilen noetig).
 
-poi_text_path (optional): liefert die tatsaechlichen POI-Texte (build_poi_text.py), um
-text_id zu berechnen - eine Ganzzahl-Gruppe pro EINDEUTIGEM Text (pd.factorize, byte-
-identischer Stringvergleich, kein Aehnlichkeitsmass). Zwei Zeilen teilen sich genau dann
-denselben text_id-Wert, wenn ihr Text-String identisch ist - Grundlage fuer die pos_mask
-in train.py (siehe dortiger Docstring: 54,8% der POIs teilen sich nur 46 Texte)."""
+Sampling-Gewicht ist NICHT mehr coverage/n_pixels_poi (das war die alte poi_id-Pairs-Logik,
+die grosse Polygone mit vielen Pixel-Zeilen pro POI kompensieren musste). Auf Pixel-Ebene gibt
+es diese Verzerrung strukturell nicht mehr - jedes Pixel ist bereits genau eine Zeile,
+unabhaengig von der Flaeche des/der beitragenden POI(s). weight=1.0 durchgehend (Phase-5-
+Vorgabe), coverage/n_pixels_poi bleiben nur als Diagnosespalten erhalten, gehen in kein
+Gewicht ein.
+
+split kommt direkt aus der Pixel-Datei (Phase-5-Nachtrag, build_splits_pixels.py hat die
+Split-Zuordnung schon eingetragen) - kein separater CSV-Merge ueber poi_id mehr noetig
+(splits.py/load_split_assignment sind fuer diesen Pfad nicht mehr im Einsatz).
+
+text_id (fuer die pos_mask in train.py) kommt jetzt direkt aus pd.factorize auf 'pixel_text' -
+kein separater poi_text_path-Merge mehr noetig, der String steht schon in der Pixel-Datei.
+"""
 import tempfile
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import torch
-from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
+from torch.utils.data import DataLoader, Dataset
 
-ID_COL = "poi_id"
+from build_poi_text import FRAME_NOUN, KEY_FRAME
+
+TEXT_COL = "pixel_text"
+
+# Reverse-Lookup: Frame-Text -> Key, fuer extract_primary_key(). Laengste zuerst, damit ein
+# Praefix-Frame (z.B. falls zwei Frames denselben Anfang teilen wuerden) nicht vorzeitig matcht.
+_KEY_FRAME_BY_LEN = sorted(KEY_FRAME.items(), key=lambda kv: -len(kv[1]))
+_FRAME_NOUN_BY_LEN = sorted(FRAME_NOUN.items(), key=lambda kv: -len(kv[1]))
+
+
+def extract_primary_key(text: str) -> str | None:
+    """Rekonstruiert den primaeren OSM-Key (den der Top-Coverage-POI, siehe
+    aggregate_pixel_pairs.py-Sortierung) direkt aus dem TEMPLATE-generierten pixel_text -
+    kein zusaetzlicher Join gegen die Rohdaten noetig, weil build_poi_text.py/
+    aggregate_pixel_pairs.py den Text deterministisch aus genau diesen Frame-Vokabularen
+    zusammensetzen. Heuristisch (Substring-Suche), aber zuverlaessig GENAU WEIL die Texte
+    Template-Ausgaben sind, keine freie Sprache."""
+    t = text
+    if t.startswith("A location containing "):
+        t = t[len("A location containing "):]
+    t = t.split("; ")[0]           # nur der Top-Coverage-POI-Teil (vor dem ersten Trenner)
+    if " — " in t:
+        t = t.split(" — ", 1)[1]   # Namensprefix abtrennen, falls vorhanden
+    t_lower = t.lower()
+
+    for key, frame in _KEY_FRAME_BY_LEN:                # Single-Tag-Form "{frame}: {value}."
+        if t_lower.startswith(frame.lower() + ":"):
+            return key
+
+    best_key, best_pos = None, None                     # Multi-Tag-Form "a {value} {noun} and ..."
+    for key, noun in _FRAME_NOUN_BY_LEN:
+        pos = t_lower.find(noun.lower())
+        if pos != -1 and (best_pos is None or pos < best_pos):
+            best_key, best_pos = key, pos
+    return best_key
 
 
 class PairDataset(Dataset):
-    def __init__(self, pairs_path, text_embeddings_path, poi_text_path=None, id_col: str = ID_COL):
-        pairs = pd.read_parquet(pairs_path)
+    def __init__(self, pixels_path, text_embeddings_path):
+        pixels = pd.read_parquet(pixels_path)
         text = pd.read_parquet(text_embeddings_path)
 
-        merged = pairs.merge(text, on=id_col, suffixes=("_ee", "_text"))
-        if len(merged) == 0:
+        # pixel_text_embeddings.parquet (compute_pixel_text_embeddings.py) benutzt die Spalte
+        # 'text', die Pixel-Datei 'pixel_text' - unterschiedliche Namen, gleicher Inhalt.
+        merged = pixels.merge(text, left_on=TEXT_COL, right_on="text", how="left",
+                               suffixes=("_ee", "_text"))
+        n_missing = int(merged["embedding_text"].isna().sum())
+        if n_missing > 0:
             raise ValueError(
-                f"Kein Overlap zwischen {pairs_path} und {text_embeddings_path} ueber '{id_col}'."
+                f"{n_missing} Pixel ohne Text-Embedding nach dem Merge - {text_embeddings_path} "
+                f"sollte alle '{TEXT_COL}'-Werte aus {pixels_path} abdecken."
             )
 
-        if poi_text_path is not None:
-            poi_text = pd.read_parquet(poi_text_path, columns=[id_col, "text"])
-            merged = merged.merge(poi_text, on=id_col, how="left")
-            if merged["text"].isna().any():
-                raise ValueError(
-                    f"{int(merged['text'].isna().sum())} Zeilen ohne Text-String nach dem "
-                    f"Merge mit {poi_text_path} - poi_text_path sollte dieselbe POI-Menge "
-                    f"wie {text_embeddings_path} abdecken."
-                )
-            # pd.factorize: byte-identischer Stringvergleich, keine Aehnlichkeit/Schwellwert -
-            # gleicher text_id-Wert <=> exakt derselbe Text-String
-            self.text_id = pd.factorize(merged["text"].to_numpy())[0].astype(np.int64)
-        else:
-            self.text_id = None
+        # pd.factorize: byte-identischer Stringvergleich auf pixel_text, keine Aehnlichkeit -
+        # gleicher text_id-Wert <=> exakt derselbe Pixel-Text-String (analog zur alten poi_id-
+        # Variante, nur jetzt direkt auf der bereits vorhandenen Textspalte).
+        self.text_id = pd.factorize(merged[TEXT_COL].to_numpy())[0].astype(np.int64)
 
         self.ee = np.stack(merged["embedding_ee"].to_numpy()).astype(np.float32)
         self.text = np.stack(merged["embedding_text"].to_numpy()).astype(np.float32)
-        self.coverage = merged["coverage"].to_numpy(dtype=np.float32)
-        self.n_pixels_poi = merged["n_pixels_poi"].to_numpy(dtype=np.float32)
-        self.sample_weight = self.coverage / self.n_pixels_poi
-        self.poi_id = merged[id_col].to_numpy()
+        self.coverage = merged["coverage"].to_numpy(dtype=np.float32)          # Diagnose, kein Gewicht
+        self.n_pixels_poi = merged["n_pixels_poi"].to_numpy(dtype=np.float32)  # Diagnose, kein Gewicht
+        self.sample_weight = merged["weight"].to_numpy(dtype=np.float32)       # =1.0 durchgehend
+        self.split = merged["split"].to_numpy()
+        self.n_pois = merged["n_pois"].to_numpy(dtype=np.int64)
+        self.pixel_key = (merged["tile"].astype(str) + "/" + merged["row"].astype(str) +
+                           "/" + merged["col"].astype(str)).to_numpy()
+
+        # primary_key NUR einmal pro EINDEUTIGEM Text parsen, nicht pro Zeile (Millionen Pixel
+        # teilen sich wenige zehntausend eindeutige Texte, siehe Phase-5/6-Berichte) - danach
+        # per text_id zurueckbroadcasten.
+        # Sentinel "" statt None: default_collate() im DataLoader kann keine None-Werte in
+        # einer Batch-Liste verarbeiten (bricht mit TypeError ab). "" ist kein gueltiger Key
+        # (alle 13 Keys sind nicht-leer) - train.py::class_recall_at_k() ueberspringt ""
+        # explizit statt sie faelschlich als Klasse zu werten.
+        unique_texts = merged[TEXT_COL].drop_duplicates().reset_index(drop=True)
+        key_by_text = {t: (extract_primary_key(t) or "") for t in unique_texts}
+        self.primary_key = merged[TEXT_COL].map(key_by_text).to_numpy()
 
     def __len__(self) -> int:
         return len(self.coverage)
 
     def __getitem__(self, idx):
-        item = {
+        return {
             "ee_embedding": torch.from_numpy(self.ee[idx]),
             "text_embedding": torch.from_numpy(self.text[idx]),
             "coverage": torch.tensor(self.coverage[idx]),
-            "poi_id": self.poi_id[idx],
+            "n_pois": torch.tensor(self.n_pois[idx]),
+            "primary_key": self.primary_key[idx],
+            "pixel_key": self.pixel_key[idx],
+            "text_id": torch.tensor(self.text_id[idx]),
         }
-        if self.text_id is not None:
-            item["text_id"] = torch.tensor(self.text_id[idx])
-        return item
-
-
-def make_coverage_sampler(dataset: PairDataset) -> WeightedRandomSampler:
-    """coverage / n_pixels_poi als Sampling-Gewicht: haelt den Gesamtzug pro POI naeherungsweise
-    unabhaengig von dessen Pixelzahl (Polygongroesse), statt grosse Polygone zu ueberrepraesentieren."""
-    weights = torch.from_numpy(dataset.sample_weight.copy())
-    return WeightedRandomSampler(weights=weights, num_samples=len(dataset), replacement=True)
 
 
 def _smoke_test():
-    """Kein echtes Textembedding vorhanden (compute_text_embeddings.py ist nur ein Geruest) -
-    Dummy-Parquets in einem temporaeren Verzeichnis pruefen nur den Join/DataLoader-Mechanismus."""
+    """Kein echtes Textembedding vorhanden - Dummy-Parquets in einem temporaeren Verzeichnis
+    pruefen nur den Join/DataLoader-Mechanismus (Merge ueber pixel_text statt poi_id)."""
     rng = np.random.default_rng(0)
     n, ee_dim, text_dim = 20, 128, 1024
-    poi_ids = [f"node/{i}" for i in range(n)]
 
-    pairs = pd.DataFrame({
-        ID_COL: poi_ids,
+    texts = [f"pixel text {i}" for i in range(n)]
+    texts[5] = texts[0]  # Pixel 0 und 5 teilen sich denselben pixel_text -> gleicher text_id
+
+    pixels = pd.DataFrame({
+        "tile": [f"t{i % 3}.tif" for i in range(n)],
         "row": rng.integers(0, 100, n),
         "col": rng.integers(0, 100, n),
+        "embedding": list(rng.standard_normal((n, ee_dim)).astype(np.float32)),
+        "pixel_text": texts,
+        "weight": np.ones(n, dtype=np.float32),
+        "n_pois": rng.integers(1, 4, n),
         "coverage": rng.random(n).astype(np.float32),
         "n_pixels_poi": rng.integers(1, 5, n).astype(np.float32),
-        "embedding": list(rng.standard_normal((n, ee_dim)).astype(np.float32)),
+        "poi_ids": [f"way/{i}" for i in range(n)],
+        "split": rng.choice(["train", "val", "test"], size=n, p=[0.6, 0.2, 0.2]),
     })
-    text = pd.DataFrame({
-        ID_COL: poi_ids,
-        "embedding": list(rng.standard_normal((n, text_dim)).astype(np.float32)),
+    unique_texts = pixels["pixel_text"].drop_duplicates().reset_index(drop=True)
+    text_emb = pd.DataFrame({
+        "text": unique_texts,
+        "embedding": list(rng.standard_normal((len(unique_texts), text_dim)).astype(np.float32)),
     })
-    # poi_id 0 und 5 teilen sich denselben Text-String -> muessen denselben text_id bekommen
-    texts = [f"text {i}" for i in range(n)]
-    texts[5] = texts[0]
-    poi_text = pd.DataFrame({ID_COL: poi_ids, "text": texts})
 
     with tempfile.TemporaryDirectory() as tmp:
-        pairs_path = Path(tmp) / "pairs_dummy.parquet"
+        pixels_path = Path(tmp) / "pixels_dummy.parquet"
         text_path = Path(tmp) / "text_dummy.parquet"
-        poi_text_path = Path(tmp) / "poi_text_dummy.parquet"
-        pairs.to_parquet(pairs_path)
-        text.to_parquet(text_path)
-        poi_text.to_parquet(poi_text_path)
+        pixels.to_parquet(pixels_path)
+        text_emb.to_parquet(text_path)
 
-        ds = PairDataset(pairs_path, text_path, poi_text_path=poi_text_path)
+        ds = PairDataset(pixels_path, text_path)
         assert len(ds) == n
-        assert ds.text_id[0] == ds.text_id[5], "identischer Text-String muss denselben text_id bekommen"
+        assert ds.text_id[0] == ds.text_id[5], "identischer pixel_text muss denselben text_id bekommen"
         assert ds.text_id[1] != ds.text_id[2], "unterschiedliche Texte muessen unterschiedliche text_id bekommen"
+        assert np.all(ds.sample_weight == 1.0), "weight muss durchgehend 1.0 sein"
 
-        sampler = make_coverage_sampler(ds)
-        dl = DataLoader(ds, batch_size=4, sampler=sampler)
+        dl = DataLoader(ds, batch_size=4, shuffle=True)
         batch = next(iter(dl))
         assert batch["ee_embedding"].shape == (4, ee_dim)
         assert batch["text_embedding"].shape == (4, text_dim)
         assert batch["coverage"].shape == (4,)
         assert batch["text_id"].shape == (4,)
+        assert batch["n_pois"].shape == (4,)
+        assert len(batch["primary_key"]) == 4
 
-        # Ohne poi_text_path bleibt das Verhalten wie zuvor (text_id fehlt im Batch)
-        ds_no_text = PairDataset(pairs_path, text_path)
-        assert ds_no_text.text_id is None
-        assert "text_id" not in ds_no_text[0]
+    # extract_primary_key: Single-Tag (Doppelpunkt-Form) und Multi-Tag (Nominalphrasen-Form)
+    assert extract_primary_key("A building: house. building usually intended for living in") == "building"
+    assert extract_primary_key("Greggs — a public amenity or service: fast food.") == "amenity"
+    assert extract_primary_key("A pitch leisure spot and a soccer sports facility.") == "leisure"
+    assert extract_primary_key(
+        "A location containing Waitrose — a retail building and a supermarket shop.; "
+        "a building: house."
+    ) == "building"
 
-    print(f"Smoke-Test OK: PairDataset liefert Batches ee={tuple(batch['ee_embedding'].shape)}, "
-          f"text={tuple(batch['text_embedding'].shape)}, coverage-Sampler funktioniert, "
-          f"text_id markiert identische Texte korrekt (mit poi_text_path) bzw. fehlt sauber "
-          f"(ohne poi_text_path).")
+    print(f"Smoke-Test OK: PairDataset (pixel_text-Merge) liefert Batches "
+          f"ee={tuple(batch['ee_embedding'].shape)}, text={tuple(batch['text_embedding'].shape)}, "
+          f"weight durchgehend 1.0, text_id markiert identische pixel_text korrekt, "
+          f"extract_primary_key() erkennt Single- und Multi-Tag-Form korrekt.")
 
 
 if __name__ == "__main__":

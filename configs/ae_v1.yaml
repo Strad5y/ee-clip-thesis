@@ -12,10 +12,10 @@ dropout: 0.1
 normalization: none
 
 data:
-  pairs_path: data/processed/pairs_ae.parquet
-  text_embeddings_path: data/processed/text_embeddings.parquet
-  poi_text_path: data/interim/poi_text.parquet   # fuer pos_mask (byte-identischer Textvergleich, siehe train.py::build_pos_mask)
-  splits_path: data/splits/splits_london.csv
+  # Phase 7 (CLAUDE_CODE_TASKS_phase4_7.md): Pixel-Ebene statt POI-Ebene. Split steht schon
+  # in pixels_ae.parquet (build_splits_pixels.py), kein splits_path/poi_text_path mehr noetig.
+  pixels_path: data/processed/pixels_ae.parquet
+  text_embeddings_path: data/processed/pixel_text_embeddings.parquet
 
 train:
   batch_size: 256
@@ -27,7 +27,11 @@ train:
   patience: 10
   early_stopping_metric: recall@10_diag   # nicht val_loss - haengt bei SigLIP an lernbarer Temp/Bias, kein verlaessliches Stoppkriterium
   device: cuda   # torch 2.13.0+cu130 verifiziert, GB10 verfuegbar
-  coverage_sampling: true
+  temp_guard: 50.0   # Nutzervorgabe (Phase-7-Nachtrag): 25.0 hat den vorigen Lauf mitten in
+                      # monotoner recall@10_diag-Verbesserung abgeschnitten (Temperaturzuwaechse
+                      # wurden pro Epoche kleiner: 14.4->17.4->20.0->21.9->23.3->24.3->25.3 -
+                      # Konvergenzmuster, kein Weglaufen). Early Stopping soll ueber Patience 10
+                      # auf recall@10_diag greifen, nicht ueber die Temperatur.
   num_workers: 0   # DGX Spark: unified CPU/GPU-Memory, Worker forken den Prozess - nicht ohne Grund erhoehen
 
 loss:

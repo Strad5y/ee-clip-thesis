@@ -16,11 +16,10 @@ dropout: 0.1
 normalization: zscore
 
 data:
-  pairs_path: data/processed/pairs_tessera.parquet
-  text_embeddings_path: data/processed/text_embeddings.parquet
-  poi_text_path: data/interim/poi_text.parquet   # fuer pos_mask (byte-identischer Textvergleich, siehe train.py::build_pos_mask)
-  norm_stats_path: data/processed/norm_stats_tessera.json   # nur bei normalization: zscore genutzt
-  splits_path: data/splits/splits_london.csv   # raeumlich geblockter Split (F1), siehe build_splits.py
+  # Phase 7 (CLAUDE_CODE_TASKS_phase4_7.md): Pixel-Ebene statt POI-Ebene.
+  pixels_path: data/processed/pixels_tessera.parquet
+  text_embeddings_path: data/processed/pixel_text_embeddings.parquet
+  norm_stats_path: data/processed/norm_stats_tessera_pixels.json   # nur bei normalization: zscore genutzt
 
 train:
   batch_size: 256
@@ -29,7 +28,6 @@ train:
   epochs: 100
   patience: 10   # Early Stopping auf val_loss
   device: cpu
-  coverage_sampling: true
   num_workers: 0   # DGX Spark: unified CPU/GPU-Memory, Worker forken den Prozess - nicht ohne Grund erhoehen
 
 loss:

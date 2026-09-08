@@ -13,10 +13,11 @@ PBF_LONDON = DATA / "raw" / "osm" / "greater_london-latest.osm.pbf"
 PBF_NIEDERSACHSEN = DATA / "raw" / "osm" / "niedersachsen-latest.osm.pbf"
 AOI_DIR = DATA / "aoi"
 TESSERA_DIR = DATA / "raw" / "tessera_london_test" / "global_0.1_degree_representation" / str(YEAR)
-OSM_KEYS = ["amenity", "shop", "tourism", "leisure"]  # landuse bewusst nicht aktiv - HILUCS-
-                                                        # Crosswalk und sozioökonomische Kartierung
-                                                        # sind gestrichen, Eval-Ground-Truth ist
-                                                        # Copernicus Urban Atlas
+# Der aktive OSM-Key-Satz wird NICHT hier gepflegt, sondern aus den distinkten Werten der
+# key-Spalte der Klassentabelle (CLASS_TABLE) abgeleitet (siehe src/extract_pois.py) - sonst
+# koennten Config und Tabelle auseinanderlaufen. landuse taucht dort bewusst nicht auf: HILUCS-
+# Crosswalk und sozioökonomische Kartierung sind gestrichen, Eval-Ground-Truth ist Copernicus
+# Urban Atlas.
 CROSSWALK = ROOT / "crosswalk" / "osm_hilucs_crosswalk.csv"
 # Finale kuratierte Klassenliste (key, value, wikidata) - flaches Sheet, keine Table_True-
 # Struktur, keine keep-Spalte (alle Zeilen sind bereits die gewollten aktiven Klassen).

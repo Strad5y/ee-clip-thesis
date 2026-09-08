@@ -24,7 +24,6 @@ from dataset import PairDataset
 from losses import SigLIPLoss
 from model import TwoTower
 from normalize import NONE, VALID_MODES, ZSCORE, apply_zscore, fit_zscore, save_stats
-from splits import load_split_assignment, split_indices
 
 CHECKPOINT_DIR = Path("checkpoints")
 
@@ -39,14 +38,19 @@ def build_model(cfg: dict) -> TwoTower:
     )
 
 
-def spatial_split(ds: PairDataset, splits_path) -> tuple:
-    """Raeumlich geblockter Split (F1, siehe build_splits.py/splits.py) statt zufaelligem
-    Zeilensplit - Gitterzellen wurden vorab einmalig zufaellig auf train/val/test verteilt,
-    POIs erben den Split ihrer Zelle. split_indices() prueft bereits intern, dass die
-    poi_id-Mengen der Splits disjunkt sind (bricht sonst mit AssertionError ab)."""
-    assignment = load_split_assignment(splits_path)
-    idx = split_indices(ds.poi_id, assignment)
-    return Subset(ds, idx["train"]), Subset(ds, idx["val"]), idx["train"], idx["test"]
+def pixel_split(ds: PairDataset) -> tuple:
+    """Phase 7: der Split steht bereits direkt in der Pixel-Datei (Phase-5-Nachtrag,
+    build_splits_pixels.py) - kein separater CSV-Merge ueber poi_id mehr noetig (splits.py
+    ist fuer diesen Pfad nicht mehr im Einsatz). Trotzdem explizit auf Leakage geprueft:
+    ein Pixel-Schluessel kann nur in EINEM Split stehen, das ist hier aber schon durch die
+    Konstruktion (1 Split-Wert pro Zeile) garantiert, nicht durch einen Mengen-Join wie frueher."""
+    train_idx = np.where(ds.split == "train")[0]
+    val_idx = np.where(ds.split == "val")[0]
+    test_idx = np.where(ds.split == "test")[0]
+    n_missing = len(ds) - len(train_idx) - len(val_idx) - len(test_idx)
+    if n_missing > 0:
+        print(f"  Warnung: {n_missing} Pixel ohne gueltigen Split-Wert (weder train/val/test) - ausgeschlossen.")
+    return Subset(ds, train_idx), Subset(ds, val_idx), train_idx, test_idx
 
 
 def apply_normalization(ds: PairDataset, train_idx: np.ndarray, cfg: dict) -> None:
@@ -69,14 +73,6 @@ def apply_normalization(ds: PairDataset, train_idx: np.ndarray, cfg: dict) -> No
     ds.ee = apply_zscore(ds.ee, stats)
 
 
-def make_subset_coverage_sampler(ds: PairDataset, train_idx: np.ndarray):
-    """WeightedRandomSampler ueber coverage / n_pixels_poi NUR der Trainings-Teilmenge - Gewichte
-    muessen relativ zu den lokalen Subset-Indizes (0..len(train_idx)-1) stehen, sonst zieht
-    der Sampler falsch gewichtete Beispiele."""
-    weights = torch.from_numpy(ds.sample_weight[train_idx].copy())
-    return torch.utils.data.WeightedRandomSampler(weights=weights, num_samples=len(train_idx), replacement=True)
-
-
 def build_pos_mask(text_id: torch.Tensor) -> torch.Tensor:
     """(n,) Ganzzahl-Gruppen (siehe PairDataset.text_id, aus pd.factorize auf dem echten
     Text-String - byte-identischer Vergleich, kein Aehnlichkeitsmass/Schwellwert) -> (n,n)
@@ -86,16 +82,75 @@ def build_pos_mask(text_id: torch.Tensor) -> torch.Tensor:
     return text_id.unsqueeze(0) == text_id.unsqueeze(1)
 
 
-def recall_at_k(ee_z: torch.Tensor, text_z: torch.Tensor, pos_mask: torch.Tensor, k: int) -> float:
-    """In-Batch-Retrieval: fuer jede Zeile i, ist IRGENDEIN wahrer Positiv (pos_mask[i,:]) unter
-    den Top-k aehnlichsten Text-Vektoren? Multi-Positive-bewusst (nicht nur die Diagonale) -
-    bei geteilten Texten (siehe build_pos_mask) zaehlt jeder Treffer unter den Duplikaten."""
+def recall_hits(ee_z: torch.Tensor, text_z: torch.Tensor, pos_mask: torch.Tensor, k: int) -> torch.Tensor:
+    """Wie recall_at_k, aber gibt den Pro-Query-Treffervektor (n,) bool zurueck statt des
+    Batch-Mittels - noetig fuer die Aufspaltung nach n_pois und fuer die Ceiling-Normierung
+    (Phase-7-Nachtrag), die beide pro Query rechnen, nicht pro Batch."""
     n = ee_z.shape[0]
     k = min(k, n)
     sim = ee_z @ text_z.T
     topk = sim.topk(k, dim=1).indices  # (n, k)
-    hit = pos_mask.gather(1, topk).any(dim=1)  # (n,) - mind. ein Treffer unter Top-k?
-    return hit.float().mean().item()
+    return pos_mask.gather(1, topk).any(dim=1)  # (n,) - mind. ein Treffer unter Top-k?
+
+
+def recall_at_k(ee_z: torch.Tensor, text_z: torch.Tensor, pos_mask: torch.Tensor, k: int) -> float:
+    """In-Batch-Retrieval: fuer jede Zeile i, ist IRGENDEIN wahrer Positiv (pos_mask[i,:]) unter
+    den Top-k aehnlichsten Text-Vektoren? Multi-Positive-bewusst (nicht nur die Diagonale) -
+    bei geteilten Texten (siehe build_pos_mask) zaehlt jeder Treffer unter den Duplikaten."""
+    return recall_hits(ee_z, text_z, pos_mask, k).float().mean().item()
+
+
+def recall_ceiling(text_id: torch.Tensor, k: int) -> torch.Tensor:
+    """Nutzervorgabe (Phase-7-Nachtrag): recall@k_diag ist bei Textduplikaten nach oben
+    gedeckelt - der Encoder liefert fuer identische Text-Strings identische Vektoren, kann
+    also unter den n_dup Kandidaten mit demselben Text wie die Query NICHT gezielt genau den
+    wahren diagonalen Treffer bevorzugen (alle Aehnlichkeiten sind fuer diese Gruppe exakt
+    gleich). Ceiling pro Query = Erwartungswert des maximal erreichbaren Trefferanteils unter
+    zufaelliger Tie-Break-Reihenfolge innerhalb der Duplikatgruppe: min(1, k / n_dup). n_dup
+    wird IM SELBEN Kandidatenpool gezaehlt wie recall_hits (derselbe Batch), sonst waere die
+    Ceiling nicht zum gemessenen Recall vergleichbar."""
+    eq = text_id.unsqueeze(0) == text_id.unsqueeze(1)  # (n,n), Diagonale immer True
+    n_dup = eq.sum(dim=1).float()  # pro Query: Anzahl Kandidaten mit identischem Text (>=1)
+    return torch.clamp(k / n_dup, max=1.0)
+
+
+def class_recall_at_k(ee_z: torch.Tensor, text_z: torch.Tensor, primary_key: np.ndarray, k: int) -> np.ndarray:
+    """Nutzervorgabe (Phase-7-Nachtrag): klassenbezogener Recall@k - Treffer, wenn IRGENDEIN
+    Top-k-Kandidat dieselbe primaere OSM-Klasse traegt wie die Query selbst (deren wahres Ziel
+    ist per Konstruktion die Diagonale, also identisch mit primary_key[i]) - lockerer als
+    recall@k_diag (exakter Textabgleich). Gibt NaN fuer Queries mit primary_key=='' zurueck
+    (nicht aus dem Text parsebar, siehe dataset.py::extract_primary_key) statt sie als
+    Treffer/Nichttreffer zu werten - beim Mitteln explizit auszuschliessen."""
+    n = ee_z.shape[0]
+    k = min(k, n)
+    sim = ee_z @ text_z.T
+    topk = sim.topk(k, dim=1).indices.cpu().numpy()
+    hits = np.full(n, np.nan)
+    for i in range(n):
+        if primary_key[i] == "":
+            continue
+        hits[i] = float(np.any(primary_key[topk[i]] == primary_key[i]))
+    return hits
+
+
+def _new_ceiling_acc() -> dict:
+    return {"n": 0, "hit1": 0.0, "hit10": 0.0, "ceil1": 0.0, "ceil10": 0.0,
+            "class10_sum": 0.0, "class10_n": 0}
+
+
+def _summarize_ceiling_acc(a: dict) -> dict | None:
+    if a["n"] == 0:
+        return None
+    r1, r10 = a["hit1"] / a["n"], a["hit10"] / a["n"]
+    c1, c10 = a["ceil1"] / a["n"], a["ceil10"] / a["n"]
+    return {
+        "n": a["n"],
+        "recall@1_diag": r1, "recall@10_diag": r10,
+        "ceiling@1_diag": c1, "ceiling@10_diag": c10,
+        "exploitation@1_diag": r1 / c1 if c1 > 0 else float("nan"),
+        "exploitation@10_diag": r10 / c10 if c10 > 0 else float("nan"),
+        "class_recall@10": a["class10_sum"] / a["class10_n"] if a["class10_n"] > 0 else float("nan"),
+    }
 
 
 @torch.no_grad()
@@ -104,7 +159,17 @@ def evaluate(model, criterion, dl, device, use_pos_mask: bool = True) -> dict | 
     recall@k_diag ausschliesslich gegen die Diagonale (echte 1:1-Paare). Grund: bei pos_mask
     zaehlen Duplikat-Texte als zusaetzliche Treffer, was recall@k systematisch anhebt, unabhaengig
     von der eigentlichen Modellguete - recall@k_diag ist dadurch der einzige Wert, der zwischen
-    einem Lauf mit und einem Lauf ohne pos_mask fair vergleichbar ist."""
+    einem Lauf mit und einem Lauf ohne pos_mask fair vergleichbar ist.
+
+    Phase-7-Nachtrag (Nutzervorgabe): recall@k_diag allein ist zwischen Laeufen mit
+    unterschiedlicher Duplikatrate NICHT vergleichbar (die Pixel-Aggregation hat die
+    Duplikatrate gegenueber dem POI-Ebene-Lauf veraendert) - zusaetzlich Ceiling (maximal
+    erreichbarer Recall bei perfekter Tie-Break-Ausnutzung), Ausschoepfung (gemessen/Ceiling)
+    und ein klassenbezogener Recall@10 (Treffer = gleiche primaere OSM-Klasse statt exaktem
+    Text), je getrennt fuer n_pois==1 und n_pois>1 UND insgesamt ('all'). Gewichtete
+    Aggregation ueber Summe/Anzahl (nicht Mittel-der-Batch-Mittel wie bei den obigen
+    Alt-Metriken) - noetig, weil die single/multi-Teilmengen pro Batch unterschiedlich gross
+    sind und ein naives Batch-Mittel das sonst verzerren wuerde."""
     if len(dl.dataset) == 0:
         return None
     model.eval()
@@ -112,19 +177,45 @@ def evaluate(model, criterion, dl, device, use_pos_mask: bool = True) -> dict | 
     total_r1, total_r10 = 0.0, 0.0
     total_r1_diag, total_r10_diag = 0.0, 0.0
     n_batches = 0
+    acc = {"all": _new_ceiling_acc(), "single": _new_ceiling_acc(), "multi": _new_ceiling_acc()}
+
     for batch in dl:
         ee = batch["ee_embedding"].to(device)
         text = batch["text_embedding"].to(device)
         n = ee.shape[0]
         diag_mask = torch.eye(n, device=device, dtype=torch.bool)
-        pos_mask = (build_pos_mask(batch["text_id"].to(device)) if use_pos_mask and "text_id" in batch
-                    else diag_mask)
+        text_id = batch["text_id"].to(device)
+        pos_mask = (build_pos_mask(text_id) if use_pos_mask and "text_id" in batch else diag_mask)
         ee_z, text_z = model(ee, text)
         total_loss += criterion(ee_z, text_z, pos_mask=pos_mask).item()
         total_r1 += recall_at_k(ee_z, text_z, pos_mask, k=1)
         total_r10 += recall_at_k(ee_z, text_z, pos_mask, k=10)
-        total_r1_diag += recall_at_k(ee_z, text_z, diag_mask, k=1)
-        total_r10_diag += recall_at_k(ee_z, text_z, diag_mask, k=10)
+
+        hit1_diag = recall_hits(ee_z, text_z, diag_mask, k=1).cpu().numpy()
+        hit10_diag = recall_hits(ee_z, text_z, diag_mask, k=10).cpu().numpy()
+        total_r1_diag += hit1_diag.mean()
+        total_r10_diag += hit10_diag.mean()
+
+        ceil1 = recall_ceiling(text_id, k=1).cpu().numpy()
+        ceil10 = recall_ceiling(text_id, k=10).cpu().numpy()
+        primary_key = np.array(batch["primary_key"])
+        class10_hits = class_recall_at_k(ee_z, text_z, primary_key, k=10)
+
+        n_pois = batch["n_pois"].numpy()
+        for name, m in (("all", np.ones(n, dtype=bool)), ("single", n_pois == 1), ("multi", n_pois > 1)):
+            cnt = int(m.sum())
+            if cnt == 0:
+                continue
+            a = acc[name]
+            a["n"] += cnt
+            a["hit1"] += hit1_diag[m].sum()
+            a["hit10"] += hit10_diag[m].sum()
+            a["ceil1"] += ceil1[m].sum()
+            a["ceil10"] += ceil10[m].sum()
+            valid = ~np.isnan(class10_hits[m])
+            a["class10_sum"] += class10_hits[m][valid].sum()
+            a["class10_n"] += int(valid.sum())
+
         n_batches += 1
     model.train()
     return {
@@ -133,6 +224,7 @@ def evaluate(model, criterion, dl, device, use_pos_mask: bool = True) -> dict | 
         "recall@10": total_r10 / n_batches,
         "recall@1_diag": total_r1_diag / n_batches,
         "recall@10_diag": total_r10_diag / n_batches,
+        "ceiling": {name: _summarize_ceiling_acc(acc[name]) for name in acc},
     }
 
 
@@ -158,9 +250,8 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR, log_to_file: bool = 
         weight_decay=cfg["train"].get("weight_decay", 0.0),
     )
 
-    ds = PairDataset(cfg["data"]["pairs_path"], cfg["data"]["text_embeddings_path"],
-                      poi_text_path=cfg["data"].get("poi_text_path"))
-    train_ds, val_ds, train_idx, _test_idx = spatial_split(ds, cfg["data"]["splits_path"])
+    ds = PairDataset(cfg["data"]["pixels_path"], cfg["data"]["text_embeddings_path"])
+    train_ds, val_ds, train_idx, _test_idx = pixel_split(ds)
     apply_normalization(ds, train_idx, cfg)
 
     # num_workers=0 (Default): DGX Spark teilt sich CPU/GPU 128 GB Unified Memory, und
@@ -168,14 +259,14 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR, log_to_file: bool = 
     # CUDA-/Unified-Memory-Buffer) - >0 Worker sind hier ein reales Speicherrisiko, kein reines
     # Performance-Detail. Nur bewusst ueber die Config erhoehen, nicht als Default.
     num_workers = cfg["train"].get("num_workers", 0)
-    sampler = make_subset_coverage_sampler(ds, train_idx) if cfg["train"].get("coverage_sampling", True) else None
-    train_dl = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler,
-                           shuffle=(sampler is None), num_workers=num_workers)
-    # shuffle=True ist hier Pflicht, nicht Kosmetik: pairs_{backbone}.parquet ist nach poi_id
-    # gruppiert (im Schnitt ~17-18 aufeinanderfolgende Zeilen je POI, siehe spatial_join.py) -
-    # ohne Shuffle bestuenden Val-Batches fast nur aus einer Handvoll POIs (viele Pixel je POI),
-    # was fuer den Batch-Contrastive-Loss praktisch keine echten Negative uebriglaesst und
-    # val_loss massiv verzerrt (beobachtet: ~40x hoeher als train_loss im Dry-Run).
+    # KEIN WeightedRandomSampler mehr (Phase 5/7-Vorgabe): weight ist durchgehend 1.0, ein
+    # gewichteter Sampler mit konstanten Gewichten waere reine Ziehung-mit-Zuruecklegen ohne
+    # echten Effekt, nur teurer als normales Shuffle. shuffle=True ist trotzdem Pflicht, nicht
+    # Kosmetik: pixels_{backbone}.parquet ist tileweise aufgebaut (aggregate_pixel_pairs.py) -
+    # ohne Shuffle bestuenden Batches fast nur aus einer Kachel, was fuer den Batch-Contrastive-
+    # Loss praktisch keine raeumlich diversen Negative uebriglaesst.
+    train_dl = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], shuffle=True,
+                           num_workers=num_workers)
     val_dl = DataLoader(val_ds, batch_size=cfg["train"]["batch_size"], shuffle=True, num_workers=num_workers)
 
     ckpt_dir = checkpoint_dir / run_name
@@ -248,6 +339,22 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR, log_to_file: bool = 
               f"train_loss_mean={train_loss_mean:.4f} train_loss_std={train_loss_std:.4f} "
               f"{val_str} lr={lr:.2e} temp={temp:.4f} bias={bias:.4f} dauer={epoch_s:.1f}s")
 
+        # Phase-7-Nachtrag (Nutzervorgabe): Ceiling/Ausschoepfung/Klassenrecall in jede Zeile,
+        # getrennt fuer alle/single/multi-POI-Pixel - Recall allein ist zwischen Laeufen mit
+        # unterschiedlicher Duplikatrate nicht vergleichbar.
+        if val_metrics is not None:
+            for bucket in ("all", "single", "multi"):
+                c = val_metrics["ceiling"][bucket]
+                if c is None:
+                    print(f"  ceiling[{bucket}]: keine Pixel in dieser Teilmenge")
+                    continue
+                print(f"  ceiling[{bucket}] n={c['n']}: "
+                      f"recall@1_diag={c['recall@1_diag']:.4f}/ceil={c['ceiling@1_diag']:.4f} "
+                      f"(Ausschoepfung={c['exploitation@1_diag']:.4f}) "
+                      f"recall@10_diag={c['recall@10_diag']:.4f}/ceil={c['ceiling@10_diag']:.4f} "
+                      f"(Ausschoepfung={c['exploitation@10_diag']:.4f}) "
+                      f"class_recall@10={c['class_recall@10']:.4f}")
+
         ckpt = {
             "epoch": epoch + 1,
             "model_state": model.state_dict(),
@@ -255,6 +362,22 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR, log_to_file: bool = 
             "cfg": cfg,
         }
         torch.save(ckpt, ckpt_dir / "last.pt")
+
+        # Bugfix (Phase-7-Nachtrag): der Best-Checkpoint-Block MUSS vor jedem Guard-'break'
+        # laufen. Vorher stand er danach - ein Guard-Abbruch (temp_guard/recall_fall_patience)
+        # verliess die Schleife, bevor die aktuelle Epoche ueberhaupt als 'best' in Frage kam,
+        # selbst wenn sie tatsaechlich die bislang beste Metrik hatte (beobachtet: Epoche 7 im
+        # ae_v1-Lauf hatte den bisher hoechsten recall@10_diag, aber best.pt blieb auf Epoche 6
+        # stehen, weil der temp_guard-'break' zuerst kam).
+        if val_metrics is not None:
+            current_metric = val_metrics[early_stopping_key]
+            improved = current_metric > best_metric if maximize_metric else current_metric < best_metric
+            if improved:
+                best_metric = current_metric
+                epochs_no_improve = 0
+                torch.save(ckpt, ckpt_dir / "best.pt")
+            else:
+                epochs_no_improve += 1
 
         if temp > temp_guard:
             print(f"STOP (Nutzervorgabe): Temperatur {temp:.4f} > {temp_guard} - Lauf wird abgebrochen.")
@@ -269,19 +392,10 @@ def train(cfg: dict, checkpoint_dir: Path = CHECKPOINT_DIR, log_to_file: bool = 
                       f"aufeinanderfolgenden Epochen (aktuell {r10d:.4f}) - Lauf wird abgebrochen.")
                 break
 
-        if val_metrics is not None:
-            current_metric = val_metrics[early_stopping_key]
-            improved = current_metric > best_metric if maximize_metric else current_metric < best_metric
-            if improved:
-                best_metric = current_metric
-                epochs_no_improve = 0
-                torch.save(ckpt, ckpt_dir / "best.pt")
-            else:
-                epochs_no_improve += 1
-                if epochs_no_improve >= patience:
-                    print(f"Early Stopping: {early_stopping_metric} seit {patience} Epochen nicht "
-                          f"verbessert (bestes {early_stopping_metric}={best_metric:.4f}).")
-                    break
+        if val_metrics is not None and not improved and epochs_no_improve >= patience:
+            print(f"Early Stopping: {early_stopping_metric} seit {patience} Epochen nicht "
+                  f"verbessert (bestes {early_stopping_metric}={best_metric:.4f}).")
+            break
 
     return model
 
