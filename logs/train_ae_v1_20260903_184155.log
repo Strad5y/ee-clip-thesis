@@ -1,0 +1,133 @@
+=== train.py gestartet (ae_v1) ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/train_ae_v1_20260903_184155.log
+Device: cuda
+6095537 Trainings-/791022 Val-Zeilen, Checkpoints unter checkpoints/ae_v1
+epoch 1/100: train_loss_mean=12.9140 train_loss_std=1.5530 val_loss=13.7935 val_recall@1=0.2875 val_recall@10=0.4662 val_recall@1_diag=0.0940 val_recall@10_diag=0.3871 lr=1.00e-03 temp=14.4798 bias=-8.1139 dauer=167.4s
+  ceiling[all] n=791022: recall@1_diag=0.0940/ceil=0.5912 (Ausschoepfung=0.1590) recall@10_diag=0.3871/ceil=0.9316 (Ausschoepfung=0.4155) class_recall@10=0.7946
+  ceiling[single] n=515183: recall@1_diag=0.0983/ceil=0.5068 (Ausschoepfung=0.1940) recall@10_diag=0.4440/ceil=0.9030 (Ausschoepfung=0.4918) class_recall@10=0.8099
+  ceiling[multi] n=275839: recall@1_diag=0.0859/ceil=0.7489 (Ausschoepfung=0.1147) recall@10_diag=0.2807/ceil=0.9852 (Ausschoepfung=0.2850) class_recall@10=0.7660
+epoch 2/100: train_loss_mean=12.2240 train_loss_std=1.4443 val_loss=13.6436 val_recall@1=0.3160 val_recall@10=0.4834 val_recall@1_diag=0.1152 val_recall@10_diag=0.4035 lr=1.00e-03 temp=17.5162 bias=-7.7384 dauer=177.2s
+  ceiling[all] n=791022: recall@1_diag=0.1152/ceil=0.5911 (Ausschoepfung=0.1948) recall@10_diag=0.4035/ceil=0.9314 (Ausschoepfung=0.4332) class_recall@10=0.7972
+  ceiling[single] n=515183: recall@1_diag=0.1148/ceil=0.5068 (Ausschoepfung=0.2264) recall@10_diag=0.4386/ceil=0.9030 (Ausschoepfung=0.4858) class_recall@10=0.8090
+  ceiling[multi] n=275839: recall@1_diag=0.1159/ceil=0.7485 (Ausschoepfung=0.1548) recall@10_diag=0.3380/ceil=0.9846 (Ausschoepfung=0.3432) class_recall@10=0.7753
+epoch 3/100: train_loss_mean=11.8893 train_loss_std=1.4256 val_loss=13.3136 val_recall@1=0.3400 val_recall@10=0.5325 val_recall@1_diag=0.1382 val_recall@10_diag=0.4527 lr=1.00e-03 temp=20.0541 bias=-7.6323 dauer=166.5s
+  ceiling[all] n=791022: recall@1_diag=0.1382/ceil=0.5913 (Ausschoepfung=0.2337) recall@10_diag=0.4527/ceil=0.9314 (Ausschoepfung=0.4860) class_recall@10=0.8430
+  ceiling[single] n=515183: recall@1_diag=0.1384/ceil=0.5070 (Ausschoepfung=0.2729) recall@10_diag=0.5013/ceil=0.9029 (Ausschoepfung=0.5552) class_recall@10=0.8529
+  ceiling[multi] n=275839: recall@1_diag=0.1378/ceil=0.7486 (Ausschoepfung=0.1840) recall@10_diag=0.3618/ceil=0.9847 (Ausschoepfung=0.3675) class_recall@10=0.8246
+epoch 4/100: train_loss_mean=11.6585 train_loss_std=1.4158 val_loss=13.2131 val_recall@1=0.3538 val_recall@10=0.5489 val_recall@1_diag=0.1485 val_recall@10_diag=0.4690 lr=1.00e-03 temp=21.7670 bias=-7.6263 dauer=170.0s
+  ceiling[all] n=791022: recall@1_diag=0.1485/ceil=0.5908 (Ausschoepfung=0.2513) recall@10_diag=0.4690/ceil=0.9314 (Ausschoepfung=0.5035) class_recall@10=0.8409
+  ceiling[single] n=515183: recall@1_diag=0.1452/ceil=0.5066 (Ausschoepfung=0.2866) recall@10_diag=0.5008/ceil=0.9026 (Ausschoepfung=0.5548) class_recall@10=0.8504
+  ceiling[multi] n=275839: recall@1_diag=0.1546/ceil=0.7482 (Ausschoepfung=0.2066) recall@10_diag=0.4096/ceil=0.9853 (Ausschoepfung=0.4158) class_recall@10=0.8233
+epoch 5/100: train_loss_mean=11.5018 train_loss_std=1.4012 val_loss=13.1227 val_recall@1=0.3651 val_recall@10=0.5494 val_recall@1_diag=0.1558 val_recall@10_diag=0.4694 lr=1.00e-03 temp=23.2665 bias=-7.6514 dauer=148.4s
+  ceiling[all] n=791022: recall@1_diag=0.1558/ceil=0.5908 (Ausschoepfung=0.2636) recall@10_diag=0.4694/ceil=0.9316 (Ausschoepfung=0.5039) class_recall@10=0.8442
+  ceiling[single] n=515183: recall@1_diag=0.1511/ceil=0.5067 (Ausschoepfung=0.2982) recall@10_diag=0.5039/ceil=0.9030 (Ausschoepfung=0.5580) class_recall@10=0.8535
+  ceiling[multi] n=275839: recall@1_diag=0.1645/ceil=0.7479 (Ausschoepfung=0.2199) recall@10_diag=0.4051/ceil=0.9851 (Ausschoepfung=0.4112) class_recall@10=0.8268
+epoch 6/100: train_loss_mean=11.3910 train_loss_std=1.3985 val_loss=13.0496 val_recall@1=0.3753 val_recall@10=0.5601 val_recall@1_diag=0.1653 val_recall@10_diag=0.4801 lr=1.00e-03 temp=24.2011 bias=-7.6897 dauer=174.0s
+  ceiling[all] n=791022: recall@1_diag=0.1653/ceil=0.5906 (Ausschoepfung=0.2799) recall@10_diag=0.4801/ceil=0.9315 (Ausschoepfung=0.5155) class_recall@10=0.8462
+  ceiling[single] n=515183: recall@1_diag=0.1583/ceil=0.5064 (Ausschoepfung=0.3126) recall@10_diag=0.5060/ceil=0.9029 (Ausschoepfung=0.5604) class_recall@10=0.8535
+  ceiling[multi] n=275839: recall@1_diag=0.1784/ceil=0.7479 (Ausschoepfung=0.2385) recall@10_diag=0.4319/ceil=0.9849 (Ausschoepfung=0.4386) class_recall@10=0.8326
+epoch 7/100: train_loss_mean=11.3054 train_loss_std=1.4039 val_loss=13.0851 val_recall@1=0.3711 val_recall@10=0.5671 val_recall@1_diag=0.1644 val_recall@10_diag=0.4870 lr=1.00e-03 temp=24.8515 bias=-7.7183 dauer=165.8s
+  ceiling[all] n=791022: recall@1_diag=0.1644/ceil=0.5907 (Ausschoepfung=0.2783) recall@10_diag=0.4870/ceil=0.9314 (Ausschoepfung=0.5229) class_recall@10=0.8517
+  ceiling[single] n=515183: recall@1_diag=0.1551/ceil=0.5061 (Ausschoepfung=0.3064) recall@10_diag=0.5158/ceil=0.9027 (Ausschoepfung=0.5714) class_recall@10=0.8565
+  ceiling[multi] n=275839: recall@1_diag=0.1819/ceil=0.7487 (Ausschoepfung=0.2429) recall@10_diag=0.4332/ceil=0.9849 (Ausschoepfung=0.4399) class_recall@10=0.8428
+epoch 8/100: train_loss_mean=11.2431 train_loss_std=1.3964 val_loss=12.9674 val_recall@1=0.3785 val_recall@10=0.5615 val_recall@1_diag=0.1665 val_recall@10_diag=0.4818 lr=1.00e-03 temp=25.5179 bias=-7.7528 dauer=166.1s
+  ceiling[all] n=791022: recall@1_diag=0.1665/ceil=0.5908 (Ausschoepfung=0.2818) recall@10_diag=0.4818/ceil=0.9314 (Ausschoepfung=0.5173) class_recall@10=0.8458
+  ceiling[single] n=515183: recall@1_diag=0.1588/ceil=0.5063 (Ausschoepfung=0.3137) recall@10_diag=0.5104/ceil=0.9029 (Ausschoepfung=0.5653) class_recall@10=0.8532
+  ceiling[multi] n=275839: recall@1_diag=0.1809/ceil=0.7485 (Ausschoepfung=0.2416) recall@10_diag=0.4284/ceil=0.9845 (Ausschoepfung=0.4351) class_recall@10=0.8320
+epoch 9/100: train_loss_mean=11.1962 train_loss_std=1.4046 val_loss=12.9531 val_recall@1=0.3790 val_recall@10=0.5699 val_recall@1_diag=0.1678 val_recall@10_diag=0.4907 lr=1.00e-03 temp=26.0565 bias=-7.7810 dauer=170.0s
+  ceiling[all] n=791022: recall@1_diag=0.1678/ceil=0.5909 (Ausschoepfung=0.2840) recall@10_diag=0.4907/ceil=0.9315 (Ausschoepfung=0.5268) class_recall@10=0.8556
+  ceiling[single] n=515183: recall@1_diag=0.1620/ceil=0.5067 (Ausschoepfung=0.3197) recall@10_diag=0.5200/ceil=0.9030 (Ausschoepfung=0.5758) class_recall@10=0.8626
+  ceiling[multi] n=275839: recall@1_diag=0.1787/ceil=0.7483 (Ausschoepfung=0.2388) recall@10_diag=0.4361/ceil=0.9848 (Ausschoepfung=0.4429) class_recall@10=0.8425
+epoch 10/100: train_loss_mean=11.1566 train_loss_std=1.3934 val_loss=12.9011 val_recall@1=0.3814 val_recall@10=0.5653 val_recall@1_diag=0.1673 val_recall@10_diag=0.4852 lr=1.00e-03 temp=26.3776 bias=-7.8037 dauer=176.9s
+  ceiling[all] n=791022: recall@1_diag=0.1673/ceil=0.5908 (Ausschoepfung=0.2832) recall@10_diag=0.4852/ceil=0.9315 (Ausschoepfung=0.5208) class_recall@10=0.8491
+  ceiling[single] n=515183: recall@1_diag=0.1622/ceil=0.5068 (Ausschoepfung=0.3201) recall@10_diag=0.5175/ceil=0.9030 (Ausschoepfung=0.5731) class_recall@10=0.8585
+  ceiling[multi] n=275839: recall@1_diag=0.1769/ceil=0.7478 (Ausschoepfung=0.2365) recall@10_diag=0.4248/ceil=0.9847 (Ausschoepfung=0.4314) class_recall@10=0.8314
+epoch 11/100: train_loss_mean=11.1305 train_loss_std=1.3880 val_loss=12.9433 val_recall@1=0.3828 val_recall@10=0.5805 val_recall@1_diag=0.1753 val_recall@10_diag=0.5005 lr=1.00e-03 temp=26.7402 bias=-7.8272 dauer=173.0s
+  ceiling[all] n=791022: recall@1_diag=0.1753/ceil=0.5909 (Ausschoepfung=0.2967) recall@10_diag=0.5005/ceil=0.9316 (Ausschoepfung=0.5372) class_recall@10=0.8686
+  ceiling[single] n=515183: recall@1_diag=0.1641/ceil=0.5066 (Ausschoepfung=0.3240) recall@10_diag=0.5276/ceil=0.9031 (Ausschoepfung=0.5843) class_recall@10=0.8748
+  ceiling[multi] n=275839: recall@1_diag=0.1963/ceil=0.7484 (Ausschoepfung=0.2623) recall@10_diag=0.4497/ceil=0.9849 (Ausschoepfung=0.4566) class_recall@10=0.8569
+epoch 12/100: train_loss_mean=11.1026 train_loss_std=1.3892 val_loss=13.1052 val_recall@1=0.3800 val_recall@10=0.5647 val_recall@1_diag=0.1697 val_recall@10_diag=0.4848 lr=1.00e-03 temp=26.9611 bias=-7.8451 dauer=167.9s
+  ceiling[all] n=791022: recall@1_diag=0.1697/ceil=0.5910 (Ausschoepfung=0.2871) recall@10_diag=0.4848/ceil=0.9314 (Ausschoepfung=0.5205) class_recall@10=0.8510
+  ceiling[single] n=515183: recall@1_diag=0.1638/ceil=0.5066 (Ausschoepfung=0.3233) recall@10_diag=0.5221/ceil=0.9027 (Ausschoepfung=0.5784) class_recall@10=0.8583
+  ceiling[multi] n=275839: recall@1_diag=0.1806/ceil=0.7488 (Ausschoepfung=0.2412) recall@10_diag=0.4149/ceil=0.9850 (Ausschoepfung=0.4213) class_recall@10=0.8373
+epoch 13/100: train_loss_mean=11.0798 train_loss_std=1.3833 val_loss=13.1370 val_recall@1=0.3772 val_recall@10=0.5551 val_recall@1_diag=0.1634 val_recall@10_diag=0.4753 lr=1.00e-03 temp=27.2933 bias=-7.8583 dauer=162.8s
+  ceiling[all] n=791022: recall@1_diag=0.1634/ceil=0.5910 (Ausschoepfung=0.2765) recall@10_diag=0.4753/ceil=0.9314 (Ausschoepfung=0.5103) class_recall@10=0.8370
+  ceiling[single] n=515183: recall@1_diag=0.1554/ceil=0.5068 (Ausschoepfung=0.3066) recall@10_diag=0.5045/ceil=0.9029 (Ausschoepfung=0.5588) class_recall@10=0.8437
+  ceiling[multi] n=275839: recall@1_diag=0.1785/ceil=0.7484 (Ausschoepfung=0.2385) recall@10_diag=0.4208/ceil=0.9847 (Ausschoepfung=0.4273) class_recall@10=0.8245
+epoch 14/100: train_loss_mean=11.0652 train_loss_std=1.3878 val_loss=12.8774 val_recall@1=0.3857 val_recall@10=0.5802 val_recall@1_diag=0.1772 val_recall@10_diag=0.4996 lr=1.00e-03 temp=27.5290 bias=-7.8751 dauer=170.0s
+  ceiling[all] n=791022: recall@1_diag=0.1772/ceil=0.5910 (Ausschoepfung=0.2998) recall@10_diag=0.4996/ceil=0.9317 (Ausschoepfung=0.5363) class_recall@10=0.8590
+  ceiling[single] n=515183: recall@1_diag=0.1695/ceil=0.5069 (Ausschoepfung=0.3343) recall@10_diag=0.5259/ceil=0.9030 (Ausschoepfung=0.5824) class_recall@10=0.8634
+  ceiling[multi] n=275839: recall@1_diag=0.1916/ceil=0.7479 (Ausschoepfung=0.2561) recall@10_diag=0.4506/ceil=0.9852 (Ausschoepfung=0.4573) class_recall@10=0.8507
+epoch 15/100: train_loss_mean=11.0435 train_loss_std=1.3860 val_loss=12.9956 val_recall@1=0.3832 val_recall@10=0.5781 val_recall@1_diag=0.1761 val_recall@10_diag=0.4977 lr=1.00e-03 temp=27.6535 bias=-7.8895 dauer=165.9s
+  ceiling[all] n=791022: recall@1_diag=0.1761/ceil=0.5909 (Ausschoepfung=0.2979) recall@10_diag=0.4977/ceil=0.9313 (Ausschoepfung=0.5344) class_recall@10=0.8642
+  ceiling[single] n=515183: recall@1_diag=0.1688/ceil=0.5065 (Ausschoepfung=0.3333) recall@10_diag=0.5296/ceil=0.9028 (Ausschoepfung=0.5866) class_recall@10=0.8716
+  ceiling[multi] n=275839: recall@1_diag=0.1896/ceil=0.7487 (Ausschoepfung=0.2532) recall@10_diag=0.4382/ceil=0.9846 (Ausschoepfung=0.4451) class_recall@10=0.8505
+epoch 16/100: train_loss_mean=11.0302 train_loss_std=1.3735 val_loss=12.8770 val_recall@1=0.3908 val_recall@10=0.5813 val_recall@1_diag=0.1796 val_recall@10_diag=0.5015 lr=1.00e-03 temp=27.7726 bias=-7.8974 dauer=166.3s
+  ceiling[all] n=791022: recall@1_diag=0.1796/ceil=0.5908 (Ausschoepfung=0.3040) recall@10_diag=0.5015/ceil=0.9314 (Ausschoepfung=0.5384) class_recall@10=0.8634
+  ceiling[single] n=515183: recall@1_diag=0.1682/ceil=0.5066 (Ausschoepfung=0.3319) recall@10_diag=0.5213/ceil=0.9029 (Ausschoepfung=0.5774) class_recall@10=0.8674
+  ceiling[multi] n=275839: recall@1_diag=0.2010/ceil=0.7480 (Ausschoepfung=0.2687) recall@10_diag=0.4645/ceil=0.9848 (Ausschoepfung=0.4717) class_recall@10=0.8560
+epoch 17/100: train_loss_mean=11.0191 train_loss_std=1.3834 val_loss=12.8745 val_recall@1=0.3897 val_recall@10=0.5731 val_recall@1_diag=0.1757 val_recall@10_diag=0.4938 lr=1.00e-03 temp=27.8447 bias=-7.9148 dauer=173.2s
+  ceiling[all] n=791022: recall@1_diag=0.1757/ceil=0.5908 (Ausschoepfung=0.2974) recall@10_diag=0.4938/ceil=0.9317 (Ausschoepfung=0.5300) class_recall@10=0.8533
+  ceiling[single] n=515183: recall@1_diag=0.1662/ceil=0.5068 (Ausschoepfung=0.3280) recall@10_diag=0.5132/ceil=0.9030 (Ausschoepfung=0.5683) class_recall@10=0.8584
+  ceiling[multi] n=275839: recall@1_diag=0.1935/ceil=0.7478 (Ausschoepfung=0.2588) recall@10_diag=0.4577/ceil=0.9854 (Ausschoepfung=0.4645) class_recall@10=0.8437
+epoch 18/100: train_loss_mean=11.0056 train_loss_std=1.3834 val_loss=12.8535 val_recall@1=0.3823 val_recall@10=0.5683 val_recall@1_diag=0.1720 val_recall@10_diag=0.4888 lr=1.00e-03 temp=27.9193 bias=-7.9107 dauer=166.1s
+  ceiling[all] n=791022: recall@1_diag=0.1720/ceil=0.5907 (Ausschoepfung=0.2912) recall@10_diag=0.4888/ceil=0.9313 (Ausschoepfung=0.5249) class_recall@10=0.8585
+  ceiling[single] n=515183: recall@1_diag=0.1649/ceil=0.5062 (Ausschoepfung=0.3257) recall@10_diag=0.5221/ceil=0.9029 (Ausschoepfung=0.5783) class_recall@10=0.8645
+  ceiling[multi] n=275839: recall@1_diag=0.1854/ceil=0.7485 (Ausschoepfung=0.2476) recall@10_diag=0.4267/ceil=0.9844 (Ausschoepfung=0.4334) class_recall@10=0.8473
+epoch 19/100: train_loss_mean=10.9950 train_loss_std=1.3798 val_loss=12.9446 val_recall@1=0.3828 val_recall@10=0.5703 val_recall@1_diag=0.1728 val_recall@10_diag=0.4904 lr=1.00e-03 temp=28.0351 bias=-7.9279 dauer=171.7s
+  ceiling[all] n=791022: recall@1_diag=0.1728/ceil=0.5910 (Ausschoepfung=0.2924) recall@10_diag=0.4904/ceil=0.9312 (Ausschoepfung=0.5267) class_recall@10=0.8508
+  ceiling[single] n=515183: recall@1_diag=0.1653/ceil=0.5068 (Ausschoepfung=0.3262) recall@10_diag=0.5188/ceil=0.9024 (Ausschoepfung=0.5749) class_recall@10=0.8557
+  ceiling[multi] n=275839: recall@1_diag=0.1868/ceil=0.7483 (Ausschoepfung=0.2496) recall@10_diag=0.4375/ceil=0.9850 (Ausschoepfung=0.4442) class_recall@10=0.8418
+epoch 20/100: train_loss_mean=10.9819 train_loss_std=1.3698 val_loss=13.1113 val_recall@1=0.3851 val_recall@10=0.5665 val_recall@1_diag=0.1733 val_recall@10_diag=0.4871 lr=1.00e-03 temp=28.4241 bias=-7.9506 dauer=168.6s
+  ceiling[all] n=791022: recall@1_diag=0.1733/ceil=0.5911 (Ausschoepfung=0.2932) recall@10_diag=0.4871/ceil=0.9313 (Ausschoepfung=0.5230) class_recall@10=0.8522
+  ceiling[single] n=515183: recall@1_diag=0.1643/ceil=0.5064 (Ausschoepfung=0.3244) recall@10_diag=0.5134/ceil=0.9029 (Ausschoepfung=0.5686) class_recall@10=0.8596
+  ceiling[multi] n=275839: recall@1_diag=0.1902/ceil=0.7493 (Ausschoepfung=0.2539) recall@10_diag=0.4381/ceil=0.9844 (Ausschoepfung=0.4450) class_recall@10=0.8382
+epoch 21/100: train_loss_mean=10.9788 train_loss_std=1.3760 val_loss=13.0869 val_recall@1=0.3824 val_recall@10=0.5580 val_recall@1_diag=0.1684 val_recall@10_diag=0.4782 lr=1.00e-03 temp=28.3636 bias=-7.9521 dauer=164.2s
+  ceiling[all] n=791022: recall@1_diag=0.1684/ceil=0.5912 (Ausschoepfung=0.2849) recall@10_diag=0.4782/ceil=0.9315 (Ausschoepfung=0.5134) class_recall@10=0.8410
+  ceiling[single] n=515183: recall@1_diag=0.1615/ceil=0.5067 (Ausschoepfung=0.3187) recall@10_diag=0.5065/ceil=0.9030 (Ausschoepfung=0.5609) class_recall@10=0.8470
+  ceiling[multi] n=275839: recall@1_diag=0.1813/ceil=0.7488 (Ausschoepfung=0.2421) recall@10_diag=0.4254/ceil=0.9846 (Ausschoepfung=0.4321) class_recall@10=0.8298
+epoch 22/100: train_loss_mean=10.9722 train_loss_std=1.3725 val_loss=12.9005 val_recall@1=0.3836 val_recall@10=0.5827 val_recall@1_diag=0.1781 val_recall@10_diag=0.5020 lr=1.00e-03 temp=28.3475 bias=-7.9521 dauer=156.9s
+  ceiling[all] n=791022: recall@1_diag=0.1781/ceil=0.5910 (Ausschoepfung=0.3013) recall@10_diag=0.5020/ceil=0.9315 (Ausschoepfung=0.5389) class_recall@10=0.8688
+  ceiling[single] n=515183: recall@1_diag=0.1677/ceil=0.5068 (Ausschoepfung=0.3308) recall@10_diag=0.5284/ceil=0.9028 (Ausschoepfung=0.5853) class_recall@10=0.8735
+  ceiling[multi] n=275839: recall@1_diag=0.1975/ceil=0.7483 (Ausschoepfung=0.2639) recall@10_diag=0.4527/ceil=0.9850 (Ausschoepfung=0.4596) class_recall@10=0.8599
+epoch 23/100: train_loss_mean=10.9693 train_loss_std=1.3799 val_loss=12.9381 val_recall@1=0.3914 val_recall@10=0.5712 val_recall@1_diag=0.1772 val_recall@10_diag=0.4916 lr=1.00e-03 temp=28.5826 bias=-7.9601 dauer=159.6s
+  ceiling[all] n=791022: recall@1_diag=0.1772/ceil=0.5908 (Ausschoepfung=0.3000) recall@10_diag=0.4916/ceil=0.9312 (Ausschoepfung=0.5280) class_recall@10=0.8554
+  ceiling[single] n=515183: recall@1_diag=0.1690/ceil=0.5066 (Ausschoepfung=0.3336) recall@10_diag=0.5216/ceil=0.9027 (Ausschoepfung=0.5778) class_recall@10=0.8628
+  ceiling[multi] n=275839: recall@1_diag=0.1925/ceil=0.7480 (Ausschoepfung=0.2573) recall@10_diag=0.4357/ceil=0.9842 (Ausschoepfung=0.4427) class_recall@10=0.8414
+epoch 24/100: train_loss_mean=10.9612 train_loss_std=1.3815 val_loss=13.0060 val_recall@1=0.3844 val_recall@10=0.5683 val_recall@1_diag=0.1726 val_recall@10_diag=0.4888 lr=1.00e-03 temp=28.5967 bias=-7.9652 dauer=164.9s
+  ceiling[all] n=791022: recall@1_diag=0.1726/ceil=0.5908 (Ausschoepfung=0.2921) recall@10_diag=0.4888/ceil=0.9315 (Ausschoepfung=0.5248) class_recall@10=0.8546
+  ceiling[single] n=515183: recall@1_diag=0.1634/ceil=0.5067 (Ausschoepfung=0.3226) recall@10_diag=0.5124/ceil=0.9029 (Ausschoepfung=0.5674) class_recall@10=0.8621
+  ceiling[multi] n=275839: recall@1_diag=0.1896/ceil=0.7480 (Ausschoepfung=0.2535) recall@10_diag=0.4449/ceil=0.9848 (Ausschoepfung=0.4517) class_recall@10=0.8406
+epoch 25/100: train_loss_mean=10.9549 train_loss_std=1.3824 val_loss=12.9619 val_recall@1=0.3879 val_recall@10=0.5655 val_recall@1_diag=0.1747 val_recall@10_diag=0.4860 lr=1.00e-03 temp=28.7147 bias=-7.9623 dauer=170.9s
+  ceiling[all] n=791022: recall@1_diag=0.1747/ceil=0.5910 (Ausschoepfung=0.2956) recall@10_diag=0.4860/ceil=0.9315 (Ausschoepfung=0.5217) class_recall@10=0.8498
+  ceiling[single] n=515183: recall@1_diag=0.1644/ceil=0.5067 (Ausschoepfung=0.3245) recall@10_diag=0.5073/ceil=0.9030 (Ausschoepfung=0.5618) class_recall@10=0.8567
+  ceiling[multi] n=275839: recall@1_diag=0.1939/ceil=0.7483 (Ausschoepfung=0.2592) recall@10_diag=0.4462/ceil=0.9849 (Ausschoepfung=0.4530) class_recall@10=0.8370
+epoch 26/100: train_loss_mean=10.9447 train_loss_std=1.3637 val_loss=12.9040 val_recall@1=0.3888 val_recall@10=0.5688 val_recall@1_diag=0.1755 val_recall@10_diag=0.4893 lr=1.00e-03 temp=28.7523 bias=-7.9708 dauer=175.1s
+  ceiling[all] n=791022: recall@1_diag=0.1755/ceil=0.5910 (Ausschoepfung=0.2969) recall@10_diag=0.4893/ceil=0.9314 (Ausschoepfung=0.5253) class_recall@10=0.8518
+  ceiling[single] n=515183: recall@1_diag=0.1659/ceil=0.5071 (Ausschoepfung=0.3271) recall@10_diag=0.5125/ceil=0.9027 (Ausschoepfung=0.5678) class_recall@10=0.8578
+  ceiling[multi] n=275839: recall@1_diag=0.1935/ceil=0.7478 (Ausschoepfung=0.2587) recall@10_diag=0.4459/ceil=0.9850 (Ausschoepfung=0.4527) class_recall@10=0.8405
+epoch 27/100: train_loss_mean=10.9399 train_loss_std=1.3621 val_loss=12.8472 val_recall@1=0.3902 val_recall@10=0.5753 val_recall@1_diag=0.1802 val_recall@10_diag=0.4956 lr=1.00e-03 temp=28.9864 bias=-7.9740 dauer=168.5s
+  ceiling[all] n=791022: recall@1_diag=0.1802/ceil=0.5910 (Ausschoepfung=0.3050) recall@10_diag=0.4956/ceil=0.9314 (Ausschoepfung=0.5320) class_recall@10=0.8560
+  ceiling[single] n=515183: recall@1_diag=0.1714/ceil=0.5070 (Ausschoepfung=0.3381) recall@10_diag=0.5197/ceil=0.9029 (Ausschoepfung=0.5756) class_recall@10=0.8621
+  ceiling[multi] n=275839: recall@1_diag=0.1968/ceil=0.7480 (Ausschoepfung=0.2631) recall@10_diag=0.4505/ceil=0.9847 (Ausschoepfung=0.4575) class_recall@10=0.8445
+epoch 28/100: train_loss_mean=10.9373 train_loss_std=1.3670 val_loss=13.0088 val_recall@1=0.3904 val_recall@10=0.5699 val_recall@1_diag=0.1766 val_recall@10_diag=0.4901 lr=1.00e-03 temp=29.0605 bias=-7.9801 dauer=169.6s
+  ceiling[all] n=791022: recall@1_diag=0.1766/ceil=0.5913 (Ausschoepfung=0.2987) recall@10_diag=0.4901/ceil=0.9314 (Ausschoepfung=0.5262) class_recall@10=0.8454
+  ceiling[single] n=515183: recall@1_diag=0.1684/ceil=0.5066 (Ausschoepfung=0.3324) recall@10_diag=0.5143/ceil=0.9028 (Ausschoepfung=0.5697) class_recall@10=0.8511
+  ceiling[multi] n=275839: recall@1_diag=0.1919/ceil=0.7494 (Ausschoepfung=0.2561) recall@10_diag=0.4449/ceil=0.9850 (Ausschoepfung=0.4517) class_recall@10=0.8347
+epoch 29/100: train_loss_mean=10.9331 train_loss_std=1.3655 val_loss=12.9674 val_recall@1=0.3830 val_recall@10=0.5749 val_recall@1_diag=0.1752 val_recall@10_diag=0.4943 lr=1.00e-03 temp=29.1582 bias=-7.9760 dauer=169.0s
+  ceiling[all] n=791022: recall@1_diag=0.1752/ceil=0.5911 (Ausschoepfung=0.2963) recall@10_diag=0.4943/ceil=0.9314 (Ausschoepfung=0.5308) class_recall@10=0.8572
+  ceiling[single] n=515183: recall@1_diag=0.1668/ceil=0.5066 (Ausschoepfung=0.3292) recall@10_diag=0.5244/ceil=0.9026 (Ausschoepfung=0.5810) class_recall@10=0.8625
+  ceiling[multi] n=275839: recall@1_diag=0.1908/ceil=0.7488 (Ausschoepfung=0.2548) recall@10_diag=0.4382/ceil=0.9851 (Ausschoepfung=0.4448) class_recall@10=0.8475
+epoch 30/100: train_loss_mean=10.9341 train_loss_std=1.3877 val_loss=12.9391 val_recall@1=0.3848 val_recall@10=0.5753 val_recall@1_diag=0.1756 val_recall@10_diag=0.4954 lr=1.00e-03 temp=29.1501 bias=-7.9706 dauer=167.6s
+  ceiling[all] n=791022: recall@1_diag=0.1756/ceil=0.5911 (Ausschoepfung=0.2970) recall@10_diag=0.4954/ceil=0.9313 (Ausschoepfung=0.5319) class_recall@10=0.8592
+  ceiling[single] n=515183: recall@1_diag=0.1682/ceil=0.5067 (Ausschoepfung=0.3320) recall@10_diag=0.5305/ceil=0.9026 (Ausschoepfung=0.5877) class_recall@10=0.8661
+  ceiling[multi] n=275839: recall@1_diag=0.1893/ceil=0.7488 (Ausschoepfung=0.2528) recall@10_diag=0.4300/ceil=0.9849 (Ausschoepfung=0.4366) class_recall@10=0.8463
+epoch 31/100: train_loss_mean=10.9272 train_loss_std=1.3832 val_loss=12.9364 val_recall@1=0.3871 val_recall@10=0.5658 val_recall@1_diag=0.1739 val_recall@10_diag=0.4858 lr=1.00e-03 temp=29.1661 bias=-7.9710 dauer=171.9s
+  ceiling[all] n=791022: recall@1_diag=0.1739/ceil=0.5909 (Ausschoepfung=0.2943) recall@10_diag=0.4858/ceil=0.9314 (Ausschoepfung=0.5215) class_recall@10=0.8495
+  ceiling[single] n=515183: recall@1_diag=0.1660/ceil=0.5069 (Ausschoepfung=0.3274) recall@10_diag=0.5148/ceil=0.9028 (Ausschoepfung=0.5703) class_recall@10=0.8584
+  ceiling[multi] n=275839: recall@1_diag=0.1887/ceil=0.7479 (Ausschoepfung=0.2523) recall@10_diag=0.4315/ceil=0.9849 (Ausschoepfung=0.4381) class_recall@10=0.8329
+epoch 32/100: train_loss_mean=10.9311 train_loss_std=1.3836 val_loss=12.9513 val_recall@1=0.3839 val_recall@10=0.5763 val_recall@1_diag=0.1758 val_recall@10_diag=0.4959 lr=1.00e-03 temp=29.2667 bias=-7.9688 dauer=172.6s
+  ceiling[all] n=791022: recall@1_diag=0.1758/ceil=0.5912 (Ausschoepfung=0.2975) recall@10_diag=0.4959/ceil=0.9313 (Ausschoepfung=0.5325) class_recall@10=0.8574
+  ceiling[single] n=515183: recall@1_diag=0.1685/ceil=0.5068 (Ausschoepfung=0.3325) recall@10_diag=0.5267/ceil=0.9029 (Ausschoepfung=0.5834) class_recall@10=0.8632
+  ceiling[multi] n=275839: recall@1_diag=0.1896/ceil=0.7488 (Ausschoepfung=0.2532) recall@10_diag=0.4384/ceil=0.9844 (Ausschoepfung=0.4453) class_recall@10=0.8466
+Early Stopping: recall@10_diag seit 10 Epochen nicht verbessert (bestes recall@10_diag=0.5020).
