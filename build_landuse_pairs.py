@@ -144,6 +144,56 @@ def assign_pixel_splits(pairs: pd.DataFrame, tile_paths: dict, aoi_path=AOI_IN,
     return split
 
 
+def deduplicate_pixels(pairs: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """Randpixel-Deduplizierung (Nutzervorgabe Phase C/1c): ein Pixel (tile,row,col) kann von
+    mehreren Urban-Atlas-Polygonen mit Teil-Coverage getroffen werden (siehe Zusatzpruefung
+    Schritt 1b) - ein Pixel hat aber nur einen Embedding-Vektor, also genau ein Ziel. Behalten
+    wird die Zeile mit maximaler coverage (dominante Flaechenzuordnung). Ties (identische
+    coverage) deterministisch ueber die kleinste ID_COL-ID aufgeloest, kein Zufall."""
+    key = ["tile", "row", "col"]
+    n_before = len(pairs)
+
+    max_cov = pairs.groupby(key)["coverage"].transform("max")
+    is_max = pairs["coverage"] == max_cov
+    n_tie_groups = int((pairs[is_max].groupby(key).size() > 1).sum())
+
+    # Sortierung so, dass die erste Zeile je Gruppe die gewuenschte Gewinner-Zeile ist:
+    # coverage absteigend, bei Gleichstand ID_COL aufsteigend.
+    ordered = pairs.sort_values(["coverage", ID_COL], ascending=[False, True])
+    dedup = ordered.drop_duplicates(subset=key, keep="first").reset_index(drop=True)
+
+    stats = {
+        "n_before": n_before,
+        "n_after": len(dedup),
+        "n_removed": n_before - len(dedup),
+        "frac_removed": (n_before - len(dedup)) / n_before if n_before else 0.0,
+        "n_tie_groups": n_tie_groups,
+    }
+    print(f"  Deduplizierung (max coverage je Pixel): {n_before} -> {stats['n_after']} Zeilen "
+          f"(-{stats['n_removed']}, {stats['frac_removed']:.2%} der Zeilen betroffen)")
+    print(f"  Ties (mehrere Zeilen mit identischer max-coverage je Pixel, ueber "
+          f"{ID_COL} aufgeloest): {n_tie_groups}")
+
+    cov = dedup["coverage"]
+    print(f"  Coverage der Gewinner-Zeilen: min={cov.min():.4f} p10={cov.quantile(0.1):.4f} "
+          f"median={cov.median():.4f}")
+    if (cov < 0.5).mean() > 0.05:
+        print(f"  WARNUNG: {int((cov < 0.5).sum())} ({(cov < 0.5).mean():.2%}) Gewinner-Zeilen "
+              f"haben coverage < 0.5 - schwache Flaechenzuordnung, gehoert in die Limitationen.")
+
+    dist_before = pairs["code_2021"].value_counts(normalize=True)
+    dist_after = dedup["code_2021"].value_counts(normalize=True)
+    dist_cmp = pd.DataFrame({"anteil_vor": dist_before, "anteil_nach": dist_after})
+    dist_cmp["delta_pp"] = (dist_cmp["anteil_nach"] - dist_cmp["anteil_vor"]) * 100
+    dist_cmp = dist_cmp.sort_values("delta_pp")
+    print("\n  Klassenverteilung vor/nach Deduplizierung (Anteil an allen Zeilen), "
+          "groesste Verschiebungen zuerst und zuletzt:")
+    with pd.option_context("display.max_rows", None, "display.width", 200):
+        print(pd.concat([dist_cmp.head(5), dist_cmp.tail(5)]))
+
+    return dedup, stats
+
+
 def build_landuse_pairs(name: str, ua: gpd.GeoDataFrame, tile_paths_list) -> pd.DataFrame:
     print(f"\n=== Backbone: {name} ===")
     pairs = sj.join_pois_to_tiles(ua, tile_paths_list, id_col=ID_COL, carry=CARRY,
@@ -153,10 +203,17 @@ def build_landuse_pairs(name: str, ua: gpd.GeoDataFrame, tile_paths_list) -> pd.
         return pairs
     print(f"  Pixel-Zeilen vor Sampling: {len(pairs)} (aus {pairs[ID_COL].nunique()} Polygonen)")
 
+    pairs, _dedup_stats = deduplicate_pixels(pairs)
+
+    # Nutzervorgabe (Phase C): groupby(ID_COL, group_keys=False).apply(lambda g: g.sample(...))
+    # droppt in dieser pandas-Version die Gruppierungsspalte ID_COL aus dem Rueckgabe-DataFrame -
+    # verifiziert an einem Minimalbeispiel. Manuelle Schleife statt .apply() vermeidet das;
+    # gleicher SAMPLE_SEED, gleiche Gruppenreihenfolge (pandas-Default sort=True), gleiche
+    # rng-Verbrauchsreihenfolge pro Gruppe wie zuvor.
     rng = np.random.default_rng(SAMPLE_SEED)
-    sampled = (pairs.groupby(ID_COL, group_keys=False)
-               .apply(lambda g: g.sample(n=min(len(g), MAX_PIXELS_PER_POLYGON), random_state=rng)))
-    sampled = sampled.reset_index(drop=True)
+    parts = [g.sample(n=min(len(g), MAX_PIXELS_PER_POLYGON), random_state=rng)
+             for _, g in pairs.groupby(ID_COL)]
+    sampled = pd.concat(parts, ignore_index=True)
     print(f"  Pixel-Zeilen nach Sampling (max {MAX_PIXELS_PER_POLYGON}/Polygon): {len(sampled)}")
 
     tile_paths = {p.name: p for p in tile_paths_list}

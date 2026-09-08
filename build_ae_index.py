@@ -10,6 +10,7 @@ positiv), d.h. src.bounds.bottom > src.bounds.top ist moeglich. Bounds werden de
 ueber min()/max() normalisiert, nie direkt aus left/right/top/bottom uebernommen - sonst
 entstehen invertierte Boxen und jeder raeumliche Filter liefert still null Treffer.
 """
+import argparse
 import concurrent.futures as cf
 from pathlib import Path
 
@@ -19,7 +20,10 @@ from shapely.geometry import box
 
 import config as cfg
 
-ZONES = ["30N", "31N"]  # Greater London: 30N und 31N (0-Meridian)
+ZONES_BY_REGION = {
+    "london": ["30N", "31N"],          # 0-Meridian, siehe CLAUDE.md
+    "niedersachsen": ["32N"],          # eine einzelne UTM-Zone, siehe CLAUDE.md
+}
 TILEDIR = cfg.DATA / "raw" / "alphaearth"
 
 
@@ -60,9 +64,16 @@ def build_zone_index(zone: str, tiledir: Path = TILEDIR, max_workers: int = 16) 
 
 
 def main():
-    for zone in ZONES:
-        gdf = build_zone_index(zone)
+    parser = argparse.ArgumentParser(description="Raeumlicher Index der AlphaEarth-Kacheln je Region")
+    parser.add_argument("--region", type=str, default="london", choices=sorted(ZONES_BY_REGION))
+    args = parser.parse_args()
+
+    for zone in ZONES_BY_REGION[args.region]:
         out = TILEDIR / f"ae_index_{zone}.gpkg"
+        if out.exists():
+            print(f"  {out} existiert bereits - ueberspringe (Index wird nicht neu gebaut).")
+            continue
+        gdf = build_zone_index(zone)
         gdf.to_file(out, driver="GPKG")
         print(f"  Gespeichert: {out}")
 

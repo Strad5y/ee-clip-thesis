@@ -23,7 +23,7 @@ import geopandas as gpd
 import pandas as pd
 
 import config as cfg
-from spatial_join import ID_COL, POIS_IN, join_pois_to_tiles
+from spatial_join import DEFAULT_ZONES, ID_COL, POIS_IN, join_pois_to_tiles
 
 LOG_DIR = cfg.ROOT / "logs"
 HEARTBEAT_INTERVAL_S = 60
@@ -92,7 +92,7 @@ def make_chunks(gdf: gpd.GeoDataFrame, chunk_size: int) -> list:
 
 
 def run(label: str, tile_paths, dequantize, chunk_dir: Path, out_path: Path,
-        chunk_size: int = 20000, pois_in: Path = POIS_IN) -> pd.DataFrame:
+        chunk_size: int = 20000, pois_in: Path = POIS_IN, zones=DEFAULT_ZONES) -> pd.DataFrame:
     """Fuehrt den vollstaendigen blockweisen Join durch und schreibt out_path.
     label: nur fuer Logdatei-Namen/Ausgaben (z.B. 'ae', 'tessera')."""
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -137,7 +137,7 @@ def run(label: str, tile_paths, dequantize, chunk_dir: Path, out_path: Path,
             continue
 
         print(f"Block {i + 1}/{n_blocks}: {len(chunk)} POIs, starte Join...")
-        pairs = join_pois_to_tiles(chunk, tile_paths, dequantize=dequantize)
+        pairs = join_pois_to_tiles(chunk, tile_paths, dequantize=dequantize, zones=zones)
         pairs.to_parquet(chunk_path)
 
         n_pois_done += len(chunk)

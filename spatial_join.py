@@ -47,6 +47,10 @@ CARRY = []  # zusaetzliche POI-Spalten fuer den Output; bewusst leer -
             # sonst wuerde das Long-Format (mehrere Tags je poi_id) die Pixel-Paare vervielfachen
 
 POIS_IN = cfg.DATA / "interim" / "pois_london_test_filtered.parquet"
+POIS_IN_BY_REGION = {
+    "london": POIS_IN,
+    "niedersachsen": cfg.DATA / "interim" / "pois_niedersachsen_full_filtered.parquet",
+}
 
 
 def _ensure_north_up(raster_path: Path, cache_dir: Path) -> Path:
@@ -85,13 +89,45 @@ def _ensure_north_up(raster_path: Path, cache_dir: Path) -> Path:
 # der beiden - das fertige AlphaEarth-Mosaik (build_mosaic.py) waere einmal resampled gewesen,
 # TESSERA nicht; fuer einen Backbone-Vergleich ist das eine unnoetige Asymmetrie. Das Mosaik
 # bleibt als Artefakt liegen, wird aber hier nicht mehr referenziert.
-TESSERA_DIR = cfg.DATA / "raw" / "tessera" / "london" / "global_0.1_degree_representation" / "2025"
-AE_TILES_DIR = cfg.DATA / "raw" / "alphaearth" / "tiles"
-AE_NORTHUP_DIR = cfg.DATA / "interim" / "ae_northup"
-BACKBONES = {
-    "tessera": sorted(TESSERA_DIR.glob("*/*.tiff")),
-    "ae": [_ensure_north_up(p, AE_NORTHUP_DIR) for p in sorted(AE_TILES_DIR.glob("*.tiff"))],
+#
+# Region-Parametrisierung (Niedersachsen-Erweiterung): TESSERA-Kacheln UND AlphaEarth-Kacheln
+# liegen je Region in eigenen Unterverzeichnissen (data/raw/{tessera,alphaearth/tiles}/{region}/)
+# - siehe make_tessera_tif.py bzw. download_ae_tiles.py. Ein flaches AE_TILES_DIR ohne
+# Region-Suffix wuerde sonst POIs einer Region gegen Kacheln einer anderen Region joinen
+# (geografisch meist folgenlos, da 0 Treffer, aber langsam und nicht reproduzierbar).
+ZONES_BY_REGION = {
+    "london": ["30N", "31N"],          # 0-Meridian, siehe CLAUDE.md
+    "niedersachsen": ["32N"],          # eine einzelne UTM-Zone, siehe CLAUDE.md
 }
+AE_NORTHUP_DIR = cfg.DATA / "interim" / "ae_northup"
+
+
+def tessera_dir(region: str) -> Path:
+    return cfg.DATA / "raw" / "tessera" / region / "global_0.1_degree_representation" / "2025"
+
+
+def ae_tiles_dir(region: str) -> Path:
+    return cfg.DATA / "raw" / "alphaearth" / "tiles" / region
+
+
+def get_backbones(region: str = "london") -> dict:
+    """Baut das {backbone: [Kachelpfade]}-Dict fuer eine Region neu (statt es einmalig beim
+    Modul-Import fest zu verdrahten) - noetig, weil mehrere Regionen mit unterschiedlichen
+    Kachelverzeichnissen im selben Prozess/Testlauf existieren koennen."""
+    tdir = tessera_dir(region)
+    adir = ae_tiles_dir(region)
+    return {
+        "tessera": sorted(tdir.glob("*/*.tiff")),
+        "ae": [_ensure_north_up(p, AE_NORTHUP_DIR) for p in sorted(adir.glob("*.tiff"))],
+    }
+
+
+# Backward-kompatibler Default (London) - bestehende Importe (`from spatial_join import
+# BACKBONES`) funktionieren unveraendert weiter.
+TESSERA_DIR = tessera_dir("london")
+AE_TILES_DIR = ae_tiles_dir("london")
+BACKBONES = get_backbones("london")
+
 # UTM-Zonen-Zuordnung (Nutzervorgabe): London spreizt 30N/31N am 0-Meridian, deren Kachel-
 # Gitter ueberlappen sich geografisch (~2.7 km breiter Streifen, verifiziert: 6.483 von
 # 279.988 POIs von Kacheln BEIDER Zonen getroffen -> systematisch verdoppeltes n_pixels_poi,
@@ -99,20 +135,37 @@ BACKBONES = {
 # GENAU EINER Zone zugeordnet (Laenge des Zentroids ggue. der nominellen Grenze bei 0 Grad),
 # beim Join werden fuer diesen POI nur Kacheln der zugewiesenen Zone beruecksichtigt - gilt
 # fuer TESSERA und AlphaEarth gleichermassen (beide haben 30N/31N-Kacheln).
+#
+# Niedersachsen hat nur EINE UTM-Zone (32N, siehe CLAUDE.md) - keine Zonennaht, keine
+# Ueberlappung, also keine Zentroid-Grenzlogik noetig (assign_utm_zone nimmt dafuer einen
+# Fast-Path: bei genau einer moeglichen Zone wird sie ungeprueft an alle POIs vergeben).
 UTM_ZONE_BOUNDARY_LON = 0.0
-ZONE_CRS = {"30N": "EPSG:32630", "31N": "EPSG:32631"}
+ZONE_CRS = {"30N": "EPSG:32630", "31N": "EPSG:32631", "32N": "EPSG:32632"}
 ZONE_CRS_INV = {v: k for k, v in ZONE_CRS.items()}
+DEFAULT_ZONES = ("30N", "31N")
 
 
-def assign_utm_zone(gdf: gpd.GeoDataFrame) -> pd.Series:
-    """Ordnet jedem POI (Index-aligned) genau eine UTM-Zone zu: Zentroid-Laenge < 0 Grad ->
-    30N, >= 0 Grad -> 31N. Zentroid wird in einer projizierten CRS (EPSG:3857) berechnet statt
-    direkt in Grad - geopandas warnt sonst zu Recht vor verzerrten Zentroiden in geografischer
-    CRS; fuer die hier benoetigte Praezision (nur das Vorzeichen ggue. 0 Grad, POI-Polygone
-    sind klein) ist die Web-Mercator-Verzerrung irrelevant."""
+def assign_utm_zone(gdf: gpd.GeoDataFrame, zones=DEFAULT_ZONES) -> pd.Series:
+    """Ordnet jedem POI (Index-aligned) genau eine UTM-Zone aus `zones` zu.
+
+    Ein-Zonen-Regionen (z.B. Niedersachsen/32N): jeder POI bekommt trivial die eine Zone,
+    keine Grenzberechnung noetig.
+
+    Zwei-Zonen-Fall (London/30N+31N, die einzige bisher unterstuetzte Mehrzonen-Kombination):
+    Zentroid-Laenge < 0 Grad -> erste Zone, >= 0 Grad -> zweite Zone. Zentroid wird in einer
+    projizierten CRS (EPSG:3857) berechnet statt direkt in Grad - geopandas warnt sonst zu
+    Recht vor verzerrten Zentroiden in geografischer CRS; fuer die hier benoetigte Praezision
+    (nur das Vorzeichen ggue. 0 Grad, POI-Polygone sind klein) ist die Web-Mercator-Verzerrung
+    irrelevant."""
+    if len(zones) == 1:
+        return pd.Series(zones[0], index=gdf.index)
+    if len(zones) != 2:
+        raise NotImplementedError(
+            f"assign_utm_zone unterstuetzt nur 1 Zone oder das London-Paar {DEFAULT_ZONES}, "
+            f"bekam: {zones}")
     gdf_3857 = gdf.to_crs("EPSG:3857")
     centroid_lon = gdf_3857.geometry.centroid.to_crs("EPSG:4326").x
-    return pd.Series(np.where(centroid_lon < UTM_ZONE_BOUNDARY_LON, "30N", "31N"), index=gdf.index)
+    return pd.Series(np.where(centroid_lon < UTM_ZONE_BOUNDARY_LON, zones[0], zones[1]), index=gdf.index)
 
 
 # Backbone-spezifische Dequantisierung (siehe dequantize.py) - None = keine noetig/bekannt.
@@ -201,8 +254,12 @@ def join_pois_to_raster(gdf: gpd.GeoDataFrame, raster_path, id_col=ID_COL, carry
     """POIs x EIN Raster (eine Kachel oder ein Mosaik) -> DataFrame mit einer Zeile pro (poi,
     geschnittenem Pixel), inkl. Spalte 'tile' = Dateiname dieses Rasters.
 
-    gdf wird HIER in die CRS DIESES Rasters reprojiziert - bei kachelweisem Aufruf (siehe
-    join_pois_to_tiles) ist das viel billiger, als das Raster selbst zu reprojizieren.
+    gdf wird HIER in die CRS DIESES Rasters reprojiziert (uebersprungen, wenn gdf schon in
+    dieser CRS ist - siehe join_pois_to_tiles, das bei kachelweisem Aufruf VORHER einmal pro
+    Zone reprojiziert, statt es hier pro Kachel neu zu tun: bei vielen kleinen Kacheln
+    derselben Zone, z.B. 1474 TESSERA-Kacheln/Niedersachsen (alle EPSG:32632), war die
+    wiederholte pyproj-Transformation derselben 20.000 POIs 1474x pro Block der dominante
+    Kostenfaktor, nicht der Pixel-Lookup selbst).
 
     dequantize: optionale Funktion (n, bands) int8 -> (n, bands) float, angewendet NACH dem
     Nachschlagen der rohen Bandwerte und VOR dem Speichern als 'embedding' (siehe dequantize.py -
@@ -213,7 +270,8 @@ def join_pois_to_raster(gdf: gpd.GeoDataFrame, raster_path, id_col=ID_COL, carry
     with rasterio.open(raster_path) as src:
         raster_crs = src.crs
 
-    gdf = gdf.to_crs(raster_crs)
+    if gdf.crs != raster_crs:
+        gdf = gdf.to_crs(raster_crs)
 
     points = gdf[gdf.geometry.geom_type == "Point"]
     polys = gdf[gdf.geometry.geom_type.isin(["Polygon", "MultiPolygon"])]
@@ -228,12 +286,27 @@ def join_pois_to_raster(gdf: gpd.GeoDataFrame, raster_path, id_col=ID_COL, carry
     if len(pairs) == 0:
         return pairs
 
-    # Embedding-Werte je Pixel nachschlagen (ein voller Array-Read pro Kachel; Kacheln sind
-    # klein genug dafuer - fuer sehr grosse Einzelraster spaeter durch windowed reads ersetzen)
+    # Embedding-Werte je Pixel nachschlagen: adaptive Strategie je nach Trefferdichte.
+    # - WENIGE Treffer ggue. Kachelgroesse (typisch: kachelweiser Join eines kleinen
+    #   POI-Blocks gegen VIELE kleine Kacheln, z.B. TESSERA/Niedersachsen 1474 Kacheln):
+    #   rasterio.sample() liest nur die GDAL-Bloecke der angefragten Punkte - ein
+    #   begrenzendes Fenster hilft hier NICHT zuverlaessig, weil POIs innerhalb einer Kachel
+    #   raeumlich verstreut sind (gemessen: Fenster deckte bei 5-20 Treffern oft 30-95% der
+    #   Kachel ab). Gemessen: sample() ~135x schneller als windowed read bei dieser Dichte.
+    # - VIELE Treffer (z.B. AE: wenige riesige Kacheln, oft ein Grossteil eines POI-Blocks
+    #   pro Kachel): ein einziger Vollread ist guenstiger als viele einzelne
+    #   1x1-Fenster-Reads (sample() hat ~20ms Fixkosten PRO Punkt - siehe rasterio.sample.
+    #   sample_gen, das pro Punkt einen eigenen dataset.read()-Aufruf macht, unabhaengig von
+    #   gemeinsam genutzten internen Bloecken).
     with rasterio.open(raster_path) as src:
-        arr = src.read()  # (bands, H, W)
-
-    band_vals = arr[:, pairs["row"].to_numpy(), pairs["col"].to_numpy()].T  # (n_pairs, bands)
+        n_tile_px = src.width * src.height
+        sparse = len(pairs) < 2000 and len(pairs) < 0.02 * n_tile_px
+        if sparse:
+            xs, ys = rasterio.transform.xy(src.transform, pairs["row"].to_numpy(), pairs["col"].to_numpy())
+            band_vals = np.array(list(src.sample(zip(xs, ys))))  # (n_pairs, bands)
+        else:
+            arr = src.read()  # (bands, H, W)
+            band_vals = arr[:, pairs["row"].to_numpy(), pairs["col"].to_numpy()].T  # (n_pairs, bands)
     if dequantize is not None:
         band_vals = dequantize(band_vals)
     else:
@@ -244,18 +317,28 @@ def join_pois_to_raster(gdf: gpd.GeoDataFrame, raster_path, id_col=ID_COL, carry
 
 
 def join_pois_to_tiles(gdf: gpd.GeoDataFrame, tile_paths, id_col=ID_COL, carry=CARRY,
-                        dequantize=None) -> pd.DataFrame:
+                        dequantize=None, zones=DEFAULT_ZONES) -> pd.DataFrame:
     """Iteriert ueber eine Kachelliste, joint POIs gegen JEDE Kachel einzeln (POIs werden pro
     Aufruf guenstig in die jeweils native CRS der Kachel reprojiziert - kein Rasterreproject),
     konkateniert die Ergebnisse. n_pixels_poi wird ERST NACH dem Konkatenieren berechnet
     (ueber ALLE Kacheln hinweg), falls ein POI mehrere Kacheln schneidet.
 
-    UTM-Zonen-Dedup: jeder POI wird VORHER genau einer Zone zugeordnet (assign_utm_zone) -
-    eine Kachel, deren CRS eine bekannte Zone ist (siehe ZONE_CRS), bekommt beim Join NUR die
-    POIs dieser Zone. Verhindert, dass ein POI im geografischen Ueberlappungsstreifen zweier
-    Zonen doppelte (redundante) Pixel aus beiden Kacheln bekommt. Spalte 'utm_zone' im Output
-    macht die Zuordnung nachvollziehbar."""
-    zone_per_poi = assign_utm_zone(gdf)
+    UTM-Zonen-Dedup: jeder POI wird VORHER genau einer Zone aus `zones` zugeordnet
+    (assign_utm_zone) - eine Kachel, deren CRS eine bekannte Zone ist (siehe ZONE_CRS), bekommt
+    beim Join NUR die POIs dieser Zone. Verhindert, dass ein POI im geografischen
+    Ueberlappungsstreifen zweier Zonen doppelte (redundante) Pixel aus beiden Kacheln bekommt.
+    Fuer Ein-Zonen-Regionen (zones mit Laenge 1, z.B. Niedersachsen/32N) ist das ein No-Op -
+    jede Kachel bekommt einfach alle POIs. Spalte 'utm_zone' im Output macht die Zuordnung
+    nachvollziehbar.
+
+    Reprojektions-Cache: alle Kacheln derselben CRS (typischerweise alle Kacheln einer Zone)
+    teilen sich EINE reprojizierte Kopie des zonengefilterten gdf, statt bei jedem Kachel-Aufruf
+    (in join_pois_to_raster) neu zu reprojizieren - bei vielen kleinen Kacheln derselben Zone
+    (z.B. 1474 TESSERA-Kacheln/Niedersachsen) war die wiederholte pyproj-Transformation
+    derselben POIs sonst der dominante Kostenfaktor (gemessen: >>1h Hochrechnung fuer wenige
+    Bloecke)."""
+    zone_per_poi = assign_utm_zone(gdf, zones=zones)
+    reproj_cache: dict = {}  # tile_crs (str) -> bereits reprojizierte, zonengefilterte Kopie
 
     parts = []
     for i, tile_path in enumerate(tile_paths):
@@ -263,7 +346,11 @@ def join_pois_to_tiles(gdf: gpd.GeoDataFrame, tile_paths, id_col=ID_COL, carry=C
             tile_crs = str(src.crs)
         tile_zone = ZONE_CRS_INV.get(tile_crs)
 
-        subset = gdf[zone_per_poi == tile_zone] if tile_zone is not None else gdf
+        if tile_crs not in reproj_cache:
+            base_subset = gdf[zone_per_poi == tile_zone] if tile_zone is not None else gdf
+            reproj_cache[tile_crs] = base_subset.to_crs(tile_crs) if len(base_subset) > 0 else base_subset
+        subset = reproj_cache[tile_crs]
+
         zone_note = f" (Zone {tile_zone}, {len(subset)}/{len(gdf)} POIs zugeordnet)" if tile_zone else ""
         print(f"    Kachel {i + 1}/{len(tile_paths)}: {tile_path.name}{zone_note}")
         if len(subset) == 0:
@@ -284,9 +371,78 @@ def join_pois_to_tiles(gdf: gpd.GeoDataFrame, tile_paths, id_col=ID_COL, carry=C
     return pairs
 
 
+def join_pois_to_tiles_by_tile(gdf: gpd.GeoDataFrame, tile_paths, id_col=ID_COL, carry=CARRY,
+                                dequantize=None, zones=DEFAULT_ZONES, chunk_dir: Path = None) -> pd.DataFrame:
+    """Wie join_pois_to_tiles(), aber mit VERTAUSCHTER Schleifenreihenfolge: die Kachel ist
+    die AEUSSERE Schleife, nicht der POI-Block.
+
+    Hintergrund: chunked_join_runner.run() zerlegt den POI-Datensatz in Bloecke (fuer Resume/
+    Fortschritt) und ruft join_pois_to_tiles() EINMAL PRO BLOCK auf - jede Kachel wird dabei
+    also einmal PRO BLOCK geoeffnet/verarbeitet. Fuer AlphaEarth (wenige riesige Kacheln, z.B.
+    18 fuer Niedersachsen) ist das unproblematisch (18 x 257 Bloecke = 4.626 Kachel-Touches).
+    Fuer TESSERA (viele kleine Kacheln, z.B. 1474 fuer Niedersachsen) ist es katastrophal:
+    1474 x 257 = 378.818 Kachel-Touches, gemessene Hochrechnung >16h. Hier wird stattdessen
+    jede Kachel GENAU EINMAL gegen den gesamten (zonengefilterten) POI-Datensatz verarbeitet -
+    mathematisch dieselbe Kreuzmenge aus (poi, pixel)-Paaren wie join_pois_to_tiles() (nur die
+    Reihenfolge der Schleifen ist vertauscht), aber ohne die 257-fache Redundanz. Reprojektion
+    wird wie dort einmal pro Zone gecacht.
+
+    Resumable ueber chunk_dir: eine Parquet-Datei pro Kachel (auch wenn 0 Paare - der leere
+    Frame markiert die Kachel als "bereits verarbeitet", nicht "noch zu tun")."""
+    zone_per_poi = assign_utm_zone(gdf, zones=zones)
+    reproj_cache: dict = {}
+
+    parts = []
+    n_tiles = len(tile_paths)
+    for i, tile_path in enumerate(tile_paths):
+        chunk_path = chunk_dir / f"tile_{i:04d}.parquet" if chunk_dir is not None else None
+        if chunk_path is not None and chunk_path.exists():
+            existing = pd.read_parquet(chunk_path)
+            if len(existing) > 0:
+                parts.append(existing)
+            if (i + 1) % 50 == 0 or i + 1 == n_tiles:
+                print(f"  Kachel {i + 1}/{n_tiles}: {tile_path.name} - bereits vorhanden, uebersprungen", flush=True)
+            continue
+
+        with rasterio.open(tile_path) as src:
+            tile_crs = str(src.crs)
+        tile_zone = ZONE_CRS_INV.get(tile_crs)
+
+        if tile_crs not in reproj_cache:
+            base_subset = gdf[zone_per_poi == tile_zone] if tile_zone is not None else gdf
+            reproj_cache[tile_crs] = base_subset.to_crs(tile_crs) if len(base_subset) > 0 else base_subset
+        subset = reproj_cache[tile_crs]
+
+        part = join_pois_to_raster(subset, tile_path, id_col, carry, dequantize)
+        if len(part) > 0:
+            part["utm_zone"] = tile_zone if tile_zone is not None else "n/a"
+
+        if chunk_path is not None:
+            chunk_dir.mkdir(parents=True, exist_ok=True)
+            part.to_parquet(chunk_path)
+
+        if len(part) > 0:
+            parts.append(part)
+        print(f"  Kachel {i + 1}/{n_tiles}: {tile_path.name} -> {len(part)} Paare", flush=True)
+
+    pairs = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame()
+    if len(pairs) > 0:
+        pairs["n_pixels_poi"] = pairs.groupby(id_col)[id_col].transform("size")
+    return pairs
+
+
 def main():
-    print(f"Lese POIs: {POIS_IN}")
-    gdf = gpd.read_parquet(POIS_IN)
+    import argparse
+    parser = argparse.ArgumentParser(description="Dev-Join (kleiner Testlauf, siehe run_*_join_full.py fuer Produktion)")
+    parser.add_argument("--region", type=str, default="london", choices=sorted(ZONES_BY_REGION))
+    args = parser.parse_args()
+
+    pois_in = POIS_IN_BY_REGION[args.region]
+    zones = ZONES_BY_REGION[args.region]
+    backbones = get_backbones(args.region)
+
+    print(f"Region: {args.region}  Lese POIs: {pois_in}")
+    gdf = gpd.read_parquet(pois_in)
 
     # Geometrien pro poi_id deduplizieren: das Long-Format enthaelt mehrere Tag-Zeilen
     # je poi_id (gleiche Geometrie). Fuer den Join zaehlt nur die eindeutige Geometrie;
@@ -298,7 +454,7 @@ def main():
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    for name, tile_paths in BACKBONES.items():
+    for name, tile_paths in backbones.items():
         print(f"\n=== Backbone: {name} ===")
         existing = [p for p in tile_paths if p.exists()]
         if not existing:
@@ -308,7 +464,7 @@ def main():
             print(f"  Warnung: {len(tile_paths) - len(existing)} von {len(tile_paths)} "
                   f"Kacheln fehlen auf der Platte")
 
-        pairs = join_pois_to_tiles(gdf, existing, dequantize=DEQUANTIZE.get(name))
+        pairs = join_pois_to_tiles(gdf, existing, dequantize=DEQUANTIZE.get(name), zones=zones)
         if len(pairs) == 0:
             print("  Keine Paare erzeugt.")
             continue
@@ -322,7 +478,8 @@ def main():
         print(f"  Coverage: min={cov.min():.4f} max={cov.max():.4f} mean={cov.mean():.4f}")
         print(f"  NaN in embeddings: {sum(np.isnan(e).any() for e in pairs['embedding'])}")
 
-        out_path = OUT_DIR / f"pairs_{name}.parquet"
+        suffix = "" if args.region == "london" else f"_{args.region}"
+        out_path = OUT_DIR / f"pairs_{name}{suffix}.parquet"
         pairs.to_parquet(out_path)
         print(f"  Gespeichert: {out_path}")
 
@@ -581,11 +738,73 @@ def _smoke_test_empty_geom_type():
           "int-dtype row/col - kein object-dtype-Absturz mehr bei leeren Teil-Ergebnissen.")
 
 
+def _smoke_test_by_tile_equivalence():
+    """join_pois_to_tiles_by_tile() (Kachel-Schleife aussen, fuer TESSERA/viele-Kacheln
+    gebaut) muss EXAKT dieselbe Paarmenge liefern wie join_pois_to_tiles() (POI-Schleife
+    aussen, Referenzimplementierung) - nur die Durchlaufreihenfolge unterscheidet sich. Nutzt
+    dasselbe Zwei-Kacheln-Setup wie _smoke_test() (Grenz-POI ueber beide Kacheln, Punkt-POI
+    nur in einer)."""
+    import tempfile
+
+    from shapely.geometry import Point, box
+
+    crs = "EPSG:3857"
+    n_bands = 3
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        tile_a = tmp / "tile_a.tif"
+        tile_b = tmp / "tile_b.tif"
+
+        transform_a = rasterio.transform.from_origin(west=0, north=100, xsize=10, ysize=10)
+        transform_b = rasterio.transform.from_origin(west=100, north=100, xsize=10, ysize=10)
+        rng = np.random.default_rng(0)
+        for path, transform in [(tile_a, transform_a), (tile_b, transform_b)]:
+            with rasterio.open(path, "w", driver="GTiff", height=10, width=10, count=n_bands,
+                                dtype="float32", crs=crs, transform=transform) as dst:
+                dst.write(rng.standard_normal((n_bands, 10, 10)).astype(np.float32))
+
+        gdf = gpd.GeoDataFrame(
+            {ID_COL: ["point_poi", "boundary_poi", "point_poi_2"]},
+            geometry=[
+                Point(50, 50),
+                box(80, 30, 120, 70),
+                Point(150, 60),
+            ],
+            crs=crs,
+        )
+
+        chunk_dir = tmp / "chunks"
+        pairs_ref = join_pois_to_tiles(gdf, [tile_a, tile_b])
+        pairs_new = join_pois_to_tiles_by_tile(gdf, [tile_a, tile_b], chunk_dir=chunk_dir)
+
+        cols = [ID_COL, "row", "col", "coverage", "tile"]
+        ref_sorted = pairs_ref[cols].sort_values(cols).reset_index(drop=True)
+        new_sorted = pairs_new[cols].sort_values(cols).reset_index(drop=True)
+        assert ref_sorted.equals(new_sorted), (
+            f"join_pois_to_tiles_by_tile() weicht von join_pois_to_tiles() ab:\n"
+            f"ref:\n{ref_sorted}\nnew:\n{new_sorted}")
+
+        ref_emb = np.stack(pairs_ref.sort_values(cols)["embedding"].to_numpy())
+        new_emb = np.stack(pairs_new.sort_values(cols)["embedding"].to_numpy())
+        assert np.allclose(ref_emb, new_emb), "Embedding-Werte weichen zwischen beiden Implementierungen ab"
+
+        # Resume-Pfad: zweiter Aufruf mit denselben (jetzt existierenden) Chunk-Dateien muss
+        # identisches Ergebnis liefern, ohne die Kacheln neu zu lesen
+        pairs_resumed = join_pois_to_tiles_by_tile(gdf, [tile_a, tile_b], chunk_dir=chunk_dir)
+        resumed_sorted = pairs_resumed[cols].sort_values(cols).reset_index(drop=True)
+        assert ref_sorted.equals(resumed_sorted), "Resume-Lauf weicht vom Erstlauf ab"
+
+    print("Smoke-Test OK: join_pois_to_tiles_by_tile() liefert identische Paare/Embeddings "
+          "wie join_pois_to_tiles() (inkl. Resume ueber bestehende Chunk-Dateien).")
+
+
 if __name__ == "__main__":
     if "--smoke-test" in sys.argv:
         _smoke_test()
         _smoke_test_utm_zone()
         _smoke_test_north_up()
         _smoke_test_empty_geom_type()
+        _smoke_test_by_tile_equivalence()
     else:
         main()

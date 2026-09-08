@@ -44,8 +44,20 @@ def filter_rasterizable_geometries(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
 
 if __name__ == "__main__":
-    input_path = "data/interim/pois_london_test.parquet"
-    output_path = "data/interim/pois_london_test_filtered.parquet"
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--region", type=str, default=None,
+                         help="Ohne Angabe: altes London-Testsubset (pois_london_test.parquet, "
+                              "unveraendertes Default-Verhalten). Mit Angabe: volle Region "
+                              "(pois_{region}_full.parquet -> pois_{region}_full_filtered.parquet).")
+    args = parser.parse_args()
+
+    if args.region is None:
+        input_path = "data/interim/pois_london_test.parquet"
+        output_path = "data/interim/pois_london_test_filtered.parquet"
+    else:
+        input_path = f"data/interim/pois_{args.region}_full.parquet"
+        output_path = f"data/interim/pois_{args.region}_full_filtered.parquet"
 
     gdf = gpd.read_parquet(input_path)
     print(f"POIs vor Filterung: {len(gdf)}")
