@@ -113,6 +113,22 @@ ergab keinen Treffer. Die Frage "wie viele Kategorien, ist L15 enthalten" laesst
 diesem Repo **nicht** beantworten — die SDM-Auswertung aus Tabelle 1 des Papers ist nicht Teil
 der Veroeffentlichung.
 
+## SDM-LSOA-Split (Phase 3, INSTRUCTIONS_sdm.md)
+
+Ordnet jedes Greater-London-LSOA vollstaendig einer Partition (train/val/test) des
+bestehenden 1-km-Rasters zu (Flaechenanteil-Mehrheitsregel), damit LSOA-Pixel nicht in
+Train UND Test landen. Zellgeometrie rekonstruiert aus `data/splits/splits_london.csv`
+(1.818 Zellen, 1.454/182/182 train/val/test) ohne Raster-Rerun (Ursprung/Zellgroesse aus
+`build_splits.py`/`build_splits_pixels.py`, siehe Docstring von `build_sdm_lsoa_splits.py`).
+Haengt nur an der Geometrie, nicht an den NS-SeC-Kategorien - identisch fuer 9cat und 8cat.
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/splits/sdm_lsoa_splits_london.csv` (Variante A, Mehrheitsregel) | `build_sdm_lsoa_splits.py` | `data/raw/sdm/Lower_layer_..._BFC_V10_....gpkg`, `data/aoi/london.gpkg`, `data/splits/splits_london.csv`, `data/raw/sdm/London_SDM.csv` (nur fuer die Codeliste) | 8.9.2026 | aktuell — 4.994 Zeilen (= alle TS062-LSOAs, alle gematcht). Join TS062↔Geometrie ueber `LSOA21CD`/`mnemonic`: 0 TS062-Codes ohne Geometrie, 119 Geometrie-Codes (AOI-Intersects) ohne TS062-Eintrag (verworfen - AOI ist die OSM-Verwaltungsgrenze admin_level=5 'Greater London', leicht groesser/anders geschnitten als Nomis' eigene Regionsauswahl an den Raendern). Split je LSOA: train=4.152, val=425, test=417. 1.966 LSOAs (39,4%) beruehren mehr als eine Partition (erwartbar: LSOAs sind i.d.R. kleiner als 1 km²-Zellen). max_frac: Median 1,0, Mittel 0,920, Min 0,373. 303 LSOAs (6,1%) mit max_frac < 60%. 2 LSOAs mit frac_covered < 99,9% (Restflaeche in Zellen ohne Split-Eintrag, randlich). |
+| `data/splits/sdm_lsoa_splits_london_min60.csv` (Variante B, Schwellwert) | `build_sdm_lsoa_splits.py` | wie oben | 8.9.2026 | aktuell — Variante A gefiltert auf `max_frac >= 0,60` (Schwellwert = derselbe, der ohnehin fuer den "< 60%"-Bericht verlangt war, keine zusaetzliche freie Zahl). 4.691 Zeilen (303 verworfen). Split: train=4.010, val=343, test=338. |
+
+Beide Varianten teilen sich Spaltenschema: `lsoa_code, split, max_frac, frac_train, frac_val, frac_test, frac_covered, n_partitions_touched`.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)
