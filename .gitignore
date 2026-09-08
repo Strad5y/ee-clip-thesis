@@ -19,4 +19,7 @@ data/raw/alphaearth/*
 !data/raw/alphaearth/tiles_*.txt
 !data/aoi/
 !data/splits/
+!data/processed/
+data/processed/*
+!data/processed/MANIFEST.md
 .mcp.json

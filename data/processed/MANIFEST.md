@@ -1,0 +1,121 @@
+# data/processed/MANIFEST.md — Provenienz-Manifest
+
+Hält für jedes aktive Artefakt fest, wodurch es erzeugt wurde. Bei jedem Neubau eines Artefakts
+diese Datei fortschreiben (Zeile aktualisieren, nicht nur Kommentar im Skript). Archivierte
+Gen-1-Artefakte stehen NICHT hier, sondern in `data/archive_gen1/` (siehe dortige Herkunft in
+der Git-Historie / im Chat-Verlauf vom 3.9., "Altmaterial aus dem Weg räumen").
+
+Split-Grenze, auf die sich "aktuell" bezieht: `data/splits/splits_london.csv` wurde am 3.9.
+14:52 von `build_splits_pixels.py` mit der PIXELBASIERTEN Zell→Split-Zuordnung überschrieben
+(vorher: POI-basiert, jetzt gesichert unter `data/splits/splits_london_4key.csv`, siehe
+`data/splits/README.md`). "Aktuell" heißt hier: gebaut MIT der pixelbasierten Zuordnung.
+
+## POI-Extraktion & Text
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/interim/pois_london_full.parquet` | `src/extract_pois.py` | OSM PBF (13-Key-Extraktion: amenity/shop/leisure/tourism/building/healthcare/historic/office/sport/water/waterway/military/natural) | 2.9. 22:13 | aktuell |
+| `data/interim/pois_london_full_filtered.parquet` | `src/extract_pois.py` | `pois_london_full.parquet` | 2.9. 22:13 | aktuell |
+| `data/interim/object_qid_descriptions.parquet` | `src/fetch_object_qid_descriptions.py` | `pois_london_full_filtered.parquet` (object_qid-Spalte), Wikidata REST | 3.9. 12:40 | aktuell |
+| `data/interim/qid_descriptions.parquet` | `src/fetch_class_qid_descriptions.py` | `class_table.py`/`wikidata tags/osm_wikidata_keys.xlsx` (eindeutige QIDs), Wikidata SPARQL/REST | 3.9. 13:26 | aktuell |
+| `data/interim/poi_text_full.parquet` | `build_poi_text.py` | `pois_london_full_filtered.parquet`, `class_table.py`, `qid_descriptions.parquet`, `object_qid_descriptions.parquet` | 3.9. 14:13 | aktuell |
+
+## Spatial Joins (POI × EO-Raster, POI-Ebene, vor Pixel-Aggregation)
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/pairs_ae_full.parquet` | `run_ae_join_full.py` (→ `chunked_join_runner.py`/`spatial_join.py`) | `pois_london_full_filtered.parquet`, AlphaEarth-COGs | 3.9. 00:16 | aktuell |
+| `data/processed/pairs_tessera_full.parquet` | `run_tessera_join_full.py` | `pois_london_full_filtered.parquet`, TESSERA-COGs | 3.9. 10:18 | aktuell |
+
+## Split
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/splits/splits_london.csv` | `build_splits_pixels.py` | Zell-Vereinigung aus `pixels_tessera.parquet`+`pixels_ae.parquet` (Pixel-Keys, VOR Split-Zuweisung), AOI | 3.9. 14:52 | aktuell (pixelbasiert) |
+| `data/splits/splits_london_4key.csv` | `build_splits.py` (Backup vor Überschreiben) | 279.988 POIs der alten 4-Key-Extraktion | 1.9. 10:31 | **ARCHIV — nie als aktueller Split verwenden** |
+
+## Pixel-Aggregation & Text-Embeddings
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/pixels_ae.parquet` | `src/aggregate_pixel_pairs.py` | `pairs_ae_full.parquet`, `poi_text_full.parquet`, `splits_london.csv` (aktuell) | 3.9. 14:52:59 | aktuell |
+| `data/processed/pixels_tessera.parquet` | `src/aggregate_pixel_pairs.py` | `pairs_tessera_full.parquet`, `poi_text_full.parquet`, `splits_london.csv` (aktuell) | 3.9. 14:52:42 | aktuell |
+| `data/processed/pixel_text_embeddings.parquet` | `compute_pixel_text_embeddings.py` | eindeutige `pixel_text`-Werte aus `pixels_ae.parquet`+`pixels_tessera.parquet`, Qwen3-Embedding-4B | 3.9. 16:18 | aktuell |
+
+## Normalisierung
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/norm_stats_tessera.json` | `train.py::apply_normalization` (via altem `configs/tessera_v1.yaml`-Lauf) | `pairs_tessera.parquet` (Gen1, POI-Ebene) | 1.9. 16:11 | **veraltet, liegt noch da, aber seit 3.9. NICHT mehr referenziert** (`run_landuse_probe.py::NORM_STATS_PATH` zeigt jetzt auf `norm_stats_tessera_pixels.json`, s. u.) |
+| `data/processed/norm_stats_tessera_pixels.json` | `train.py::apply_normalization` (TESSERA-Pixel-Lauf, Log fehlt) | `pixels_tessera.parquet` (aktuell) | war 3.9. 18:13, jetzt in `data/archive_gen1/processed/` | **archiviert wegen ungeklärter Herkunft — `run_landuse_probe.py`/`configs/tessera_v1.yaml` zeigen auf diesen Pfad, Datei existiert dort aktuell NICHT — Skript bricht beim nächsten TESSERA-Lauf mit `FileNotFoundError` ab, bis neu gefittet wurde. Das ist gewollt (Nutzervorgabe 3.9.: lieber Fehler als stillschweigend Gen1-Stats laden).** |
+
+## Checkpoints
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `checkpoints/ae_v1/best.pt` (Epoche 22) | `train.py --config configs/ae_v1.yaml` | `pixels_ae.parquet`, `pixel_text_embeddings.parquet` (beide aktuell) | 3.9. 19:43 | aktuell — einzig verifizierter aktueller Checkpoint |
+| `checkpoints/tessera_v1/*` | — | Gen1-Daten (`pairs_tessera.parquet`, alter Split) | 1.9. 16:19/16:36 | **archiviert** (`data/archive_gen1/checkpoints/tessera_v1/`) — vor TESSERA-Nutzung neu trainieren |
+| LR-Sweep-Checkpoints (`ae_lr*_5ep`, `tessera_lr*_5ep`, `ae_v1_nomask`) | `train.py` (LR-Sweep-Läufe) | Gen1-Daten | 1.9. | **archiviert** (`data/archive_gen1/checkpoints/`) |
+
+## Urban Atlas / Land-Use
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/interim/urban_atlas_london.parquet` | `build_landuse_pairs.py::load_and_clip` | Copernicus Urban Atlas FGB, `data/aoi/london.gpkg` | **neu gebaut 3.9. 23:45** (Rebuild, unabhängig vom Split — deterministisch identischer Inhalt zur alten 1.9.-Version) | aktuell |
+| `data/processed/landuse_pairs_ae.parquet` | `build_landuse_pairs.py` | `urban_atlas_london.parquet`, AlphaEarth-COGs, `splits_london.csv` (aktuell, pixelbasiert) | **neu gebaut 3./4.9. (Rebuild nach Leakage-Fund)** | **aktuell — `verify_provenance.py` bestätigt 100% Split-Übereinstimmung mit `pixels_ae.parquet` (1.934.728 gemeinsame Pixel, 0 Konflikte)** |
+| `data/processed/landuse_pairs_tessera.parquet` | `build_landuse_pairs.py` | analog, TESSERA-COGs | **neu gebaut 3./4.9.** | **aktuell — `verify_provenance.py` bestätigt 100% Übereinstimmung (1.959.700 gemeinsame Pixel, 0 Konflikte)** |
+
+Nebenbefunde aus dem Rebuild (4.9., beide Backbones): `split='missing'` betrifft AE 317 / TESSERA 315 Pixel
+(~0,0066%) — UA-Pixel in 1-km-Gitterzellen ganz ohne POI-Pixel, daher kein Eintrag in
+`splits_london.csv`; nicht verworfen, nur markiert. Klasse `12400` (Airports, 12 UA-Polygone)
+kommt in allen drei Splits vor (AE: train=949/val=97/test=110), wird aber wegen zu geringer
+Test-Fallzahl weiterhin in `run_landuse_probe.py` ausgeschlossen (`EXCLUDED_CLASS`). Klasse
+`40000` (Wetlands, 13 Polygone) fehlt in diesem Split-Zug komplett im Test-Anteil beider
+Backbones (Zufall der Ziehung, nicht Bug) — Konfusionsmatrizen sind deshalb 23x23 statt 24x24.
+
+## Werkzeuge
+
+- `src/verify_provenance.py` — prüft Split-Konsistenz über gemeinsame `(tile,row,col)`-Schlüssel
+  zwischen registrierten Dateipaaren (aktuell: `pixels_ae`↔`landuse_pairs_ae`,
+  `pixels_tessera`↔`landuse_pairs_tessera`), bricht bei Abweichung mit Fehler ab. Zuletzt
+  ausgeführt 4.9., beide Paare 100% konsistent (Exit-Code 0). **Noch nicht automatisch in
+  `train.py`/`run_landuse_probe.py` eingebaut** — muss manuell vor einem Lauf aufgerufen werden.
+
+## Evaluations-Outputs (Phase B/C dieser Session)
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/retrieval_baselines_ae_v1.csv` | `run_retrieval_baselines.py` | `checkpoints/ae_v1/best.pt`, `pixels_ae.parquet`, `pixel_text_embeddings.parquet` (alle aktuell) | 3.9. 21:28 | aktuell (von der Landuse-Split-Frage nicht betroffen — reine Retrieval-Auswertung auf `pixels_ae.parquet`) |
+| `data/processed/landuse_probe_results_ae.csv` + zugehörige `landuse_probe_*_ae.csv` (Konfusionsmatrizen, Per-Klassen-F1, Häufigkeitsniveau, Test-Bootstrap, gepaarter Diff) | `run_landuse_probe.py --backbones ae --skip-train-bootstrap` | `landuse_pairs_ae.parquet` (**neu, verifiziert konsistent**), `checkpoints/ae_v1/best.pt` | **4.9., Rerun nach Leakage-Fix** | **aktuell — Endergebnis (Test): roh test_macro_f1=0.2559, zufällig=0.2140, trainiert=0.2631, Häufigkeitsniveau=0.0270; gepaart trainiert−roh macro_f1=+0.00735 [0.00242,0.01236]. Ersetzt den 3.9.-Lauf unten.** |
+| `data/processed/landuse_probe_results.csv` + `landuse_probe_{train,test}_bootstrap*.csv`, `landuse_probe_paired_diff.csv` (ohne `_ae`-Suffix) | `run_landuse_probe.py` (alter Lauf, beide Backbones) | `landuse_pairs_ae.parquet`+`landuse_pairs_tessera.parquet` **(beide waren zu diesem Zeitpunkt STALE)** | 1.–2.9. | **veraltet, ersetzt durch die `_ae`-Zeile oben. Noch nicht archiviert (nicht explizit im Archivierungsauftrag), nur gemeldet.** |
+| `data/processed/landuse_probe_results_ae.csv`-Vorläufer vom 3.9. 22:07–22:53 (überschrieben) | `run_landuse_probe.py --backbones ae` | `landuse_pairs_ae.parquet` (damals noch STALE) | 3.9. | **durch den 4.9.-Rerun überschrieben — falls eine Kopie des alten Standes noch irgendwo referenziert wird, ist sie ungültig (Leakage).** |
+
+## SDM-Rohdaten (Phase 2, INSTRUCTIONS_sdm.md — Socioeconomic Distribution Mapping London)
+
+Beide Rohdateien manuell geladen, kein Download-Skript. Lagen zunächst unter `data/SDM/`,
+liegen jetzt (Umzug ausserhalb dieser Session, vor Phase 2 festgestellt) unter `data/raw/sdm/`
+— passt zur `.gitignore`-Konvention (`data/raw/` ist ausgenommen, `data/SDM/` wäre es nicht
+gewesen). SHA-256 vor und nach dem Umzug identisch, siehe unten.
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/raw/sdm/London_SDM.csv` | manuell geladen (Nomis Census 2021 Bulk, kein Skript) | Nomis, Tabelle **TS062** (NS-SeC), Geography ueber "select areas within" → Regions → **London**, Ebene **2021 LSOA lower layer**, alle **9 NS-SeC-Kategorien**, **Counts** (nicht Percent), Format **CSV**, **mit area codes** | Zugriff 8.9.2026 (Datei selbst traegt die Copyright-Zeile „ONS Crown Copyright Reserved [from Nomis on 8 September 2026]") | aktuell — SHA-256 `042e214ab5d73efb9360ae534808a7103553a6d6e2b7ac3aa06fc06c7688556a`, Lizenz OGL v3.0. Format: Nomis-Bulk mit Metadaten-Kopf, echte Kopfzeile Zeile 8, Daten Zeile 10–5003 (4.994 Zeilen), Footer ab Zeile 5004 — siehe `build_sdm_targets.py::HEADER_ROW/N_DATA_ROWS`. |
+| `data/raw/sdm/Lower_layer_Super_Output_Areas_December_2021_Boundaries_EW_BFC_V10_-672099234420024429.gpkg` | manuell geladen (ONS Open Geography Portal) | Produkt „Lower layer Super Output Areas (December 2021) Boundaries EW **BFC** (full resolution, clipped to coastline), V10" — ganz England & Wales (35.672 Features), CRS EPSG:27700, Layer `LSOA_2021_EW_BFC_V10`, Felder `LSOA21CD, LSOA21NM, LSOA21NMW, BNG_E, BNG_N, LAT, LONG, GlobalID` | Zugriff 8.9.2026 (Dateisystem-Zeitstempel des Downloads: 8.9. 16:16) | aktuell — SHA-256 `fae6b97592c3164294d291d42298f83c97a751fbb9b9149b6ed61796a2f255a9`, Lizenz OGL v3.0 (enthaelt OS- und ONS-IPR). BFC bestaetigt (nicht BGC) ueber Datei- und Layername. Noch **nicht** auf London geclippt, noch **nicht** nach EPSG:32630 reprojiziert (Phase 3). |
+| `data/processed/sdm_targets_london.parquet` | `build_sdm_targets.py` | `data/raw/sdm/London_SDM.csv` | 8.9.2026 | aktuell — 4.994 Zeilen (= alle Zeilen der Quelle, kein Filter), 9 NS-SeC-Kategorien inkl. **L15** (Nutzervorgabe, s. u.), Total-Spalte nur zur Validierung (0 von 4.994 Zeilen mit Summe(9 Kategorien) != Total, 0 Zeilen mit Summe=0), Anteile je Zeile normiert auf Summe=1,0 (max. Abweichung 2,22e-16). Join-Key `lsoa_code` (aus `mnemonic`), 0 doppelte Codes. Spalten: `lsoa_code, lsoa_name, total, {9 Rohzaehlungen}, category_sum, {9 Anteile p_*}`. |
+
+**Kategorienentscheidung (Phase 2a):** Nutzervorgabe — alle neun NS-SeC-Kategorien werden
+verwendet, inklusive L15 (Vollzeitstudierende), unabhaengig vom AETHER-Repo-Befund. Das
+oeffentliche AETHER-Repo (github.com/inwind0212/AETHER, `main`, Commit `cc52099`) enthaelt
+**keinen** SDM/NS-SeC/Census-Auswertungscode — nur die Contrastive-Pretraining-Pipeline
+(AE×POI-Alignment, `train.py`/`dataio.py`/`model.py`). Eine Grep ueber Code/Config/README nach
+`ns-sec|nssec|l15|student|occupation|sdm|census|socio|distribution|kl.diver|land.use|urban.atlas`
+ergab keinen Treffer. Die Frage "wie viele Kategorien, ist L15 enthalten" laesst sich aus
+diesem Repo **nicht** beantworten — die SDM-Auswertung aus Tabelle 1 des Papers ist nicht Teil
+der Veroeffentlichung.
+
+## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
+
+- `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)
+- `data/processed/text_embeddings.parquet` (1.9., POI-Ebene-Textembeddings, von `pixel_text_embeddings.parquet` abgelöst — Achtung: laut `compute_pixel_text_embeddings.py`-Docstring für HILUCS-Zero-Shot-Prompts evtl. noch separat gebraucht, nicht vorschnell löschen)
+- `data/interim/pois_london_test.parquet`, `pois_london_test_filtered.parquet`, `pois_london_object_qid_check.parquet` (Test-/Zwischenstände der Extraktion)
+- `run_ae_join.py`, `run_tessera_join.py` — **archiviert** (`data/archive_gen1/scripts/`, 3.9.). Waren alte Join-Skripte mit `OUT_PATH` auf die jetzt ebenfalls archivierten `pairs_ae.parquet`/`pairs_tessera.parquet`; abgelöst durch `run_ae_join_full.py`/`run_tessera_join_full.py`. Liegen jetzt nicht mehr im aktiven Repo-Root, ein versehentlicher Re-Run ist damit ausgeschlossen.
