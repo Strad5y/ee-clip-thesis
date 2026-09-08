@@ -1,0 +1,733 @@
+=== compute_pixel_text_embeddings.py gestartet ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/pixel_text_embed_20260903_150709.log
+tessera: 8257024 Pixel, 243237 eindeutige pixel_text
+ae: 7664167 Pixel, 237811 eindeutige pixel_text
+
+Schnittmenge TESSERA/AE: 158403
+Vereinigung (= Groesse des gemeinsamen Caches): 322645
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Tokenlaengen (Tokenizer-gemessen, 322645 Texte): median=54, p99=150, max=503
+Modellgrenze (tokenizer.model_max_length): 131072
+Keine Ueberschreitung - alle Texte innerhalb der Modellgrenze.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  81%|########1 | 323/398 [00:00<00:00, 3221.25it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 3380.98it/s]
+
+Modell geladen (1024-dim, CUDA) in 43.5s
+Batch 1/646: 500/322645 Texte kodiert, verstrichen=0.1 min, geschaetzte Restzeit=40.0 min
+Batch 2/646: 1000/322645 Texte kodiert, verstrichen=0.1 min, geschaetzte Restzeit=36.3 min
+Batch 3/646: 1500/322645 Texte kodiert, verstrichen=0.2 min, geschaetzte Restzeit=34.1 min
+Batch 4/646: 2000/322645 Texte kodiert, verstrichen=0.2 min, geschaetzte Restzeit=32.7 min
+Batch 5/646: 2500/322645 Texte kodiert, verstrichen=0.3 min, geschaetzte Restzeit=32.3 min
+Batch 6/646: 3000/322645 Texte kodiert, verstrichen=0.3 min, geschaetzte Restzeit=32.1 min
+Batch 7/646: 3500/322645 Texte kodiert, verstrichen=0.4 min, geschaetzte Restzeit=31.9 min
+Batch 8/646: 4000/322645 Texte kodiert, verstrichen=0.4 min, geschaetzte Restzeit=31.7 min
+Batch 9/646: 4500/322645 Texte kodiert, verstrichen=0.4 min, geschaetzte Restzeit=31.4 min
+Batch 10/646: 5000/322645 Texte kodiert, verstrichen=0.5 min, geschaetzte Restzeit=31.1 min
+Batch 11/646: 5500/322645 Texte kodiert, verstrichen=0.5 min, geschaetzte Restzeit=30.9 min
+Batch 12/646: 6000/322645 Texte kodiert, verstrichen=0.6 min, geschaetzte Restzeit=30.6 min
+Batch 13/646: 6500/322645 Texte kodiert, verstrichen=0.6 min, geschaetzte Restzeit=30.4 min
+Batch 14/646: 7000/322645 Texte kodiert, verstrichen=0.7 min, geschaetzte Restzeit=30.3 min
+Batch 15/646: 7500/322645 Texte kodiert, verstrichen=0.7 min, geschaetzte Restzeit=30.1 min
+Batch 16/646: 8000/322645 Texte kodiert, verstrichen=0.8 min, geschaetzte Restzeit=30.1 min
+Batch 17/646: 8500/322645 Texte kodiert, verstrichen=0.8 min, geschaetzte Restzeit=30.0 min
+Batch 18/646: 9000/322645 Texte kodiert, verstrichen=0.9 min, geschaetzte Restzeit=29.9 min
+Batch 19/646: 9500/322645 Texte kodiert, verstrichen=0.9 min, geschaetzte Restzeit=29.8 min
+Batch 20/646: 10000/322645 Texte kodiert, verstrichen=1.0 min, geschaetzte Restzeit=29.7 min
+Batch 21/646: 10500/322645 Texte kodiert, verstrichen=1.0 min, geschaetzte Restzeit=29.6 min
+[Fortschritt] 10500/322645 Texte kodiert, verstrichen=1.0 min, geschaetzte Restzeit=29.7 min
+Batch 22/646: 11000/322645 Texte kodiert, verstrichen=1.0 min, geschaetzte Restzeit=29.4 min
+Batch 23/646: 11500/322645 Texte kodiert, verstrichen=1.1 min, geschaetzte Restzeit=29.4 min
+Batch 24/646: 12000/322645 Texte kodiert, verstrichen=1.1 min, geschaetzte Restzeit=29.3 min
+Batch 25/646: 12500/322645 Texte kodiert, verstrichen=1.2 min, geschaetzte Restzeit=29.3 min
+Batch 26/646: 13000/322645 Texte kodiert, verstrichen=1.2 min, geschaetzte Restzeit=29.1 min
+Batch 27/646: 13500/322645 Texte kodiert, verstrichen=1.3 min, geschaetzte Restzeit=29.1 min
+Batch 28/646: 14000/322645 Texte kodiert, verstrichen=1.3 min, geschaetzte Restzeit=29.0 min
+Batch 29/646: 14500/322645 Texte kodiert, verstrichen=1.4 min, geschaetzte Restzeit=28.9 min
+Batch 30/646: 15000/322645 Texte kodiert, verstrichen=1.4 min, geschaetzte Restzeit=28.8 min
+Batch 31/646: 15500/322645 Texte kodiert, verstrichen=1.5 min, geschaetzte Restzeit=28.8 min
+Batch 32/646: 16000/322645 Texte kodiert, verstrichen=1.5 min, geschaetzte Restzeit=28.7 min
+Batch 33/646: 16500/322645 Texte kodiert, verstrichen=1.5 min, geschaetzte Restzeit=28.6 min
+Batch 34/646: 17000/322645 Texte kodiert, verstrichen=1.6 min, geschaetzte Restzeit=28.6 min
+Batch 35/646: 17500/322645 Texte kodiert, verstrichen=1.6 min, geschaetzte Restzeit=28.5 min
+Batch 36/646: 18000/322645 Texte kodiert, verstrichen=1.7 min, geschaetzte Restzeit=28.5 min
+Batch 37/646: 18500/322645 Texte kodiert, verstrichen=1.7 min, geschaetzte Restzeit=28.5 min
+Batch 38/646: 19000/322645 Texte kodiert, verstrichen=1.8 min, geschaetzte Restzeit=28.5 min
+Batch 39/646: 19500/322645 Texte kodiert, verstrichen=1.8 min, geschaetzte Restzeit=28.4 min
+Batch 40/646: 20000/322645 Texte kodiert, verstrichen=1.9 min, geschaetzte Restzeit=28.4 min
+Batch 41/646: 20500/322645 Texte kodiert, verstrichen=1.9 min, geschaetzte Restzeit=28.4 min
+Batch 42/646: 21000/322645 Texte kodiert, verstrichen=2.0 min, geschaetzte Restzeit=28.4 min
+[Fortschritt] 21000/322645 Texte kodiert, verstrichen=2.0 min, geschaetzte Restzeit=28.7 min
+Batch 43/646: 21500/322645 Texte kodiert, verstrichen=2.0 min, geschaetzte Restzeit=28.3 min
+Batch 44/646: 22000/322645 Texte kodiert, verstrichen=2.1 min, geschaetzte Restzeit=28.2 min
+Batch 45/646: 22500/322645 Texte kodiert, verstrichen=2.1 min, geschaetzte Restzeit=28.2 min
+Batch 46/646: 23000/322645 Texte kodiert, verstrichen=2.2 min, geschaetzte Restzeit=28.2 min
+Batch 47/646: 23500/322645 Texte kodiert, verstrichen=2.2 min, geschaetzte Restzeit=28.1 min
+Batch 48/646: 24000/322645 Texte kodiert, verstrichen=2.3 min, geschaetzte Restzeit=28.0 min
+Batch 49/646: 24500/322645 Texte kodiert, verstrichen=2.3 min, geschaetzte Restzeit=27.9 min
+Batch 50/646: 25000/322645 Texte kodiert, verstrichen=2.3 min, geschaetzte Restzeit=27.8 min
+Batch 51/646: 25500/322645 Texte kodiert, verstrichen=2.4 min, geschaetzte Restzeit=27.7 min
+Batch 52/646: 26000/322645 Texte kodiert, verstrichen=2.4 min, geschaetzte Restzeit=27.6 min
+Batch 53/646: 26500/322645 Texte kodiert, verstrichen=2.5 min, geschaetzte Restzeit=27.6 min
+Batch 54/646: 27000/322645 Texte kodiert, verstrichen=2.5 min, geschaetzte Restzeit=27.5 min
+Batch 55/646: 27500/322645 Texte kodiert, verstrichen=2.6 min, geschaetzte Restzeit=27.4 min
+Batch 56/646: 28000/322645 Texte kodiert, verstrichen=2.6 min, geschaetzte Restzeit=27.4 min
+Batch 57/646: 28500/322645 Texte kodiert, verstrichen=2.6 min, geschaetzte Restzeit=27.3 min
+Batch 58/646: 29000/322645 Texte kodiert, verstrichen=2.7 min, geschaetzte Restzeit=27.3 min
+Batch 59/646: 29500/322645 Texte kodiert, verstrichen=2.7 min, geschaetzte Restzeit=27.2 min
+Batch 60/646: 30000/322645 Texte kodiert, verstrichen=2.8 min, geschaetzte Restzeit=27.1 min
+Batch 61/646: 30500/322645 Texte kodiert, verstrichen=2.8 min, geschaetzte Restzeit=27.1 min
+Batch 62/646: 31000/322645 Texte kodiert, verstrichen=2.9 min, geschaetzte Restzeit=27.0 min
+Batch 63/646: 31500/322645 Texte kodiert, verstrichen=2.9 min, geschaetzte Restzeit=26.9 min
+Batch 64/646: 32000/322645 Texte kodiert, verstrichen=3.0 min, geschaetzte Restzeit=26.8 min
+[Fortschritt] 32000/322645 Texte kodiert, verstrichen=3.0 min, geschaetzte Restzeit=27.2 min
+Batch 65/646: 32500/322645 Texte kodiert, verstrichen=3.0 min, geschaetzte Restzeit=26.8 min
+Batch 66/646: 33000/322645 Texte kodiert, verstrichen=3.0 min, geschaetzte Restzeit=26.7 min
+Batch 67/646: 33500/322645 Texte kodiert, verstrichen=3.1 min, geschaetzte Restzeit=26.7 min
+Batch 68/646: 34000/322645 Texte kodiert, verstrichen=3.1 min, geschaetzte Restzeit=26.7 min
+Batch 69/646: 34500/322645 Texte kodiert, verstrichen=3.2 min, geschaetzte Restzeit=26.7 min
+Batch 70/646: 35000/322645 Texte kodiert, verstrichen=3.3 min, geschaetzte Restzeit=26.7 min
+Batch 71/646: 35500/322645 Texte kodiert, verstrichen=3.3 min, geschaetzte Restzeit=26.7 min
+Batch 72/646: 36000/322645 Texte kodiert, verstrichen=3.3 min, geschaetzte Restzeit=26.6 min
+Batch 73/646: 36500/322645 Texte kodiert, verstrichen=3.4 min, geschaetzte Restzeit=26.5 min
+Batch 74/646: 37000/322645 Texte kodiert, verstrichen=3.4 min, geschaetzte Restzeit=26.5 min
+Batch 75/646: 37500/322645 Texte kodiert, verstrichen=3.5 min, geschaetzte Restzeit=26.4 min
+Batch 76/646: 38000/322645 Texte kodiert, verstrichen=3.5 min, geschaetzte Restzeit=26.4 min
+Batch 77/646: 38500/322645 Texte kodiert, verstrichen=3.6 min, geschaetzte Restzeit=26.3 min
+Batch 78/646: 39000/322645 Texte kodiert, verstrichen=3.6 min, geschaetzte Restzeit=26.2 min
+Batch 79/646: 39500/322645 Texte kodiert, verstrichen=3.6 min, geschaetzte Restzeit=26.2 min
+Batch 80/646: 40000/322645 Texte kodiert, verstrichen=3.7 min, geschaetzte Restzeit=26.1 min
+Batch 81/646: 40500/322645 Texte kodiert, verstrichen=3.7 min, geschaetzte Restzeit=26.1 min
+Batch 82/646: 41000/322645 Texte kodiert, verstrichen=3.8 min, geschaetzte Restzeit=26.1 min
+Batch 83/646: 41500/322645 Texte kodiert, verstrichen=3.8 min, geschaetzte Restzeit=26.0 min
+Batch 84/646: 42000/322645 Texte kodiert, verstrichen=3.9 min, geschaetzte Restzeit=26.0 min
+Batch 85/646: 42500/322645 Texte kodiert, verstrichen=3.9 min, geschaetzte Restzeit=26.0 min
+Batch 86/646: 43000/322645 Texte kodiert, verstrichen=4.0 min, geschaetzte Restzeit=25.9 min
+[Fortschritt] 43000/322645 Texte kodiert, verstrichen=4.0 min, geschaetzte Restzeit=26.0 min
+Batch 87/646: 43500/322645 Texte kodiert, verstrichen=4.0 min, geschaetzte Restzeit=25.9 min
+Batch 88/646: 44000/322645 Texte kodiert, verstrichen=4.1 min, geschaetzte Restzeit=25.9 min
+Batch 89/646: 44500/322645 Texte kodiert, verstrichen=4.1 min, geschaetzte Restzeit=25.9 min
+Batch 90/646: 45000/322645 Texte kodiert, verstrichen=4.2 min, geschaetzte Restzeit=25.8 min
+Batch 91/646: 45500/322645 Texte kodiert, verstrichen=4.2 min, geschaetzte Restzeit=25.8 min
+Batch 92/646: 46000/322645 Texte kodiert, verstrichen=4.3 min, geschaetzte Restzeit=25.8 min
+Batch 93/646: 46500/322645 Texte kodiert, verstrichen=4.3 min, geschaetzte Restzeit=25.8 min
+Batch 94/646: 47000/322645 Texte kodiert, verstrichen=4.4 min, geschaetzte Restzeit=25.8 min
+Batch 95/646: 47500/322645 Texte kodiert, verstrichen=4.4 min, geschaetzte Restzeit=25.7 min
+Batch 96/646: 48000/322645 Texte kodiert, verstrichen=4.5 min, geschaetzte Restzeit=25.7 min
+Batch 97/646: 48500/322645 Texte kodiert, verstrichen=4.5 min, geschaetzte Restzeit=25.7 min
+Batch 98/646: 49000/322645 Texte kodiert, verstrichen=4.6 min, geschaetzte Restzeit=25.6 min
+Batch 99/646: 49500/322645 Texte kodiert, verstrichen=4.6 min, geschaetzte Restzeit=25.6 min
+Batch 100/646: 50000/322645 Texte kodiert, verstrichen=4.7 min, geschaetzte Restzeit=25.5 min
+Batch 101/646: 50500/322645 Texte kodiert, verstrichen=4.7 min, geschaetzte Restzeit=25.5 min
+Batch 102/646: 51000/322645 Texte kodiert, verstrichen=4.8 min, geschaetzte Restzeit=25.4 min
+Batch 103/646: 51500/322645 Texte kodiert, verstrichen=4.8 min, geschaetzte Restzeit=25.4 min
+Batch 104/646: 52000/322645 Texte kodiert, verstrichen=4.9 min, geschaetzte Restzeit=25.3 min
+Batch 105/646: 52500/322645 Texte kodiert, verstrichen=4.9 min, geschaetzte Restzeit=25.5 min
+[Fortschritt] 52500/322645 Texte kodiert, verstrichen=5.0 min, geschaetzte Restzeit=25.7 min
+Batch 106/646: 53000/322645 Texte kodiert, verstrichen=5.1 min, geschaetzte Restzeit=25.8 min
+Batch 107/646: 53500/322645 Texte kodiert, verstrichen=5.2 min, geschaetzte Restzeit=26.0 min
+Batch 108/646: 54000/322645 Texte kodiert, verstrichen=5.3 min, geschaetzte Restzeit=26.2 min
+Batch 109/646: 54500/322645 Texte kodiert, verstrichen=5.4 min, geschaetzte Restzeit=26.5 min
+Batch 110/646: 55000/322645 Texte kodiert, verstrichen=5.5 min, geschaetzte Restzeit=26.9 min
+Batch 111/646: 55500/322645 Texte kodiert, verstrichen=5.6 min, geschaetzte Restzeit=27.1 min
+Batch 112/646: 56000/322645 Texte kodiert, verstrichen=5.8 min, geschaetzte Restzeit=27.4 min
+Batch 113/646: 56500/322645 Texte kodiert, verstrichen=5.9 min, geschaetzte Restzeit=27.6 min
+Batch 114/646: 57000/322645 Texte kodiert, verstrichen=6.0 min, geschaetzte Restzeit=27.8 min
+[Fortschritt] 57000/322645 Texte kodiert, verstrichen=6.0 min, geschaetzte Restzeit=28.0 min
+Batch 115/646: 57500/322645 Texte kodiert, verstrichen=6.1 min, geschaetzte Restzeit=28.0 min
+Batch 116/646: 58000/322645 Texte kodiert, verstrichen=6.2 min, geschaetzte Restzeit=28.2 min
+Batch 117/646: 58500/322645 Texte kodiert, verstrichen=6.3 min, geschaetzte Restzeit=28.4 min
+Batch 118/646: 59000/322645 Texte kodiert, verstrichen=6.4 min, geschaetzte Restzeit=28.7 min
+Batch 119/646: 59500/322645 Texte kodiert, verstrichen=6.6 min, geschaetzte Restzeit=29.0 min
+Batch 120/646: 60000/322645 Texte kodiert, verstrichen=6.7 min, geschaetzte Restzeit=29.3 min
+Batch 121/646: 60500/322645 Texte kodiert, verstrichen=6.8 min, geschaetzte Restzeit=29.5 min
+Batch 122/646: 61000/322645 Texte kodiert, verstrichen=6.9 min, geschaetzte Restzeit=29.7 min
+[Fortschritt] 61000/322645 Texte kodiert, verstrichen=7.0 min, geschaetzte Restzeit=30.0 min
+Batch 123/646: 61500/322645 Texte kodiert, verstrichen=7.0 min, geschaetzte Restzeit=29.9 min
+Batch 124/646: 62000/322645 Texte kodiert, verstrichen=7.2 min, geschaetzte Restzeit=30.1 min
+Batch 125/646: 62500/322645 Texte kodiert, verstrichen=7.3 min, geschaetzte Restzeit=30.4 min
+Batch 126/646: 63000/322645 Texte kodiert, verstrichen=7.4 min, geschaetzte Restzeit=30.6 min
+Batch 127/646: 63500/322645 Texte kodiert, verstrichen=7.6 min, geschaetzte Restzeit=30.9 min
+Batch 128/646: 64000/322645 Texte kodiert, verstrichen=7.7 min, geschaetzte Restzeit=31.2 min
+Batch 129/646: 64500/322645 Texte kodiert, verstrichen=7.8 min, geschaetzte Restzeit=31.3 min
+Batch 130/646: 65000/322645 Texte kodiert, verstrichen=7.9 min, geschaetzte Restzeit=31.4 min
+[Fortschritt] 65000/322645 Texte kodiert, verstrichen=8.0 min, geschaetzte Restzeit=31.7 min
+Batch 131/646: 65500/322645 Texte kodiert, verstrichen=8.0 min, geschaetzte Restzeit=31.6 min
+Batch 132/646: 66000/322645 Texte kodiert, verstrichen=8.2 min, geschaetzte Restzeit=31.7 min
+Batch 133/646: 66500/322645 Texte kodiert, verstrichen=8.3 min, geschaetzte Restzeit=31.9 min
+Batch 134/646: 67000/322645 Texte kodiert, verstrichen=8.4 min, geschaetzte Restzeit=32.0 min
+Batch 135/646: 67500/322645 Texte kodiert, verstrichen=8.5 min, geschaetzte Restzeit=32.1 min
+Batch 136/646: 68000/322645 Texte kodiert, verstrichen=8.6 min, geschaetzte Restzeit=32.3 min
+Batch 137/646: 68500/322645 Texte kodiert, verstrichen=8.8 min, geschaetzte Restzeit=32.5 min
+Batch 138/646: 69000/322645 Texte kodiert, verstrichen=8.9 min, geschaetzte Restzeit=32.6 min
+[Fortschritt] 69000/322645 Texte kodiert, verstrichen=9.0 min, geschaetzte Restzeit=33.1 min
+Batch 139/646: 69500/322645 Texte kodiert, verstrichen=9.0 min, geschaetzte Restzeit=32.8 min
+Batch 140/646: 70000/322645 Texte kodiert, verstrichen=9.1 min, geschaetzte Restzeit=32.9 min
+Batch 141/646: 70500/322645 Texte kodiert, verstrichen=9.3 min, geschaetzte Restzeit=33.1 min
+Batch 142/646: 71000/322645 Texte kodiert, verstrichen=9.4 min, geschaetzte Restzeit=33.2 min
+Batch 143/646: 71500/322645 Texte kodiert, verstrichen=9.5 min, geschaetzte Restzeit=33.3 min
+Batch 144/646: 72000/322645 Texte kodiert, verstrichen=9.6 min, geschaetzte Restzeit=33.5 min
+Batch 145/646: 72500/322645 Texte kodiert, verstrichen=9.7 min, geschaetzte Restzeit=33.6 min
+Batch 146/646: 73000/322645 Texte kodiert, verstrichen=9.8 min, geschaetzte Restzeit=33.7 min
+Batch 147/646: 73500/322645 Texte kodiert, verstrichen=10.0 min, geschaetzte Restzeit=33.8 min
+[Fortschritt] 73500/322645 Texte kodiert, verstrichen=10.0 min, geschaetzte Restzeit=33.9 min
+Batch 148/646: 74000/322645 Texte kodiert, verstrichen=10.1 min, geschaetzte Restzeit=33.9 min
+Batch 149/646: 74500/322645 Texte kodiert, verstrichen=10.2 min, geschaetzte Restzeit=34.0 min
+Batch 150/646: 75000/322645 Texte kodiert, verstrichen=10.3 min, geschaetzte Restzeit=34.1 min
+Batch 151/646: 75500/322645 Texte kodiert, verstrichen=10.4 min, geschaetzte Restzeit=34.2 min
+Batch 152/646: 76000/322645 Texte kodiert, verstrichen=10.5 min, geschaetzte Restzeit=34.2 min
+Batch 153/646: 76500/322645 Texte kodiert, verstrichen=10.7 min, geschaetzte Restzeit=34.3 min
+Batch 154/646: 77000/322645 Texte kodiert, verstrichen=10.8 min, geschaetzte Restzeit=34.4 min
+Batch 155/646: 77500/322645 Texte kodiert, verstrichen=10.9 min, geschaetzte Restzeit=34.4 min
+[Fortschritt] 77500/322645 Texte kodiert, verstrichen=11.0 min, geschaetzte Restzeit=34.8 min
+Batch 156/646: 78000/322645 Texte kodiert, verstrichen=11.0 min, geschaetzte Restzeit=34.6 min
+Batch 157/646: 78500/322645 Texte kodiert, verstrichen=11.1 min, geschaetzte Restzeit=34.6 min
+Batch 158/646: 79000/322645 Texte kodiert, verstrichen=11.3 min, geschaetzte Restzeit=34.7 min
+Batch 159/646: 79500/322645 Texte kodiert, verstrichen=11.4 min, geschaetzte Restzeit=34.8 min
+Batch 160/646: 80000/322645 Texte kodiert, verstrichen=11.5 min, geschaetzte Restzeit=34.8 min
+Batch 161/646: 80500/322645 Texte kodiert, verstrichen=11.6 min, geschaetzte Restzeit=34.9 min
+Batch 162/646: 81000/322645 Texte kodiert, verstrichen=11.7 min, geschaetzte Restzeit=35.0 min
+Batch 163/646: 81500/322645 Texte kodiert, verstrichen=11.9 min, geschaetzte Restzeit=35.1 min
+[Fortschritt] 81500/322645 Texte kodiert, verstrichen=12.0 min, geschaetzte Restzeit=35.5 min
+Batch 164/646: 82000/322645 Texte kodiert, verstrichen=12.0 min, geschaetzte Restzeit=35.3 min
+Batch 165/646: 82500/322645 Texte kodiert, verstrichen=12.1 min, geschaetzte Restzeit=35.4 min
+Batch 166/646: 83000/322645 Texte kodiert, verstrichen=12.3 min, geschaetzte Restzeit=35.4 min
+Batch 167/646: 83500/322645 Texte kodiert, verstrichen=12.4 min, geschaetzte Restzeit=35.5 min
+Batch 168/646: 84000/322645 Texte kodiert, verstrichen=12.5 min, geschaetzte Restzeit=35.6 min
+Batch 169/646: 84500/322645 Texte kodiert, verstrichen=12.6 min, geschaetzte Restzeit=35.6 min
+Batch 170/646: 85000/322645 Texte kodiert, verstrichen=12.8 min, geschaetzte Restzeit=35.6 min
+Batch 171/646: 85500/322645 Texte kodiert, verstrichen=12.9 min, geschaetzte Restzeit=35.7 min
+Batch 172/646: 86000/322645 Texte kodiert, verstrichen=13.0 min, geschaetzte Restzeit=35.7 min
+[Fortschritt] 86000/322645 Texte kodiert, verstrichen=13.0 min, geschaetzte Restzeit=35.8 min
+Batch 173/646: 86500/322645 Texte kodiert, verstrichen=13.1 min, geschaetzte Restzeit=35.7 min
+Batch 174/646: 87000/322645 Texte kodiert, verstrichen=13.2 min, geschaetzte Restzeit=35.7 min
+Batch 175/646: 87500/322645 Texte kodiert, verstrichen=13.3 min, geschaetzte Restzeit=35.8 min
+Batch 176/646: 88000/322645 Texte kodiert, verstrichen=13.4 min, geschaetzte Restzeit=35.8 min
+Batch 177/646: 88500/322645 Texte kodiert, verstrichen=13.6 min, geschaetzte Restzeit=35.9 min
+Batch 178/646: 89000/322645 Texte kodiert, verstrichen=13.7 min, geschaetzte Restzeit=35.9 min
+Batch 179/646: 89500/322645 Texte kodiert, verstrichen=13.8 min, geschaetzte Restzeit=35.9 min
+Batch 180/646: 90000/322645 Texte kodiert, verstrichen=13.9 min, geschaetzte Restzeit=35.9 min
+[Fortschritt] 90000/322645 Texte kodiert, verstrichen=14.0 min, geschaetzte Restzeit=36.2 min
+Batch 181/646: 90500/322645 Texte kodiert, verstrichen=14.0 min, geschaetzte Restzeit=35.9 min
+Batch 182/646: 91000/322645 Texte kodiert, verstrichen=14.1 min, geschaetzte Restzeit=36.0 min
+Batch 183/646: 91500/322645 Texte kodiert, verstrichen=14.2 min, geschaetzte Restzeit=36.0 min
+Batch 184/646: 92000/322645 Texte kodiert, verstrichen=14.4 min, geschaetzte Restzeit=36.0 min
+Batch 185/646: 92500/322645 Texte kodiert, verstrichen=14.5 min, geschaetzte Restzeit=36.0 min
+Batch 186/646: 93000/322645 Texte kodiert, verstrichen=14.6 min, geschaetzte Restzeit=36.1 min
+Batch 187/646: 93500/322645 Texte kodiert, verstrichen=14.7 min, geschaetzte Restzeit=36.1 min
+Batch 188/646: 94000/322645 Texte kodiert, verstrichen=14.9 min, geschaetzte Restzeit=36.1 min
+Batch 189/646: 94500/322645 Texte kodiert, verstrichen=15.0 min, geschaetzte Restzeit=36.1 min
+[Fortschritt] 94500/322645 Texte kodiert, verstrichen=15.0 min, geschaetzte Restzeit=36.2 min
+Batch 190/646: 95000/322645 Texte kodiert, verstrichen=15.1 min, geschaetzte Restzeit=36.1 min
+Batch 191/646: 95500/322645 Texte kodiert, verstrichen=15.2 min, geschaetzte Restzeit=36.2 min
+Batch 192/646: 96000/322645 Texte kodiert, verstrichen=15.3 min, geschaetzte Restzeit=36.2 min
+Batch 193/646: 96500/322645 Texte kodiert, verstrichen=15.4 min, geschaetzte Restzeit=36.2 min
+Batch 194/646: 97000/322645 Texte kodiert, verstrichen=15.6 min, geschaetzte Restzeit=36.2 min
+Batch 195/646: 97500/322645 Texte kodiert, verstrichen=15.7 min, geschaetzte Restzeit=36.2 min
+Batch 196/646: 98000/322645 Texte kodiert, verstrichen=15.8 min, geschaetzte Restzeit=36.2 min
+Batch 197/646: 98500/322645 Texte kodiert, verstrichen=15.9 min, geschaetzte Restzeit=36.2 min
+[Fortschritt] 98500/322645 Texte kodiert, verstrichen=16.0 min, geschaetzte Restzeit=36.4 min
+Batch 198/646: 99000/322645 Texte kodiert, verstrichen=16.0 min, geschaetzte Restzeit=36.2 min
+Batch 199/646: 99500/322645 Texte kodiert, verstrichen=16.1 min, geschaetzte Restzeit=36.2 min
+Batch 200/646: 100000/322645 Texte kodiert, verstrichen=16.2 min, geschaetzte Restzeit=36.2 min
+Batch 201/646: 100500/322645 Texte kodiert, verstrichen=16.4 min, geschaetzte Restzeit=36.2 min
+Batch 202/646: 101000/322645 Texte kodiert, verstrichen=16.5 min, geschaetzte Restzeit=36.2 min
+Batch 203/646: 101500/322645 Texte kodiert, verstrichen=16.6 min, geschaetzte Restzeit=36.2 min
+Batch 204/646: 102000/322645 Texte kodiert, verstrichen=16.7 min, geschaetzte Restzeit=36.1 min
+Batch 205/646: 102500/322645 Texte kodiert, verstrichen=16.8 min, geschaetzte Restzeit=36.1 min
+Batch 206/646: 103000/322645 Texte kodiert, verstrichen=16.9 min, geschaetzte Restzeit=36.1 min
+[Fortschritt] 103000/322645 Texte kodiert, verstrichen=17.0 min, geschaetzte Restzeit=36.3 min
+Batch 207/646: 103500/322645 Texte kodiert, verstrichen=17.0 min, geschaetzte Restzeit=36.1 min
+Batch 208/646: 104000/322645 Texte kodiert, verstrichen=17.2 min, geschaetzte Restzeit=36.1 min
+Batch 209/646: 104500/322645 Texte kodiert, verstrichen=17.3 min, geschaetzte Restzeit=36.2 min
+Batch 210/646: 105000/322645 Texte kodiert, verstrichen=17.5 min, geschaetzte Restzeit=36.2 min
+Batch 211/646: 105500/322645 Texte kodiert, verstrichen=17.6 min, geschaetzte Restzeit=36.2 min
+Batch 212/646: 106000/322645 Texte kodiert, verstrichen=17.7 min, geschaetzte Restzeit=36.3 min
+Batch 213/646: 106500/322645 Texte kodiert, verstrichen=17.9 min, geschaetzte Restzeit=36.3 min
+Batch 214/646: 107000/322645 Texte kodiert, verstrichen=18.0 min, geschaetzte Restzeit=36.3 min
+[Fortschritt] 107000/322645 Texte kodiert, verstrichen=18.0 min, geschaetzte Restzeit=36.3 min
+Batch 215/646: 107500/322645 Texte kodiert, verstrichen=18.1 min, geschaetzte Restzeit=36.2 min
+Batch 216/646: 108000/322645 Texte kodiert, verstrichen=18.2 min, geschaetzte Restzeit=36.2 min
+Batch 217/646: 108500/322645 Texte kodiert, verstrichen=18.3 min, geschaetzte Restzeit=36.2 min
+Batch 218/646: 109000/322645 Texte kodiert, verstrichen=18.4 min, geschaetzte Restzeit=36.1 min
+Batch 219/646: 109500/322645 Texte kodiert, verstrichen=18.5 min, geschaetzte Restzeit=36.1 min
+Batch 220/646: 110000/322645 Texte kodiert, verstrichen=18.6 min, geschaetzte Restzeit=36.0 min
+Batch 221/646: 110500/322645 Texte kodiert, verstrichen=18.7 min, geschaetzte Restzeit=36.0 min
+Batch 222/646: 111000/322645 Texte kodiert, verstrichen=18.9 min, geschaetzte Restzeit=35.9 min
+Batch 223/646: 111500/322645 Texte kodiert, verstrichen=19.0 min, geschaetzte Restzeit=35.9 min
+[Fortschritt] 111500/322645 Texte kodiert, verstrichen=19.0 min, geschaetzte Restzeit=36.0 min
+Batch 224/646: 112000/322645 Texte kodiert, verstrichen=19.1 min, geschaetzte Restzeit=35.9 min
+Batch 225/646: 112500/322645 Texte kodiert, verstrichen=19.2 min, geschaetzte Restzeit=35.8 min
+Batch 226/646: 113000/322645 Texte kodiert, verstrichen=19.3 min, geschaetzte Restzeit=35.8 min
+Batch 227/646: 113500/322645 Texte kodiert, verstrichen=19.4 min, geschaetzte Restzeit=35.8 min
+Batch 228/646: 114000/322645 Texte kodiert, verstrichen=19.5 min, geschaetzte Restzeit=35.7 min
+Batch 229/646: 114500/322645 Texte kodiert, verstrichen=19.6 min, geschaetzte Restzeit=35.7 min
+Batch 230/646: 115000/322645 Texte kodiert, verstrichen=19.7 min, geschaetzte Restzeit=35.6 min
+Batch 231/646: 115500/322645 Texte kodiert, verstrichen=19.8 min, geschaetzte Restzeit=35.6 min
+Batch 232/646: 116000/322645 Texte kodiert, verstrichen=20.0 min, geschaetzte Restzeit=35.5 min
+[Fortschritt] 116000/322645 Texte kodiert, verstrichen=20.0 min, geschaetzte Restzeit=35.6 min
+Batch 233/646: 116500/322645 Texte kodiert, verstrichen=20.1 min, geschaetzte Restzeit=35.5 min
+Batch 234/646: 117000/322645 Texte kodiert, verstrichen=20.2 min, geschaetzte Restzeit=35.4 min
+Batch 235/646: 117500/322645 Texte kodiert, verstrichen=20.3 min, geschaetzte Restzeit=35.4 min
+Batch 236/646: 118000/322645 Texte kodiert, verstrichen=20.4 min, geschaetzte Restzeit=35.4 min
+Batch 237/646: 118500/322645 Texte kodiert, verstrichen=20.5 min, geschaetzte Restzeit=35.3 min
+Batch 238/646: 119000/322645 Texte kodiert, verstrichen=20.6 min, geschaetzte Restzeit=35.3 min
+Batch 239/646: 119500/322645 Texte kodiert, verstrichen=20.8 min, geschaetzte Restzeit=35.3 min
+Batch 240/646: 120000/322645 Texte kodiert, verstrichen=20.9 min, geschaetzte Restzeit=35.3 min
+[Fortschritt] 120000/322645 Texte kodiert, verstrichen=21.0 min, geschaetzte Restzeit=35.5 min
+Batch 241/646: 120500/322645 Texte kodiert, verstrichen=21.0 min, geschaetzte Restzeit=35.2 min
+Batch 242/646: 121000/322645 Texte kodiert, verstrichen=21.1 min, geschaetzte Restzeit=35.2 min
+Batch 243/646: 121500/322645 Texte kodiert, verstrichen=21.3 min, geschaetzte Restzeit=35.2 min
+Batch 244/646: 122000/322645 Texte kodiert, verstrichen=21.4 min, geschaetzte Restzeit=35.2 min
+Batch 245/646: 122500/322645 Texte kodiert, verstrichen=21.5 min, geschaetzte Restzeit=35.2 min
+Batch 246/646: 123000/322645 Texte kodiert, verstrichen=21.6 min, geschaetzte Restzeit=35.1 min
+Batch 247/646: 123500/322645 Texte kodiert, verstrichen=21.7 min, geschaetzte Restzeit=35.1 min
+Batch 248/646: 124000/322645 Texte kodiert, verstrichen=21.9 min, geschaetzte Restzeit=35.0 min
+Batch 249/646: 124500/322645 Texte kodiert, verstrichen=22.0 min, geschaetzte Restzeit=35.0 min
+[Fortschritt] 124500/322645 Texte kodiert, verstrichen=22.0 min, geschaetzte Restzeit=35.0 min
+Batch 250/646: 125000/322645 Texte kodiert, verstrichen=22.1 min, geschaetzte Restzeit=35.0 min
+Batch 251/646: 125500/322645 Texte kodiert, verstrichen=22.2 min, geschaetzte Restzeit=34.9 min
+Batch 252/646: 126000/322645 Texte kodiert, verstrichen=22.3 min, geschaetzte Restzeit=34.9 min
+Batch 253/646: 126500/322645 Texte kodiert, verstrichen=22.5 min, geschaetzte Restzeit=34.8 min
+Batch 254/646: 127000/322645 Texte kodiert, verstrichen=22.6 min, geschaetzte Restzeit=34.8 min
+Batch 255/646: 127500/322645 Texte kodiert, verstrichen=22.7 min, geschaetzte Restzeit=34.7 min
+Batch 256/646: 128000/322645 Texte kodiert, verstrichen=22.8 min, geschaetzte Restzeit=34.7 min
+Batch 257/646: 128500/322645 Texte kodiert, verstrichen=22.9 min, geschaetzte Restzeit=34.7 min
+[Fortschritt] 128500/322645 Texte kodiert, verstrichen=23.0 min, geschaetzte Restzeit=34.7 min
+Batch 258/646: 129000/322645 Texte kodiert, verstrichen=23.1 min, geschaetzte Restzeit=34.6 min
+Batch 259/646: 129500/322645 Texte kodiert, verstrichen=23.2 min, geschaetzte Restzeit=34.6 min
+Batch 260/646: 130000/322645 Texte kodiert, verstrichen=23.3 min, geschaetzte Restzeit=34.6 min
+Batch 261/646: 130500/322645 Texte kodiert, verstrichen=23.4 min, geschaetzte Restzeit=34.5 min
+Batch 262/646: 131000/322645 Texte kodiert, verstrichen=23.6 min, geschaetzte Restzeit=34.5 min
+Batch 263/646: 131500/322645 Texte kodiert, verstrichen=23.7 min, geschaetzte Restzeit=34.4 min
+Batch 264/646: 132000/322645 Texte kodiert, verstrichen=23.8 min, geschaetzte Restzeit=34.4 min
+Batch 265/646: 132500/322645 Texte kodiert, verstrichen=23.9 min, geschaetzte Restzeit=34.3 min
+Batch 266/646: 133000/322645 Texte kodiert, verstrichen=24.0 min, geschaetzte Restzeit=34.2 min
+[Fortschritt] 133000/322645 Texte kodiert, verstrichen=24.0 min, geschaetzte Restzeit=34.2 min
+Batch 267/646: 133500/322645 Texte kodiert, verstrichen=24.1 min, geschaetzte Restzeit=34.2 min
+Batch 268/646: 134000/322645 Texte kodiert, verstrichen=24.2 min, geschaetzte Restzeit=34.1 min
+Batch 269/646: 134500/322645 Texte kodiert, verstrichen=24.3 min, geschaetzte Restzeit=34.0 min
+Batch 270/646: 135000/322645 Texte kodiert, verstrichen=24.4 min, geschaetzte Restzeit=34.0 min
+Batch 271/646: 135500/322645 Texte kodiert, verstrichen=24.6 min, geschaetzte Restzeit=33.9 min
+Batch 272/646: 136000/322645 Texte kodiert, verstrichen=24.7 min, geschaetzte Restzeit=33.9 min
+Batch 273/646: 136500/322645 Texte kodiert, verstrichen=24.8 min, geschaetzte Restzeit=33.8 min
+Batch 274/646: 137000/322645 Texte kodiert, verstrichen=24.9 min, geschaetzte Restzeit=33.8 min
+[Fortschritt] 137000/322645 Texte kodiert, verstrichen=25.0 min, geschaetzte Restzeit=33.9 min
+Batch 275/646: 137500/322645 Texte kodiert, verstrichen=25.0 min, geschaetzte Restzeit=33.7 min
+Batch 276/646: 138000/322645 Texte kodiert, verstrichen=25.1 min, geschaetzte Restzeit=33.6 min
+Batch 277/646: 138500/322645 Texte kodiert, verstrichen=25.3 min, geschaetzte Restzeit=33.6 min
+Batch 278/646: 139000/322645 Texte kodiert, verstrichen=25.4 min, geschaetzte Restzeit=33.5 min
+Batch 279/646: 139500/322645 Texte kodiert, verstrichen=25.5 min, geschaetzte Restzeit=33.5 min
+Batch 280/646: 140000/322645 Texte kodiert, verstrichen=25.6 min, geschaetzte Restzeit=33.4 min
+Batch 281/646: 140500/322645 Texte kodiert, verstrichen=25.7 min, geschaetzte Restzeit=33.3 min
+Batch 282/646: 141000/322645 Texte kodiert, verstrichen=25.8 min, geschaetzte Restzeit=33.3 min
+Batch 283/646: 141500/322645 Texte kodiert, verstrichen=25.9 min, geschaetzte Restzeit=33.2 min
+[Fortschritt] 141500/322645 Texte kodiert, verstrichen=26.0 min, geschaetzte Restzeit=33.3 min
+Batch 284/646: 142000/322645 Texte kodiert, verstrichen=26.0 min, geschaetzte Restzeit=33.1 min
+Batch 285/646: 142500/322645 Texte kodiert, verstrichen=26.2 min, geschaetzte Restzeit=33.1 min
+Batch 286/646: 143000/322645 Texte kodiert, verstrichen=26.3 min, geschaetzte Restzeit=33.0 min
+Batch 287/646: 143500/322645 Texte kodiert, verstrichen=26.4 min, geschaetzte Restzeit=32.9 min
+Batch 288/646: 144000/322645 Texte kodiert, verstrichen=26.5 min, geschaetzte Restzeit=32.8 min
+Batch 289/646: 144500/322645 Texte kodiert, verstrichen=26.6 min, geschaetzte Restzeit=32.8 min
+Batch 290/646: 145000/322645 Texte kodiert, verstrichen=26.7 min, geschaetzte Restzeit=32.7 min
+Batch 291/646: 145500/322645 Texte kodiert, verstrichen=26.8 min, geschaetzte Restzeit=32.6 min
+Batch 292/646: 146000/322645 Texte kodiert, verstrichen=26.9 min, geschaetzte Restzeit=32.6 min
+[Fortschritt] 146000/322645 Texte kodiert, verstrichen=27.0 min, geschaetzte Restzeit=32.7 min
+Batch 293/646: 146500/322645 Texte kodiert, verstrichen=27.0 min, geschaetzte Restzeit=32.5 min
+Batch 294/646: 147000/322645 Texte kodiert, verstrichen=27.1 min, geschaetzte Restzeit=32.4 min
+Batch 295/646: 147500/322645 Texte kodiert, verstrichen=27.2 min, geschaetzte Restzeit=32.3 min
+Batch 296/646: 148000/322645 Texte kodiert, verstrichen=27.4 min, geschaetzte Restzeit=32.3 min
+Batch 297/646: 148500/322645 Texte kodiert, verstrichen=27.5 min, geschaetzte Restzeit=32.2 min
+Batch 298/646: 149000/322645 Texte kodiert, verstrichen=27.6 min, geschaetzte Restzeit=32.1 min
+Batch 299/646: 149500/322645 Texte kodiert, verstrichen=27.7 min, geschaetzte Restzeit=32.1 min
+Batch 300/646: 150000/322645 Texte kodiert, verstrichen=27.8 min, geschaetzte Restzeit=32.0 min
+Batch 301/646: 150500/322645 Texte kodiert, verstrichen=27.9 min, geschaetzte Restzeit=31.9 min
+[Fortschritt] 150500/322645 Texte kodiert, verstrichen=28.0 min, geschaetzte Restzeit=32.0 min
+Batch 302/646: 151000/322645 Texte kodiert, verstrichen=28.0 min, geschaetzte Restzeit=31.8 min
+Batch 303/646: 151500/322645 Texte kodiert, verstrichen=28.1 min, geschaetzte Restzeit=31.8 min
+Batch 304/646: 152000/322645 Texte kodiert, verstrichen=28.3 min, geschaetzte Restzeit=31.7 min
+Batch 305/646: 152500/322645 Texte kodiert, verstrichen=28.4 min, geschaetzte Restzeit=31.7 min
+Batch 306/646: 153000/322645 Texte kodiert, verstrichen=28.5 min, geschaetzte Restzeit=31.6 min
+Batch 307/646: 153500/322645 Texte kodiert, verstrichen=28.6 min, geschaetzte Restzeit=31.6 min
+Batch 308/646: 154000/322645 Texte kodiert, verstrichen=28.8 min, geschaetzte Restzeit=31.5 min
+Batch 309/646: 154500/322645 Texte kodiert, verstrichen=28.9 min, geschaetzte Restzeit=31.4 min
+Batch 310/646: 155000/322645 Texte kodiert, verstrichen=29.0 min, geschaetzte Restzeit=31.3 min
+[Fortschritt] 155000/322645 Texte kodiert, verstrichen=29.0 min, geschaetzte Restzeit=31.4 min
+Batch 311/646: 155500/322645 Texte kodiert, verstrichen=29.1 min, geschaetzte Restzeit=31.3 min
+Batch 312/646: 156000/322645 Texte kodiert, verstrichen=29.2 min, geschaetzte Restzeit=31.2 min
+Batch 313/646: 156500/322645 Texte kodiert, verstrichen=29.3 min, geschaetzte Restzeit=31.1 min
+Batch 314/646: 157000/322645 Texte kodiert, verstrichen=29.4 min, geschaetzte Restzeit=31.0 min
+Batch 315/646: 157500/322645 Texte kodiert, verstrichen=29.5 min, geschaetzte Restzeit=30.9 min
+Batch 316/646: 158000/322645 Texte kodiert, verstrichen=29.6 min, geschaetzte Restzeit=30.9 min
+Batch 317/646: 158500/322645 Texte kodiert, verstrichen=29.7 min, geschaetzte Restzeit=30.8 min
+Batch 318/646: 159000/322645 Texte kodiert, verstrichen=29.8 min, geschaetzte Restzeit=30.7 min
+Batch 319/646: 159500/322645 Texte kodiert, verstrichen=29.9 min, geschaetzte Restzeit=30.6 min
+[Fortschritt] 159500/322645 Texte kodiert, verstrichen=30.0 min, geschaetzte Restzeit=30.7 min
+Batch 320/646: 160000/322645 Texte kodiert, verstrichen=30.0 min, geschaetzte Restzeit=30.5 min
+Batch 321/646: 160500/322645 Texte kodiert, verstrichen=30.1 min, geschaetzte Restzeit=30.4 min
+Batch 322/646: 161000/322645 Texte kodiert, verstrichen=30.2 min, geschaetzte Restzeit=30.3 min
+Batch 323/646: 161500/322645 Texte kodiert, verstrichen=30.3 min, geschaetzte Restzeit=30.3 min
+Batch 324/646: 162000/322645 Texte kodiert, verstrichen=30.4 min, geschaetzte Restzeit=30.2 min
+Batch 325/646: 162500/322645 Texte kodiert, verstrichen=30.6 min, geschaetzte Restzeit=30.1 min
+Batch 326/646: 163000/322645 Texte kodiert, verstrichen=30.7 min, geschaetzte Restzeit=30.0 min
+Batch 327/646: 163500/322645 Texte kodiert, verstrichen=30.8 min, geschaetzte Restzeit=30.0 min
+Batch 328/646: 164000/322645 Texte kodiert, verstrichen=30.9 min, geschaetzte Restzeit=29.9 min
+[Fortschritt] 164000/322645 Texte kodiert, verstrichen=31.0 min, geschaetzte Restzeit=30.0 min
+Batch 329/646: 164500/322645 Texte kodiert, verstrichen=31.0 min, geschaetzte Restzeit=29.8 min
+Batch 330/646: 165000/322645 Texte kodiert, verstrichen=31.1 min, geschaetzte Restzeit=29.7 min
+Batch 331/646: 165500/322645 Texte kodiert, verstrichen=31.3 min, geschaetzte Restzeit=29.7 min
+Batch 332/646: 166000/322645 Texte kodiert, verstrichen=31.4 min, geschaetzte Restzeit=29.6 min
+Batch 333/646: 166500/322645 Texte kodiert, verstrichen=31.5 min, geschaetzte Restzeit=29.6 min
+Batch 334/646: 167000/322645 Texte kodiert, verstrichen=31.6 min, geschaetzte Restzeit=29.5 min
+Batch 335/646: 167500/322645 Texte kodiert, verstrichen=31.8 min, geschaetzte Restzeit=29.4 min
+Batch 336/646: 168000/322645 Texte kodiert, verstrichen=31.9 min, geschaetzte Restzeit=29.4 min
+[Fortschritt] 168000/322645 Texte kodiert, verstrichen=32.0 min, geschaetzte Restzeit=29.5 min
+Batch 337/646: 168500/322645 Texte kodiert, verstrichen=32.0 min, geschaetzte Restzeit=29.3 min
+Batch 338/646: 169000/322645 Texte kodiert, verstrichen=32.1 min, geschaetzte Restzeit=29.2 min
+Batch 339/646: 169500/322645 Texte kodiert, verstrichen=32.2 min, geschaetzte Restzeit=29.1 min
+Batch 340/646: 170000/322645 Texte kodiert, verstrichen=32.3 min, geschaetzte Restzeit=29.0 min
+Batch 341/646: 170500/322645 Texte kodiert, verstrichen=32.4 min, geschaetzte Restzeit=28.9 min
+Batch 342/646: 171000/322645 Texte kodiert, verstrichen=32.5 min, geschaetzte Restzeit=28.9 min
+Batch 343/646: 171500/322645 Texte kodiert, verstrichen=32.7 min, geschaetzte Restzeit=28.8 min
+Batch 344/646: 172000/322645 Texte kodiert, verstrichen=32.8 min, geschaetzte Restzeit=28.7 min
+Batch 345/646: 172500/322645 Texte kodiert, verstrichen=32.9 min, geschaetzte Restzeit=28.7 min
+[Fortschritt] 172500/322645 Texte kodiert, verstrichen=33.0 min, geschaetzte Restzeit=28.7 min
+Batch 346/646: 173000/322645 Texte kodiert, verstrichen=33.1 min, geschaetzte Restzeit=28.6 min
+Batch 347/646: 173500/322645 Texte kodiert, verstrichen=33.2 min, geschaetzte Restzeit=28.5 min
+Batch 348/646: 174000/322645 Texte kodiert, verstrichen=33.3 min, geschaetzte Restzeit=28.5 min
+Batch 349/646: 174500/322645 Texte kodiert, verstrichen=33.4 min, geschaetzte Restzeit=28.4 min
+Batch 350/646: 175000/322645 Texte kodiert, verstrichen=33.6 min, geschaetzte Restzeit=28.3 min
+Batch 351/646: 175500/322645 Texte kodiert, verstrichen=33.7 min, geschaetzte Restzeit=28.2 min
+Batch 352/646: 176000/322645 Texte kodiert, verstrichen=33.8 min, geschaetzte Restzeit=28.2 min
+Batch 353/646: 176500/322645 Texte kodiert, verstrichen=33.9 min, geschaetzte Restzeit=28.1 min
+[Fortschritt] 176500/322645 Texte kodiert, verstrichen=34.0 min, geschaetzte Restzeit=28.2 min
+Batch 354/646: 177000/322645 Texte kodiert, verstrichen=34.1 min, geschaetzte Restzeit=28.0 min
+Batch 355/646: 177500/322645 Texte kodiert, verstrichen=34.2 min, geschaetzte Restzeit=27.9 min
+Batch 356/646: 178000/322645 Texte kodiert, verstrichen=34.3 min, geschaetzte Restzeit=27.9 min
+Batch 357/646: 178500/322645 Texte kodiert, verstrichen=34.4 min, geschaetzte Restzeit=27.8 min
+Batch 358/646: 179000/322645 Texte kodiert, verstrichen=34.5 min, geschaetzte Restzeit=27.7 min
+Batch 359/646: 179500/322645 Texte kodiert, verstrichen=34.6 min, geschaetzte Restzeit=27.6 min
+Batch 360/646: 180000/322645 Texte kodiert, verstrichen=34.7 min, geschaetzte Restzeit=27.5 min
+Batch 361/646: 180500/322645 Texte kodiert, verstrichen=34.8 min, geschaetzte Restzeit=27.4 min
+Batch 362/646: 181000/322645 Texte kodiert, verstrichen=34.9 min, geschaetzte Restzeit=27.3 min
+[Fortschritt] 181000/322645 Texte kodiert, verstrichen=35.0 min, geschaetzte Restzeit=27.4 min
+Batch 363/646: 181500/322645 Texte kodiert, verstrichen=35.0 min, geschaetzte Restzeit=27.2 min
+Batch 364/646: 182000/322645 Texte kodiert, verstrichen=35.1 min, geschaetzte Restzeit=27.2 min
+Batch 365/646: 182500/322645 Texte kodiert, verstrichen=35.2 min, geschaetzte Restzeit=27.1 min
+Batch 366/646: 183000/322645 Texte kodiert, verstrichen=35.4 min, geschaetzte Restzeit=27.0 min
+Batch 367/646: 183500/322645 Texte kodiert, verstrichen=35.5 min, geschaetzte Restzeit=26.9 min
+Batch 368/646: 184000/322645 Texte kodiert, verstrichen=35.6 min, geschaetzte Restzeit=26.8 min
+Batch 369/646: 184500/322645 Texte kodiert, verstrichen=35.7 min, geschaetzte Restzeit=26.7 min
+Batch 370/646: 185000/322645 Texte kodiert, verstrichen=35.8 min, geschaetzte Restzeit=26.6 min
+Batch 371/646: 185500/322645 Texte kodiert, verstrichen=35.9 min, geschaetzte Restzeit=26.5 min
+Batch 372/646: 186000/322645 Texte kodiert, verstrichen=36.0 min, geschaetzte Restzeit=26.4 min
+[Fortschritt] 186000/322645 Texte kodiert, verstrichen=36.0 min, geschaetzte Restzeit=26.4 min
+Batch 373/646: 186500/322645 Texte kodiert, verstrichen=36.1 min, geschaetzte Restzeit=26.3 min
+Batch 374/646: 187000/322645 Texte kodiert, verstrichen=36.2 min, geschaetzte Restzeit=26.2 min
+Batch 375/646: 187500/322645 Texte kodiert, verstrichen=36.3 min, geschaetzte Restzeit=26.1 min
+Batch 376/646: 188000/322645 Texte kodiert, verstrichen=36.4 min, geschaetzte Restzeit=26.1 min
+Batch 377/646: 188500/322645 Texte kodiert, verstrichen=36.5 min, geschaetzte Restzeit=26.0 min
+Batch 378/646: 189000/322645 Texte kodiert, verstrichen=36.6 min, geschaetzte Restzeit=25.9 min
+Batch 379/646: 189500/322645 Texte kodiert, verstrichen=36.7 min, geschaetzte Restzeit=25.8 min
+Batch 380/646: 190000/322645 Texte kodiert, verstrichen=36.8 min, geschaetzte Restzeit=25.7 min
+Batch 381/646: 190500/322645 Texte kodiert, verstrichen=36.9 min, geschaetzte Restzeit=25.6 min
+[Fortschritt] 190500/322645 Texte kodiert, verstrichen=37.0 min, geschaetzte Restzeit=25.7 min
+Batch 382/646: 191000/322645 Texte kodiert, verstrichen=37.1 min, geschaetzte Restzeit=25.5 min
+Batch 383/646: 191500/322645 Texte kodiert, verstrichen=37.2 min, geschaetzte Restzeit=25.4 min
+Batch 384/646: 192000/322645 Texte kodiert, verstrichen=37.3 min, geschaetzte Restzeit=25.4 min
+Batch 385/646: 192500/322645 Texte kodiert, verstrichen=37.4 min, geschaetzte Restzeit=25.3 min
+Batch 386/646: 193000/322645 Texte kodiert, verstrichen=37.5 min, geschaetzte Restzeit=25.2 min
+Batch 387/646: 193500/322645 Texte kodiert, verstrichen=37.7 min, geschaetzte Restzeit=25.1 min
+Batch 388/646: 194000/322645 Texte kodiert, verstrichen=37.8 min, geschaetzte Restzeit=25.1 min
+Batch 389/646: 194500/322645 Texte kodiert, verstrichen=37.9 min, geschaetzte Restzeit=25.0 min
+[Fortschritt] 194500/322645 Texte kodiert, verstrichen=38.0 min, geschaetzte Restzeit=25.0 min
+Batch 390/646: 195000/322645 Texte kodiert, verstrichen=38.1 min, geschaetzte Restzeit=24.9 min
+Batch 391/646: 195500/322645 Texte kodiert, verstrichen=38.2 min, geschaetzte Restzeit=24.9 min
+Batch 392/646: 196000/322645 Texte kodiert, verstrichen=38.4 min, geschaetzte Restzeit=24.8 min
+Batch 393/646: 196500/322645 Texte kodiert, verstrichen=38.5 min, geschaetzte Restzeit=24.7 min
+Batch 394/646: 197000/322645 Texte kodiert, verstrichen=38.6 min, geschaetzte Restzeit=24.6 min
+Batch 395/646: 197500/322645 Texte kodiert, verstrichen=38.7 min, geschaetzte Restzeit=24.5 min
+Batch 396/646: 198000/322645 Texte kodiert, verstrichen=38.8 min, geschaetzte Restzeit=24.4 min
+Batch 397/646: 198500/322645 Texte kodiert, verstrichen=38.9 min, geschaetzte Restzeit=24.3 min
+[Fortschritt] 198500/322645 Texte kodiert, verstrichen=39.0 min, geschaetzte Restzeit=24.4 min
+Batch 398/646: 199000/322645 Texte kodiert, verstrichen=39.0 min, geschaetzte Restzeit=24.3 min
+Batch 399/646: 199500/322645 Texte kodiert, verstrichen=39.2 min, geschaetzte Restzeit=24.2 min
+Batch 400/646: 200000/322645 Texte kodiert, verstrichen=39.3 min, geschaetzte Restzeit=24.1 min
+Batch 401/646: 200500/322645 Texte kodiert, verstrichen=39.4 min, geschaetzte Restzeit=24.0 min
+Batch 402/646: 201000/322645 Texte kodiert, verstrichen=39.5 min, geschaetzte Restzeit=23.9 min
+Batch 403/646: 201500/322645 Texte kodiert, verstrichen=39.6 min, geschaetzte Restzeit=23.8 min
+Batch 404/646: 202000/322645 Texte kodiert, verstrichen=39.8 min, geschaetzte Restzeit=23.7 min
+Batch 405/646: 202500/322645 Texte kodiert, verstrichen=39.9 min, geschaetzte Restzeit=23.7 min
+[Fortschritt] 202500/322645 Texte kodiert, verstrichen=40.0 min, geschaetzte Restzeit=23.7 min
+Batch 406/646: 203000/322645 Texte kodiert, verstrichen=40.0 min, geschaetzte Restzeit=23.6 min
+Batch 407/646: 203500/322645 Texte kodiert, verstrichen=40.2 min, geschaetzte Restzeit=23.5 min
+Batch 408/646: 204000/322645 Texte kodiert, verstrichen=40.3 min, geschaetzte Restzeit=23.4 min
+Batch 409/646: 204500/322645 Texte kodiert, verstrichen=40.4 min, geschaetzte Restzeit=23.3 min
+Batch 410/646: 205000/322645 Texte kodiert, verstrichen=40.5 min, geschaetzte Restzeit=23.2 min
+Batch 411/646: 205500/322645 Texte kodiert, verstrichen=40.6 min, geschaetzte Restzeit=23.2 min
+Batch 412/646: 206000/322645 Texte kodiert, verstrichen=40.7 min, geschaetzte Restzeit=23.1 min
+Batch 413/646: 206500/322645 Texte kodiert, verstrichen=40.8 min, geschaetzte Restzeit=23.0 min
+Batch 414/646: 207000/322645 Texte kodiert, verstrichen=41.0 min, geschaetzte Restzeit=22.9 min
+[Fortschritt] 207000/322645 Texte kodiert, verstrichen=41.0 min, geschaetzte Restzeit=22.9 min
+Batch 415/646: 207500/322645 Texte kodiert, verstrichen=41.1 min, geschaetzte Restzeit=22.8 min
+Batch 416/646: 208000/322645 Texte kodiert, verstrichen=41.2 min, geschaetzte Restzeit=22.7 min
+Batch 417/646: 208500/322645 Texte kodiert, verstrichen=41.3 min, geschaetzte Restzeit=22.6 min
+Batch 418/646: 209000/322645 Texte kodiert, verstrichen=41.4 min, geschaetzte Restzeit=22.5 min
+Batch 419/646: 209500/322645 Texte kodiert, verstrichen=41.6 min, geschaetzte Restzeit=22.4 min
+Batch 420/646: 210000/322645 Texte kodiert, verstrichen=41.7 min, geschaetzte Restzeit=22.4 min
+Batch 421/646: 210500/322645 Texte kodiert, verstrichen=41.8 min, geschaetzte Restzeit=22.3 min
+Batch 422/646: 211000/322645 Texte kodiert, verstrichen=42.0 min, geschaetzte Restzeit=22.2 min
+[Fortschritt] 211000/322645 Texte kodiert, verstrichen=42.0 min, geschaetzte Restzeit=22.2 min
+Batch 423/646: 211500/322645 Texte kodiert, verstrichen=42.2 min, geschaetzte Restzeit=22.2 min
+Batch 424/646: 212000/322645 Texte kodiert, verstrichen=42.3 min, geschaetzte Restzeit=22.1 min
+Batch 425/646: 212500/322645 Texte kodiert, verstrichen=42.4 min, geschaetzte Restzeit=22.0 min
+Batch 426/646: 213000/322645 Texte kodiert, verstrichen=42.5 min, geschaetzte Restzeit=21.9 min
+Batch 427/646: 213500/322645 Texte kodiert, verstrichen=42.7 min, geschaetzte Restzeit=21.8 min
+Batch 428/646: 214000/322645 Texte kodiert, verstrichen=42.8 min, geschaetzte Restzeit=21.7 min
+Batch 429/646: 214500/322645 Texte kodiert, verstrichen=42.9 min, geschaetzte Restzeit=21.6 min
+[Fortschritt] 214500/322645 Texte kodiert, verstrichen=43.0 min, geschaetzte Restzeit=21.7 min
+Batch 430/646: 215000/322645 Texte kodiert, verstrichen=43.1 min, geschaetzte Restzeit=21.6 min
+Batch 431/646: 215500/322645 Texte kodiert, verstrichen=43.2 min, geschaetzte Restzeit=21.5 min
+Batch 432/646: 216000/322645 Texte kodiert, verstrichen=43.4 min, geschaetzte Restzeit=21.4 min
+Batch 433/646: 216500/322645 Texte kodiert, verstrichen=43.5 min, geschaetzte Restzeit=21.3 min
+Batch 434/646: 217000/322645 Texte kodiert, verstrichen=43.6 min, geschaetzte Restzeit=21.2 min
+Batch 435/646: 217500/322645 Texte kodiert, verstrichen=43.7 min, geschaetzte Restzeit=21.1 min
+Batch 436/646: 218000/322645 Texte kodiert, verstrichen=43.8 min, geschaetzte Restzeit=21.0 min
+Batch 437/646: 218500/322645 Texte kodiert, verstrichen=44.0 min, geschaetzte Restzeit=20.9 min
+[Fortschritt] 218500/322645 Texte kodiert, verstrichen=44.0 min, geschaetzte Restzeit=21.0 min
+Batch 438/646: 219000/322645 Texte kodiert, verstrichen=44.1 min, geschaetzte Restzeit=20.9 min
+Batch 439/646: 219500/322645 Texte kodiert, verstrichen=44.2 min, geschaetzte Restzeit=20.8 min
+Batch 440/646: 220000/322645 Texte kodiert, verstrichen=44.3 min, geschaetzte Restzeit=20.7 min
+Batch 441/646: 220500/322645 Texte kodiert, verstrichen=44.5 min, geschaetzte Restzeit=20.6 min
+Batch 442/646: 221000/322645 Texte kodiert, verstrichen=44.6 min, geschaetzte Restzeit=20.5 min
+Batch 443/646: 221500/322645 Texte kodiert, verstrichen=44.7 min, geschaetzte Restzeit=20.4 min
+Batch 444/646: 222000/322645 Texte kodiert, verstrichen=44.8 min, geschaetzte Restzeit=20.3 min
+Batch 445/646: 222500/322645 Texte kodiert, verstrichen=45.0 min, geschaetzte Restzeit=20.2 min
+[Fortschritt] 222500/322645 Texte kodiert, verstrichen=45.0 min, geschaetzte Restzeit=20.3 min
+Batch 446/646: 223000/322645 Texte kodiert, verstrichen=45.1 min, geschaetzte Restzeit=20.2 min
+Batch 447/646: 223500/322645 Texte kodiert, verstrichen=45.3 min, geschaetzte Restzeit=20.1 min
+Batch 448/646: 224000/322645 Texte kodiert, verstrichen=45.4 min, geschaetzte Restzeit=20.0 min
+Batch 449/646: 224500/322645 Texte kodiert, verstrichen=45.5 min, geschaetzte Restzeit=19.9 min
+Batch 450/646: 225000/322645 Texte kodiert, verstrichen=45.6 min, geschaetzte Restzeit=19.8 min
+Batch 451/646: 225500/322645 Texte kodiert, verstrichen=45.8 min, geschaetzte Restzeit=19.7 min
+Batch 452/646: 226000/322645 Texte kodiert, verstrichen=45.9 min, geschaetzte Restzeit=19.6 min
+[Fortschritt] 226000/322645 Texte kodiert, verstrichen=46.0 min, geschaetzte Restzeit=19.7 min
+Batch 453/646: 226500/322645 Texte kodiert, verstrichen=46.0 min, geschaetzte Restzeit=19.5 min
+Batch 454/646: 227000/322645 Texte kodiert, verstrichen=46.2 min, geschaetzte Restzeit=19.5 min
+Batch 455/646: 227500/322645 Texte kodiert, verstrichen=46.3 min, geschaetzte Restzeit=19.4 min
+Batch 456/646: 228000/322645 Texte kodiert, verstrichen=46.4 min, geschaetzte Restzeit=19.3 min
+Batch 457/646: 228500/322645 Texte kodiert, verstrichen=46.6 min, geschaetzte Restzeit=19.2 min
+Batch 458/646: 229000/322645 Texte kodiert, verstrichen=46.7 min, geschaetzte Restzeit=19.1 min
+Batch 459/646: 229500/322645 Texte kodiert, verstrichen=46.8 min, geschaetzte Restzeit=19.0 min
+Batch 460/646: 230000/322645 Texte kodiert, verstrichen=46.9 min, geschaetzte Restzeit=18.9 min
+[Fortschritt] 230000/322645 Texte kodiert, verstrichen=47.0 min, geschaetzte Restzeit=18.9 min
+Batch 461/646: 230500/322645 Texte kodiert, verstrichen=47.0 min, geschaetzte Restzeit=18.8 min
+Batch 462/646: 231000/322645 Texte kodiert, verstrichen=47.1 min, geschaetzte Restzeit=18.7 min
+Batch 463/646: 231500/322645 Texte kodiert, verstrichen=47.3 min, geschaetzte Restzeit=18.6 min
+Batch 464/646: 232000/322645 Texte kodiert, verstrichen=47.4 min, geschaetzte Restzeit=18.5 min
+Batch 465/646: 232500/322645 Texte kodiert, verstrichen=47.5 min, geschaetzte Restzeit=18.4 min
+Batch 466/646: 233000/322645 Texte kodiert, verstrichen=47.6 min, geschaetzte Restzeit=18.3 min
+Batch 467/646: 233500/322645 Texte kodiert, verstrichen=47.7 min, geschaetzte Restzeit=18.2 min
+Batch 468/646: 234000/322645 Texte kodiert, verstrichen=47.9 min, geschaetzte Restzeit=18.1 min
+[Fortschritt] 234000/322645 Texte kodiert, verstrichen=48.0 min, geschaetzte Restzeit=18.2 min
+Batch 469/646: 234500/322645 Texte kodiert, verstrichen=48.0 min, geschaetzte Restzeit=18.0 min
+Batch 470/646: 235000/322645 Texte kodiert, verstrichen=48.1 min, geschaetzte Restzeit=18.0 min
+Batch 471/646: 235500/322645 Texte kodiert, verstrichen=48.3 min, geschaetzte Restzeit=17.9 min
+Batch 472/646: 236000/322645 Texte kodiert, verstrichen=48.4 min, geschaetzte Restzeit=17.8 min
+Batch 473/646: 236500/322645 Texte kodiert, verstrichen=48.5 min, geschaetzte Restzeit=17.7 min
+Batch 474/646: 237000/322645 Texte kodiert, verstrichen=48.7 min, geschaetzte Restzeit=17.6 min
+Batch 475/646: 237500/322645 Texte kodiert, verstrichen=48.8 min, geschaetzte Restzeit=17.5 min
+Batch 476/646: 238000/322645 Texte kodiert, verstrichen=48.9 min, geschaetzte Restzeit=17.4 min
+Batch 477/646: 238500/322645 Texte kodiert, verstrichen=49.0 min, geschaetzte Restzeit=17.3 min
+[Fortschritt] 238500/322645 Texte kodiert, verstrichen=49.0 min, geschaetzte Restzeit=17.3 min
+Batch 478/646: 239000/322645 Texte kodiert, verstrichen=49.1 min, geschaetzte Restzeit=17.2 min
+Batch 479/646: 239500/322645 Texte kodiert, verstrichen=49.2 min, geschaetzte Restzeit=17.1 min
+Batch 480/646: 240000/322645 Texte kodiert, verstrichen=49.4 min, geschaetzte Restzeit=17.0 min
+Batch 481/646: 240500/322645 Texte kodiert, verstrichen=49.5 min, geschaetzte Restzeit=16.9 min
+Batch 482/646: 241000/322645 Texte kodiert, verstrichen=49.6 min, geschaetzte Restzeit=16.8 min
+Batch 483/646: 241500/322645 Texte kodiert, verstrichen=49.7 min, geschaetzte Restzeit=16.7 min
+Batch 484/646: 242000/322645 Texte kodiert, verstrichen=49.8 min, geschaetzte Restzeit=16.6 min
+Batch 485/646: 242500/322645 Texte kodiert, verstrichen=49.9 min, geschaetzte Restzeit=16.5 min
+[Fortschritt] 242500/322645 Texte kodiert, verstrichen=50.0 min, geschaetzte Restzeit=16.5 min
+Batch 486/646: 243000/322645 Texte kodiert, verstrichen=50.1 min, geschaetzte Restzeit=16.4 min
+Batch 487/646: 243500/322645 Texte kodiert, verstrichen=50.2 min, geschaetzte Restzeit=16.3 min
+Batch 488/646: 244000/322645 Texte kodiert, verstrichen=50.2 min, geschaetzte Restzeit=16.2 min
+Batch 489/646: 244500/322645 Texte kodiert, verstrichen=50.3 min, geschaetzte Restzeit=16.1 min
+Batch 490/646: 245000/322645 Texte kodiert, verstrichen=50.3 min, geschaetzte Restzeit=15.9 min
+Batch 491/646: 245500/322645 Texte kodiert, verstrichen=50.4 min, geschaetzte Restzeit=15.8 min
+Batch 492/646: 246000/322645 Texte kodiert, verstrichen=50.4 min, geschaetzte Restzeit=15.7 min
+Batch 493/646: 246500/322645 Texte kodiert, verstrichen=50.4 min, geschaetzte Restzeit=15.6 min
+Batch 494/646: 247000/322645 Texte kodiert, verstrichen=50.5 min, geschaetzte Restzeit=15.5 min
+Batch 495/646: 247500/322645 Texte kodiert, verstrichen=50.5 min, geschaetzte Restzeit=15.3 min
+Batch 496/646: 248000/322645 Texte kodiert, verstrichen=50.6 min, geschaetzte Restzeit=15.2 min
+Batch 497/646: 248500/322645 Texte kodiert, verstrichen=50.6 min, geschaetzte Restzeit=15.1 min
+Batch 498/646: 249000/322645 Texte kodiert, verstrichen=50.7 min, geschaetzte Restzeit=15.0 min
+Batch 499/646: 249500/322645 Texte kodiert, verstrichen=50.8 min, geschaetzte Restzeit=14.9 min
+Batch 500/646: 250000/322645 Texte kodiert, verstrichen=50.9 min, geschaetzte Restzeit=14.8 min
+[Fortschritt] 250000/322645 Texte kodiert, verstrichen=51.0 min, geschaetzte Restzeit=14.8 min
+Batch 501/646: 250500/322645 Texte kodiert, verstrichen=51.1 min, geschaetzte Restzeit=14.7 min
+Batch 502/646: 251000/322645 Texte kodiert, verstrichen=51.2 min, geschaetzte Restzeit=14.6 min
+Batch 503/646: 251500/322645 Texte kodiert, verstrichen=51.3 min, geschaetzte Restzeit=14.5 min
+Batch 504/646: 252000/322645 Texte kodiert, verstrichen=51.4 min, geschaetzte Restzeit=14.4 min
+Batch 505/646: 252500/322645 Texte kodiert, verstrichen=51.6 min, geschaetzte Restzeit=14.3 min
+Batch 506/646: 253000/322645 Texte kodiert, verstrichen=51.7 min, geschaetzte Restzeit=14.2 min
+Batch 507/646: 253500/322645 Texte kodiert, verstrichen=51.8 min, geschaetzte Restzeit=14.1 min
+Batch 508/646: 254000/322645 Texte kodiert, verstrichen=52.0 min, geschaetzte Restzeit=14.0 min
+[Fortschritt] 254000/322645 Texte kodiert, verstrichen=52.0 min, geschaetzte Restzeit=14.1 min
+Batch 509/646: 254500/322645 Texte kodiert, verstrichen=52.1 min, geschaetzte Restzeit=13.9 min
+Batch 510/646: 255000/322645 Texte kodiert, verstrichen=52.2 min, geschaetzte Restzeit=13.9 min
+Batch 511/646: 255500/322645 Texte kodiert, verstrichen=52.4 min, geschaetzte Restzeit=13.8 min
+Batch 512/646: 256000/322645 Texte kodiert, verstrichen=52.5 min, geschaetzte Restzeit=13.7 min
+Batch 513/646: 256500/322645 Texte kodiert, verstrichen=52.6 min, geschaetzte Restzeit=13.6 min
+Batch 514/646: 257000/322645 Texte kodiert, verstrichen=52.8 min, geschaetzte Restzeit=13.5 min
+Batch 515/646: 257500/322645 Texte kodiert, verstrichen=52.9 min, geschaetzte Restzeit=13.4 min
+Batch 516/646: 258000/322645 Texte kodiert, verstrichen=53.0 min, geschaetzte Restzeit=13.3 min
+[Fortschritt] 258000/322645 Texte kodiert, verstrichen=53.0 min, geschaetzte Restzeit=13.3 min
+Batch 517/646: 258500/322645 Texte kodiert, verstrichen=53.1 min, geschaetzte Restzeit=13.2 min
+Batch 518/646: 259000/322645 Texte kodiert, verstrichen=53.2 min, geschaetzte Restzeit=13.1 min
+Batch 519/646: 259500/322645 Texte kodiert, verstrichen=53.4 min, geschaetzte Restzeit=13.0 min
+Batch 520/646: 260000/322645 Texte kodiert, verstrichen=53.5 min, geschaetzte Restzeit=12.9 min
+Batch 521/646: 260500/322645 Texte kodiert, verstrichen=53.6 min, geschaetzte Restzeit=12.8 min
+Batch 522/646: 261000/322645 Texte kodiert, verstrichen=53.7 min, geschaetzte Restzeit=12.7 min
+Batch 523/646: 261500/322645 Texte kodiert, verstrichen=53.9 min, geschaetzte Restzeit=12.6 min
+Batch 524/646: 262000/322645 Texte kodiert, verstrichen=54.0 min, geschaetzte Restzeit=12.5 min
+[Fortschritt] 262000/322645 Texte kodiert, verstrichen=54.0 min, geschaetzte Restzeit=12.5 min
+Batch 525/646: 262500/322645 Texte kodiert, verstrichen=54.1 min, geschaetzte Restzeit=12.4 min
+Batch 526/646: 263000/322645 Texte kodiert, verstrichen=54.3 min, geschaetzte Restzeit=12.3 min
+Batch 527/646: 263500/322645 Texte kodiert, verstrichen=54.4 min, geschaetzte Restzeit=12.2 min
+Batch 528/646: 264000/322645 Texte kodiert, verstrichen=54.5 min, geschaetzte Restzeit=12.1 min
+Batch 529/646: 264500/322645 Texte kodiert, verstrichen=54.7 min, geschaetzte Restzeit=12.0 min
+Batch 530/646: 265000/322645 Texte kodiert, verstrichen=54.8 min, geschaetzte Restzeit=11.9 min
+Batch 531/646: 265500/322645 Texte kodiert, verstrichen=54.9 min, geschaetzte Restzeit=11.8 min
+[Fortschritt] 265500/322645 Texte kodiert, verstrichen=55.0 min, geschaetzte Restzeit=11.8 min
+Batch 532/646: 266000/322645 Texte kodiert, verstrichen=55.1 min, geschaetzte Restzeit=11.7 min
+Batch 533/646: 266500/322645 Texte kodiert, verstrichen=55.2 min, geschaetzte Restzeit=11.6 min
+Batch 534/646: 267000/322645 Texte kodiert, verstrichen=55.3 min, geschaetzte Restzeit=11.5 min
+Batch 535/646: 267500/322645 Texte kodiert, verstrichen=55.4 min, geschaetzte Restzeit=11.4 min
+Batch 536/646: 268000/322645 Texte kodiert, verstrichen=55.5 min, geschaetzte Restzeit=11.3 min
+Batch 537/646: 268500/322645 Texte kodiert, verstrichen=55.7 min, geschaetzte Restzeit=11.2 min
+Batch 538/646: 269000/322645 Texte kodiert, verstrichen=55.8 min, geschaetzte Restzeit=11.1 min
+Batch 539/646: 269500/322645 Texte kodiert, verstrichen=55.9 min, geschaetzte Restzeit=11.0 min
+[Fortschritt] 269500/322645 Texte kodiert, verstrichen=56.0 min, geschaetzte Restzeit=11.0 min
+Batch 540/646: 270000/322645 Texte kodiert, verstrichen=56.1 min, geschaetzte Restzeit=10.9 min
+Batch 541/646: 270500/322645 Texte kodiert, verstrichen=56.2 min, geschaetzte Restzeit=10.8 min
+Batch 542/646: 271000/322645 Texte kodiert, verstrichen=56.3 min, geschaetzte Restzeit=10.7 min
+Batch 543/646: 271500/322645 Texte kodiert, verstrichen=56.4 min, geschaetzte Restzeit=10.6 min
+Batch 544/646: 272000/322645 Texte kodiert, verstrichen=56.5 min, geschaetzte Restzeit=10.5 min
+Batch 545/646: 272500/322645 Texte kodiert, verstrichen=56.7 min, geschaetzte Restzeit=10.4 min
+Batch 546/646: 273000/322645 Texte kodiert, verstrichen=56.8 min, geschaetzte Restzeit=10.3 min
+Batch 547/646: 273500/322645 Texte kodiert, verstrichen=56.9 min, geschaetzte Restzeit=10.2 min
+[Fortschritt] 273500/322645 Texte kodiert, verstrichen=57.0 min, geschaetzte Restzeit=10.2 min
+Batch 548/646: 274000/322645 Texte kodiert, verstrichen=57.1 min, geschaetzte Restzeit=10.1 min
+Batch 549/646: 274500/322645 Texte kodiert, verstrichen=57.2 min, geschaetzte Restzeit=10.0 min
+Batch 550/646: 275000/322645 Texte kodiert, verstrichen=57.3 min, geschaetzte Restzeit=9.9 min
+Batch 551/646: 275500/322645 Texte kodiert, verstrichen=57.5 min, geschaetzte Restzeit=9.8 min
+Batch 552/646: 276000/322645 Texte kodiert, verstrichen=57.6 min, geschaetzte Restzeit=9.7 min
+Batch 553/646: 276500/322645 Texte kodiert, verstrichen=57.7 min, geschaetzte Restzeit=9.6 min
+Batch 554/646: 277000/322645 Texte kodiert, verstrichen=57.9 min, geschaetzte Restzeit=9.5 min
+[Fortschritt] 277000/322645 Texte kodiert, verstrichen=58.0 min, geschaetzte Restzeit=9.6 min
+Batch 555/646: 277500/322645 Texte kodiert, verstrichen=58.0 min, geschaetzte Restzeit=9.4 min
+Batch 556/646: 278000/322645 Texte kodiert, verstrichen=58.1 min, geschaetzte Restzeit=9.3 min
+Batch 557/646: 278500/322645 Texte kodiert, verstrichen=58.3 min, geschaetzte Restzeit=9.2 min
+Batch 558/646: 279000/322645 Texte kodiert, verstrichen=58.4 min, geschaetzte Restzeit=9.1 min
+Batch 559/646: 279500/322645 Texte kodiert, verstrichen=58.6 min, geschaetzte Restzeit=9.0 min
+Batch 560/646: 280000/322645 Texte kodiert, verstrichen=58.7 min, geschaetzte Restzeit=8.9 min
+Batch 561/646: 280500/322645 Texte kodiert, verstrichen=58.8 min, geschaetzte Restzeit=8.8 min
+Batch 562/646: 281000/322645 Texte kodiert, verstrichen=58.9 min, geschaetzte Restzeit=8.7 min
+[Fortschritt] 281000/322645 Texte kodiert, verstrichen=59.0 min, geschaetzte Restzeit=8.7 min
+Batch 563/646: 281500/322645 Texte kodiert, verstrichen=59.1 min, geschaetzte Restzeit=8.6 min
+Batch 564/646: 282000/322645 Texte kodiert, verstrichen=59.2 min, geschaetzte Restzeit=8.5 min
+Batch 565/646: 282500/322645 Texte kodiert, verstrichen=59.3 min, geschaetzte Restzeit=8.4 min
+Batch 566/646: 283000/322645 Texte kodiert, verstrichen=59.4 min, geschaetzte Restzeit=8.3 min
+Batch 567/646: 283500/322645 Texte kodiert, verstrichen=59.6 min, geschaetzte Restzeit=8.2 min
+Batch 568/646: 284000/322645 Texte kodiert, verstrichen=59.7 min, geschaetzte Restzeit=8.1 min
+Batch 569/646: 284500/322645 Texte kodiert, verstrichen=59.8 min, geschaetzte Restzeit=8.0 min
+Batch 570/646: 285000/322645 Texte kodiert, verstrichen=60.0 min, geschaetzte Restzeit=7.9 min
+[Fortschritt] 285000/322645 Texte kodiert, verstrichen=60.0 min, geschaetzte Restzeit=7.9 min
+Batch 571/646: 285500/322645 Texte kodiert, verstrichen=60.1 min, geschaetzte Restzeit=7.8 min
+Batch 572/646: 286000/322645 Texte kodiert, verstrichen=60.2 min, geschaetzte Restzeit=7.7 min
+Batch 573/646: 286500/322645 Texte kodiert, verstrichen=60.3 min, geschaetzte Restzeit=7.6 min
+Batch 574/646: 287000/322645 Texte kodiert, verstrichen=60.5 min, geschaetzte Restzeit=7.5 min
+Batch 575/646: 287500/322645 Texte kodiert, verstrichen=60.6 min, geschaetzte Restzeit=7.4 min
+Batch 576/646: 288000/322645 Texte kodiert, verstrichen=60.7 min, geschaetzte Restzeit=7.3 min
+Batch 577/646: 288500/322645 Texte kodiert, verstrichen=60.8 min, geschaetzte Restzeit=7.2 min
+Batch 578/646: 289000/322645 Texte kodiert, verstrichen=61.0 min, geschaetzte Restzeit=7.1 min
+[Fortschritt] 289000/322645 Texte kodiert, verstrichen=61.0 min, geschaetzte Restzeit=7.1 min
+Batch 579/646: 289500/322645 Texte kodiert, verstrichen=61.1 min, geschaetzte Restzeit=7.0 min
+Batch 580/646: 290000/322645 Texte kodiert, verstrichen=61.2 min, geschaetzte Restzeit=6.9 min
+Batch 581/646: 290500/322645 Texte kodiert, verstrichen=61.3 min, geschaetzte Restzeit=6.8 min
+Batch 582/646: 291000/322645 Texte kodiert, verstrichen=61.4 min, geschaetzte Restzeit=6.7 min
+Batch 583/646: 291500/322645 Texte kodiert, verstrichen=61.6 min, geschaetzte Restzeit=6.6 min
+Batch 584/646: 292000/322645 Texte kodiert, verstrichen=61.7 min, geschaetzte Restzeit=6.5 min
+Batch 585/646: 292500/322645 Texte kodiert, verstrichen=61.9 min, geschaetzte Restzeit=6.4 min
+Batch 586/646: 293000/322645 Texte kodiert, verstrichen=62.0 min, geschaetzte Restzeit=6.3 min
+[Fortschritt] 293000/322645 Texte kodiert, verstrichen=62.0 min, geschaetzte Restzeit=6.3 min
+Batch 587/646: 293500/322645 Texte kodiert, verstrichen=62.1 min, geschaetzte Restzeit=6.2 min
+Batch 588/646: 294000/322645 Texte kodiert, verstrichen=62.3 min, geschaetzte Restzeit=6.1 min
+Batch 589/646: 294500/322645 Texte kodiert, verstrichen=62.4 min, geschaetzte Restzeit=6.0 min
+Batch 590/646: 295000/322645 Texte kodiert, verstrichen=62.6 min, geschaetzte Restzeit=5.9 min
+Batch 591/646: 295500/322645 Texte kodiert, verstrichen=62.7 min, geschaetzte Restzeit=5.8 min
+Batch 592/646: 296000/322645 Texte kodiert, verstrichen=62.9 min, geschaetzte Restzeit=5.7 min
+Batch 593/646: 296500/322645 Texte kodiert, verstrichen=63.0 min, geschaetzte Restzeit=5.6 min
+[Fortschritt] 296500/322645 Texte kodiert, verstrichen=63.0 min, geschaetzte Restzeit=5.6 min
+Batch 594/646: 297000/322645 Texte kodiert, verstrichen=63.1 min, geschaetzte Restzeit=5.5 min
+Batch 595/646: 297500/322645 Texte kodiert, verstrichen=63.3 min, geschaetzte Restzeit=5.3 min
+Batch 596/646: 298000/322645 Texte kodiert, verstrichen=63.4 min, geschaetzte Restzeit=5.2 min
+Batch 597/646: 298500/322645 Texte kodiert, verstrichen=63.6 min, geschaetzte Restzeit=5.1 min
+Batch 598/646: 299000/322645 Texte kodiert, verstrichen=63.7 min, geschaetzte Restzeit=5.0 min
+Batch 599/646: 299500/322645 Texte kodiert, verstrichen=63.8 min, geschaetzte Restzeit=4.9 min
+Batch 600/646: 300000/322645 Texte kodiert, verstrichen=63.9 min, geschaetzte Restzeit=4.8 min
+[Fortschritt] 300000/322645 Texte kodiert, verstrichen=64.0 min, geschaetzte Restzeit=4.8 min
+Batch 601/646: 300500/322645 Texte kodiert, verstrichen=64.1 min, geschaetzte Restzeit=4.7 min
+Batch 602/646: 301000/322645 Texte kodiert, verstrichen=64.2 min, geschaetzte Restzeit=4.6 min
+Batch 603/646: 301500/322645 Texte kodiert, verstrichen=64.4 min, geschaetzte Restzeit=4.5 min
+Batch 604/646: 302000/322645 Texte kodiert, verstrichen=64.5 min, geschaetzte Restzeit=4.4 min
+Batch 605/646: 302500/322645 Texte kodiert, verstrichen=64.7 min, geschaetzte Restzeit=4.3 min
+Batch 606/646: 303000/322645 Texte kodiert, verstrichen=64.8 min, geschaetzte Restzeit=4.2 min
+Batch 607/646: 303500/322645 Texte kodiert, verstrichen=65.0 min, geschaetzte Restzeit=4.1 min
+[Fortschritt] 303500/322645 Texte kodiert, verstrichen=65.0 min, geschaetzte Restzeit=4.1 min
+Batch 608/646: 304000/322645 Texte kodiert, verstrichen=65.1 min, geschaetzte Restzeit=4.0 min
+Batch 609/646: 304500/322645 Texte kodiert, verstrichen=65.2 min, geschaetzte Restzeit=3.9 min
+Batch 610/646: 305000/322645 Texte kodiert, verstrichen=65.4 min, geschaetzte Restzeit=3.8 min
+Batch 611/646: 305500/322645 Texte kodiert, verstrichen=65.5 min, geschaetzte Restzeit=3.7 min
+Batch 612/646: 306000/322645 Texte kodiert, verstrichen=65.6 min, geschaetzte Restzeit=3.6 min
+Batch 613/646: 306500/322645 Texte kodiert, verstrichen=65.8 min, geschaetzte Restzeit=3.5 min
+Batch 614/646: 307000/322645 Texte kodiert, verstrichen=65.9 min, geschaetzte Restzeit=3.4 min
+[Fortschritt] 307000/322645 Texte kodiert, verstrichen=66.0 min, geschaetzte Restzeit=3.4 min
+Batch 615/646: 307500/322645 Texte kodiert, verstrichen=66.1 min, geschaetzte Restzeit=3.3 min
+Batch 616/646: 308000/322645 Texte kodiert, verstrichen=66.2 min, geschaetzte Restzeit=3.1 min
+Batch 617/646: 308500/322645 Texte kodiert, verstrichen=66.3 min, geschaetzte Restzeit=3.0 min
+Batch 618/646: 309000/322645 Texte kodiert, verstrichen=66.4 min, geschaetzte Restzeit=2.9 min
+Batch 619/646: 309500/322645 Texte kodiert, verstrichen=66.6 min, geschaetzte Restzeit=2.8 min
+Batch 620/646: 310000/322645 Texte kodiert, verstrichen=66.7 min, geschaetzte Restzeit=2.7 min
+Batch 621/646: 310500/322645 Texte kodiert, verstrichen=66.8 min, geschaetzte Restzeit=2.6 min
+Batch 622/646: 311000/322645 Texte kodiert, verstrichen=67.0 min, geschaetzte Restzeit=2.5 min
+[Fortschritt] 311000/322645 Texte kodiert, verstrichen=67.0 min, geschaetzte Restzeit=2.5 min
+Batch 623/646: 311500/322645 Texte kodiert, verstrichen=67.1 min, geschaetzte Restzeit=2.4 min
+Batch 624/646: 312000/322645 Texte kodiert, verstrichen=67.3 min, geschaetzte Restzeit=2.3 min
+Batch 625/646: 312500/322645 Texte kodiert, verstrichen=67.4 min, geschaetzte Restzeit=2.2 min
+Batch 626/646: 313000/322645 Texte kodiert, verstrichen=67.6 min, geschaetzte Restzeit=2.1 min
+Batch 627/646: 313500/322645 Texte kodiert, verstrichen=67.7 min, geschaetzte Restzeit=2.0 min
+Batch 628/646: 314000/322645 Texte kodiert, verstrichen=67.9 min, geschaetzte Restzeit=1.9 min
+[Fortschritt] 314000/322645 Texte kodiert, verstrichen=68.0 min, geschaetzte Restzeit=1.9 min
+Batch 629/646: 314500/322645 Texte kodiert, verstrichen=68.0 min, geschaetzte Restzeit=1.8 min
+Batch 630/646: 315000/322645 Texte kodiert, verstrichen=68.1 min, geschaetzte Restzeit=1.7 min
+Batch 631/646: 315500/322645 Texte kodiert, verstrichen=68.3 min, geschaetzte Restzeit=1.5 min
+Batch 632/646: 316000/322645 Texte kodiert, verstrichen=68.4 min, geschaetzte Restzeit=1.4 min
+Batch 633/646: 316500/322645 Texte kodiert, verstrichen=68.6 min, geschaetzte Restzeit=1.3 min
+Batch 634/646: 317000/322645 Texte kodiert, verstrichen=68.7 min, geschaetzte Restzeit=1.2 min
+Batch 635/646: 317500/322645 Texte kodiert, verstrichen=68.9 min, geschaetzte Restzeit=1.1 min
+[Fortschritt] 317500/322645 Texte kodiert, verstrichen=69.0 min, geschaetzte Restzeit=1.1 min
+Batch 636/646: 318000/322645 Texte kodiert, verstrichen=69.0 min, geschaetzte Restzeit=1.0 min
+Batch 637/646: 318500/322645 Texte kodiert, verstrichen=69.2 min, geschaetzte Restzeit=0.9 min
+Batch 638/646: 319000/322645 Texte kodiert, verstrichen=69.3 min, geschaetzte Restzeit=0.8 min
+Batch 639/646: 319500/322645 Texte kodiert, verstrichen=69.5 min, geschaetzte Restzeit=0.7 min
+Batch 640/646: 320000/322645 Texte kodiert, verstrichen=69.6 min, geschaetzte Restzeit=0.6 min
+Batch 641/646: 320500/322645 Texte kodiert, verstrichen=69.8 min, geschaetzte Restzeit=0.5 min
+Batch 642/646: 321000/322645 Texte kodiert, verstrichen=70.0 min, geschaetzte Restzeit=0.4 min
+[Fortschritt] 321000/322645 Texte kodiert, verstrichen=70.0 min, geschaetzte Restzeit=0.4 min
+Batch 643/646: 321500/322645 Texte kodiert, verstrichen=70.1 min, geschaetzte Restzeit=0.2 min
+Batch 644/646: 322000/322645 Texte kodiert, verstrichen=70.3 min, geschaetzte Restzeit=0.1 min
+Batch 645/646: 322500/322645 Texte kodiert, verstrichen=70.4 min, geschaetzte Restzeit=0.0 min
+Batch 646/646: 322645/322645 Texte kodiert, verstrichen=70.4 min, geschaetzte Restzeit=0.0 min
+Encoding fertig in 70.4 min (322645 Texte, 76.3 Texte/s)
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pixel_text_embeddings.parquet (322645 Texte, dim=1024)
+=== compute_pixel_text_embeddings.py fertig ===

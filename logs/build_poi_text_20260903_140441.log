@@ -1,0 +1,11 @@
+POIs gesamt: 1645590
+  Fall A (Klasse+QID):      11714  (0.71%)
+  Fall B (nur Klasse):     871025  (52.93%)
+  Fall C (nur QID, NEU):     2026  (0.12%)
+  Fall D (weder noch, verworfen):   760825  (46.23%)
+Aufgenommen (A+B+C): 884765
+Eindeutige Texte: 102358 (11.57% von 884765)
+Namensslot Stufe 2 (label_en-Fallback) gegriffen: 3395
+Fall-C-POIs ohne verfuegbare Beschreibung: 13 von 2026 (0.64%)
+
+Gespeichert (NEU, altes poi_text.parquet unveraendert): /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/poi_text_full.parquet

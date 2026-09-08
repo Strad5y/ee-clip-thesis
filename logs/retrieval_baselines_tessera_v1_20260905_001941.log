@@ -1,0 +1,150 @@
+=== run_retrieval_baselines.py gestartet (Phase B, tessera_v1) ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/retrieval_baselines_tessera_v1_20260905_001941.log
+Device: cuda
+Smoke-Test OK: extract_primary_class() liefert Key UND Value fuer Single- und Multi-Tag-Form korrekt.
+Modell geladen: checkpoints/tessera_v1/best.pt (Epoche 26, cfg backbone=tessera)
+Alignment-Check OK: primary_key aus unabhaengigem Read stimmt fuer alle 8257024 Zeilen mit ds.primary_key ueberein.
+Normalisierung: zscore, Statistik geladen aus data/processed/norm_stats_tessera_pixels.json
+
+Val: 843989 Zeilen, Test: 829740 Zeilen
+
+--- Verteilung primary_key / primary_value (Testset) ---
+
+primary_key (Test): 829740 Zeilen, 0 (0.0000%) mit leerem Label (aus Mittel ausgeschlossen), 13 unterschiedliche Klassen unter den restlichen 829740.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure                        n=   279675  33.7063%
+    natural                        n=   234124  28.2165%
+    building                       n=   192943  23.2534%
+    amenity                        n=   104780  12.6281%
+    shop                           n=     7572  0.9126%
+    historic                       n=     3298  0.3975%
+    tourism                        n=     2843  0.3426%
+    sport                          n=     2314  0.2789%
+    office                         n=     1689  0.2036%
+    military                       n=      207  0.0249%
+    healthcare                     n=      152  0.0183%
+    water                          n=      114  0.0137%
+    waterway                       n=       29  0.0035%
+
+primary_value (Test): 829740 Zeilen, 25016 (3.0149%) mit leerem Label (aus Mittel ausgeschlossen), 399 unterschiedliche Klassen unter den restlichen 804724.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure=park                   n=   157346  19.5528%
+    natural=wood                   n=   125346  15.5763%
+    building=house                 n=    79305  9.8549%
+    natural=water                  n=    56100  6.9713%
+    leisure=golf course            n=    52601  6.5365%
+    amenity=school                 n=    46712  5.8047%
+    building=apartments            n=    33019  4.1031%
+    leisure=garden                 n=    25115  3.1209%
+    natural=scrub                  n=    22284  2.7691%
+    building=residential           n=    20787  2.5831%
+    amenity=parking                n=    20588  2.5584%
+    building=terrace               n=    18702  2.3240%
+    leisure=nature reserve         n=    14886  1.8498%
+    natural=wetland                n=    10658  1.3244%
+    leisure=pitch                  n=     9584  1.1910%
+
+  Zusatz: bei vorhandenem primary_key aber NICHT parsebarem Value: 25016 von 829740 (3.0149%) - zusaetzlich aus dem Value-Mittel ausgeschlossen (ueber die primary_key-Leere hinaus).
+
+--- Verteilung primary_key / primary_value (Val, zur Diagnose) ---
+
+primary_key (Val): 843989 Zeilen, 1 (0.0001%) mit leerem Label (aus Mittel ausgeschlossen), 13 unterschiedliche Klassen unter den restlichen 843988.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure                        n=   301695  35.7464%
+    building                       n=   218672  25.9094%
+    natural                        n=   208678  24.7252%
+    amenity                        n=    96015  11.3763%
+    shop                           n=     5624  0.6664%
+    military                       n=     4629  0.5485%
+    tourism                        n=     3304  0.3915%
+    sport                          n=     2759  0.3269%
+    office                         n=     1506  0.1784%
+    historic                       n=      944  0.1118%
+    healthcare                     n=       69  0.0082%
+    water                          n=       61  0.0072%
+    waterway                       n=       32  0.0038%
+
+primary_value (Val): 843989 Zeilen, 20585 (2.4390%) mit leerem Label (aus Mittel ausgeschlossen), 409 unterschiedliche Klassen unter den restlichen 823404.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure=park                   n=   170116  20.6601%
+    natural=wood                   n=   116589  14.1594%
+    building=house                 n=   103126  12.5244%
+    amenity=school                 n=    43980  5.3412%
+    natural=water                  n=    43839  5.3241%
+    leisure=golf course            n=    41472  5.0367%
+    building=apartments            n=    34381  4.1755%
+    natural=scrub                  n=    31244  3.7945%
+    leisure=nature reserve         n=    28430  3.4527%
+    leisure=garden                 n=    20192  2.4523%
+    amenity=parking                n=    19958  2.4238%
+    building=terrace               n=    19903  2.4172%
+    building=residential           n=    19487  2.3666%
+    leisure=pitch                  n=    11719  1.4232%
+    natural=grassland              n=    10167  1.2348%
+
+Haeufigkeitsniveau-Referenzmenge (Test), Key:   ['amenity', 'building', 'historic', 'leisure', 'military', 'natural', 'office', 'shop', 'sport', 'tourism']
+Haeufigkeitsniveau-Referenzmenge (Test), Value: ['amenity=school', 'building=apartments', 'building=house', 'building=residential', 'leisure=garden', 'leisure=golf course', 'leisure=park', 'natural=scrub', 'natural=water', 'natural=wood']
+
+Test-Auswertung fertig (33.5s)
+
+=== TEST ===
+
+  [all] n=829740
+    Modell        recall@1_diag=0.1514  recall@10_diag=0.4957
+    Ceiling       ceil@1_diag=0.5909  ceil@10_diag=0.9446
+    Ausschoepfung @1=0.2563  @10=0.5248
+    class_recall@10   Key=0.8510  Value=0.7267
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9176+-0.0015  Value=0.5265+-0.0016
+    Haeufigkeitsniveau class_recall@10  Key=0.9996  Value=0.7687
+
+  [single] n=563779
+    Modell        recall@1_diag=0.1494  recall@10_diag=0.5225
+    Ceiling       ceil@1_diag=0.5193  ceil@10_diag=0.9221
+    Ausschoepfung @1=0.2877  @10=0.5666
+    class_recall@10   Key=0.8614  Value=0.7374
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9206+-0.0016  Value=0.5174+-0.0016
+    Haeufigkeitsniveau class_recall@10  Key=0.9998  Value=0.7514
+
+  [multi] n=265961
+    Modell        recall@1_diag=0.1558  recall@10_diag=0.4389
+    Ceiling       ceil@1_diag=0.7427  ceil@10_diag=0.9923
+    Ausschoepfung @1=0.2097  @10=0.4423
+    class_recall@10   Key=0.8290  Value=0.7041
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9113+-0.0016  Value=0.5457+-0.0023
+    Haeufigkeitsniveau class_recall@10  Key=0.9994  Value=0.8052
+
+Val-Auswertung fertig (33.2s)
+
+=== VAL ===
+
+  [all] n=843989
+    Modell        recall@1_diag=0.1429  recall@10_diag=0.4584
+    Ceiling       ceil@1_diag=0.5879  ceil@10_diag=0.9319
+    Ausschoepfung @1=0.2431  @10=0.4919
+    class_recall@10   Key=0.8379  Value=0.7059
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9165+-0.0016  Value=0.5330+-0.0013
+    Haeufigkeitsniveau class_recall@10  Key=0.9998  Value=0.7692
+
+  [single] n=552193
+    Modell        recall@1_diag=0.1388  recall@10_diag=0.4902
+    Ceiling       ceil@1_diag=0.5057  ceil@10_diag=0.9051
+    Ausschoepfung @1=0.2744  @10=0.5416
+    class_recall@10   Key=0.8466  Value=0.7129
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9171+-0.0016  Value=0.5156+-0.0014
+    Haeufigkeitsniveau class_recall@10  Key=0.9999  Value=0.7663
+
+  [multi] n=291796
+    Modell        recall@1_diag=0.1508  recall@10_diag=0.3983
+    Ceiling       ceil@1_diag=0.7433  ceil@10_diag=0.9825
+    Ausschoepfung @1=0.2029  @10=0.4054
+    class_recall@10   Key=0.8215  Value=0.6926
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9153+-0.0017  Value=0.5657+-0.0020
+    Haeufigkeitsniveau class_recall@10  Key=0.9997  Value=0.7746
+
+Ergebnistabelle gespeichert: data/processed/retrieval_baselines_tessera_v1.csv

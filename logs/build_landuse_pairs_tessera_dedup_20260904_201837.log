@@ -1,0 +1,112 @@
+Polygone vor Zuschnitt: 133772
+Polygone nach Zuschnitt auf AOI: 53937
+Polygone nach Klassenausschluss (['22000', '33000']): 53935 (2 entfernt)
+Gesamtflaeche: 1575.51 km2
+Anzahl Klassen: 25
+
+Klassenverteilung (Polygone, Flaechenanteil):
+                                                              n_polygons  ...  area_share
+code_2021 class_2021                                                      ...            
+11210     Discontinuous dense urban fabric (S.L. : 50% - ...       23744  ...    0.278580
+12100     Industrial, commercial, public, military and pr...        8987  ...    0.102770
+11220     Discontinuous medium density urban fabric (S.L....        6360  ...    0.133619
+11100     Continuous urban fabric (S.L. : > 80%)                    5135  ...    0.023499
+14110     Green urban areas (Public access)                         2568  ...    0.099314
+14200     Sports and leisure facilities                             1844  ...    0.075971
+11230     Discontinuous low density urban fabric (S.L. : ...         886  ...    0.017630
+23000     Pastures                                                   885  ...    0.073075
+21000     Arable land (annual crops)                                 737  ...    0.038767
+50000     Water                                                      534  ...    0.011853
+12230     Railways and associated land                               533  ...    0.011805
+31000     Forests                                                    486  ...    0.025062
+13400     Land without current use                                   213  ...    0.001223
+11300     Isolated structures                                        206  ...    0.000709
+11240     Discontinuous very low density urban fabric (S....         165  ...    0.002316
+12220     Other roads and associated land                            120  ...    0.076808
+14120     Green urban areas (Private access)                         119  ...    0.001186
+14130     Green urban areas (Unknown access conditions)              111  ...    0.000873
+12300     Port areas                                                 103  ...    0.006690
+13300     Construction sites                                          76  ...    0.002286
+13100     Mineral extraction and dump sites                           51  ...    0.002591
+12210     Fast transit roads and associated land                      38  ...    0.001542
+40000     Wetlands                                                    13  ...    0.000205
+12400     Airports                                                    12  ...    0.010493
+32000     Herbaceous vegetation associations (natural gra...           9  ...    0.001133
+
+[25 rows x 3 columns]
+TESSERA-Kacheln: 50
+
+=== Backbone: tessera ===
+    Kachel 1/50: grid_-0.05_51.25_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 2/50: grid_-0.05_51.35_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 3/50: grid_-0.05_51.45_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 4/50: grid_-0.05_51.55_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 5/50: grid_-0.05_51.65_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 6/50: grid_-0.15_51.25_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 7/50: grid_-0.15_51.35_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 8/50: grid_-0.15_51.45_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 9/50: grid_-0.15_51.55_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 10/50: grid_-0.15_51.65_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 11/50: grid_-0.25_51.25_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 12/50: grid_-0.25_51.35_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 13/50: grid_-0.25_51.45_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 14/50: grid_-0.25_51.55_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 15/50: grid_-0.25_51.65_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 16/50: grid_-0.35_51.25_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 17/50: grid_-0.35_51.35_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 18/50: grid_-0.35_51.45_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 19/50: grid_-0.35_51.55_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 20/50: grid_-0.35_51.65_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 21/50: grid_-0.45_51.25_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 22/50: grid_-0.45_51.35_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 23/50: grid_-0.45_51.45_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 24/50: grid_-0.45_51.55_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 25/50: grid_-0.45_51.65_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 26/50: grid_-0.55_51.25_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 27/50: grid_-0.55_51.35_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 28/50: grid_-0.55_51.45_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 29/50: grid_-0.55_51.55_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 30/50: grid_-0.55_51.65_2025.tiff (Zone 30N, 40598/53935 POIs zugeordnet)
+    Kachel 31/50: grid_0.05_51.25_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 32/50: grid_0.05_51.35_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 33/50: grid_0.05_51.45_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 34/50: grid_0.05_51.55_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 35/50: grid_0.05_51.65_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 36/50: grid_0.15_51.25_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 37/50: grid_0.15_51.35_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 38/50: grid_0.15_51.45_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 39/50: grid_0.15_51.55_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 40/50: grid_0.15_51.65_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 41/50: grid_0.25_51.25_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 42/50: grid_0.25_51.35_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 43/50: grid_0.25_51.45_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 44/50: grid_0.25_51.55_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 45/50: grid_0.25_51.65_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 46/50: grid_0.35_51.25_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 47/50: grid_0.35_51.35_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 48/50: grid_0.35_51.45_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 49/50: grid_0.35_51.55_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+    Kachel 50/50: grid_0.35_51.65_2025.tiff (Zone 31N, 13337/53935 POIs zugeordnet)
+  Pixel-Zeilen vor Sampling: 21016428 (aus 53935 Polygonen)
+  Deduplizierung (max coverage je Pixel): 21016428 -> 16925710 Zeilen (-4090718, 19.46% der Zeilen betroffen)
+  Ties (mehrere Zeilen mit identischer max-coverage je Pixel, ueber identifier aufgeloest): 0
+  Coverage der Gewinner-Zeilen: min=0.0000 p10=0.6681 median=1.0000
+
+  Klassenverteilung vor/nach Deduplizierung (Anteil an allen Zeilen), groesste Verschiebungen zuerst und zuletzt:
+           anteil_vor  anteil_nach  delta_pp
+code_2021                                   
+12220        0.118219     0.058487 -5.973207
+12230        0.014222     0.011739 -0.248250
+11100        0.026040     0.024389 -0.165053
+13400        0.001308     0.001255 -0.005245
+11300        0.000809     0.000759 -0.004931
+11210        0.280966     0.288206  0.724043
+11220        0.129252     0.138222  0.896994
+14200        0.066369     0.075398  0.902928
+23000        0.064628     0.074378  0.975013
+14110        0.087571     0.098906  1.133519
+  Pixel-Zeilen nach Sampling (max 100/Polygon): 4417428
+  Warnung: 278 Pixel ohne Split-Zuordnung (Gitterzelle ohne POI im Split-Artefakt) - im Output markiert als split='missing', NICHT verworfen.
+
+Endgueltig: 4417428 Zeilen, Spalten: ['identifier', 'row', 'col', 'coverage', 'code_2021', 'class_2021', 'embedding', 'tile', 'utm_zone', 'n_pixels_poi', 'split']
+Gespeichert: data/processed/landuse_pairs_tessera.parquet

@@ -1,0 +1,82 @@
+=== run_class_retrieval.py gestartet (tessera) ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/class_retrieval_tessera_20260906_205806.log
+Device: cuda
+
+======================================================================
+=== Backbone: tessera ===
+======================================================================
+Modell geladen: checkpoints/tessera_v1/best.pt (Epoche 26, cfg backbone=tessera)
+
+--- Galerie: Klassenmenge je Pixel ---
+  243237 eindeutige Texte geparst (1.7s), 79235 unaufloesbare Einheiten insgesamt (siehe Bericht).
+  Test-Split: 829740 Pixel
+  Klassenanzahl je Test-Pixel: median=1.0 p90=2.0 max=8
+  Anteil Pixel mit genau 1 Klasse: 67.8326%
+
+--- EO-Embeddings laden, normalisieren, projizieren ---
+Normalisierung: zscore, Statistik geladen aus data/processed/norm_stats_tessera_pixels.json
+  Galeriegroesse: 829740 Pixel, 256 Dim
+
+--- Queries: Klassen mit >= 100 relevanten Test-Pixeln ---
+  Klassen insgesamt (>=1 Pixel): 463
+  Queries (>= 100 relevante Pixel): 189
+  Ausgeschlossen (< 100): 274
+
+--- Query-Texte einbetten (Qwen3-Encoder, kein Cache-Lookup) ---
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 10128.59it/s]
+  189 Queries eingebettet (47.3s)
+
+--- Relevanz-Membership-Matrix (Queries x Galerie) ---
+  Summe n_relevant ueber alle Queries: 1161358 (> Galeriegroesse 829740 durch Mehrfachklassen, erwartet)
+
+--- Kosinus-Ranking ---
+  Aehnlichkeitsmatrix (189, 829740) berechnet (2.8s)
+
+Gespeichert: data/processed/class_retrieval_tessera.csv
+
+=== Makro-Mittelwerte, tessera (189 Queries) ===
+p_at_10                            0.074074
+p_at_50                            0.074286
+p_at_100                           0.069894
+r_precision                        0.047123
+average_precision                  0.034260
+random_baseline                    0.007406
+p_at_10_random_actual              0.008466
+p_at_50_random_actual              0.008042
+p_at_100_random_actual             0.007725
+r_precision_random_actual          0.007244
+average_precision_random_actual    0.007415
+
+--- Top-10 AP ---
+class_key  class_value  n_relevant  average_precision
+  natural         wood      176910           0.752483
+ building        house       86536           0.388013
+  leisure         park      189206           0.340929
+ building   apartments       37216           0.307402
+  amenity      parking       29012           0.299549
+ building   industrial        7844           0.260752
+  amenity       school       51989           0.205888
+  natural        scrub       27100           0.168186
+  leisure  golf course       58168           0.160712
+  leisure horse riding         876           0.158866
+
+--- Bottom-10 AP ---
+class_key     class_value  n_relevant  average_precision
+  leisure   swimming area         140           0.000106
+ historic            mine         135           0.000108
+  natural            sand         124           0.000161
+ building    kindergarten         109           0.000267
+  leisure     music venue         110           0.000379
+  natural             mud         462           0.000385
+  amenity    nursing home         338           0.000391
+  amenity           arena         110           0.000393
+  leisure fitness station         198           0.000396
+    sport         fitness         286           0.000506
+
+--- Single/Multi-Buckets (Galerie) ---
+  single: 562834 Pixel (67.8326%)  multi: 266906 Pixel (32.1674%)
+  single: {'p_at_10_single': 0.04603174603174603, 'p_at_50_single': 0.04814814814814815, 'p_at_100_single': 0.047724867724867726, 'r_precision_single': 0.04127677503737215, 'average_precision_single': 0.03299796422796286}
+  multi: {'p_at_10_multi': 0.08677248677248678, 'p_at_50_multi': 0.08783068783068784, 'p_at_100_multi': 0.08767195767195768, 'r_precision_multi': 0.05993864276525681, 'average_precision_multi': 0.046409685168561185}
+
+Gesamtlaufzeit: 1.7 min

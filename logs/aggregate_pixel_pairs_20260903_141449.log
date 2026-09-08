@@ -1,0 +1,107 @@
+Lade Split-Zellen-Referenz...
+  1655 Zellen mit bekanntem Split, UTM-CRS=EPSG:32630, minx=672920.2 miny=5685642.4
+poi_text_full.parquet: 884765 POIs geladen
+
+=== Backbone: tessera ===
+  pairs_tessera_full.parquet: 15093377 Zeilen gelesen (9s)
+  Nach Inner-Join mit poi_text_full (Fall D faellt raus): 12024545 Zeilen (11s)
+  EO-Vektor-Konsistenz verifiziert: 0 Abweichungen ueber 8257024 Pixel (18s)
+  Pixel mit 1 POI: 5444843, mit >1 POI: 2812181 (6579702 Zeilen) (24s)
+  Multi-POI-Aggregation fertig (240s)
+  Split zugeordnet (245s)
+  Validierung OK: Pixel-Schluessel eindeutig, kein leerer pixel_text.
+  Pixel ohne Split-Zelle (Ausnahme, GEMESSEN): 293749 (3.56% von 8257024)
+
+=== tessera: Bericht ===
+Zeilen vorher (POI-Pixel-Paare, GEMESSEN): 15093377
+  davon mit Text (Fall A/B/C, GEMESSEN): 12024545
+Zeilen nachher (Pixel, GEMESSEN): 8257024
+
+Verteilung n_pois (GEMESSEN): median=1.0, mean=1.4563, p90=2.0, p99=4.0, max=17
+Anteil Pixel mit genau 1 POI (GEMESSEN): 65.94%
+
+*** Anteil eindeutiger pixel_text an allen Pixeln (GEMESSEN, DIE Zahl): 243237 von 8257024 = 2.95% ***
+
+Top-10 pixel_text (GEMESSEN):
+   8.62%  n=  711770  A natural feature: wood. subjective characterization of an area with trees
+   3.48%  n=  287397  A location containing A building: house. building usually intended for living in; a building: house.
+   3.33%  n=  275226  A building: house. building usually intended for living in
+   3.01%  n=  248379  A natural feature: scrub. vegetational formation dominated by shrubs
+   2.60%  n=  214784  A water natural feature and a river water feature. chemical compound whose molecules are formed by t
+   2.45%  n=  202119  A building: apartments. self-contained housing unit occupying part of a building
+   2.38%  n=  196272  A location containing A building: house. building usually intended for living in; a building: house.
+   2.29%  n=  188705  A building: terrace. external, raised, open, flat area in architecture
+   1.99%  n=  164532  A building: residential. building mainly used for residential purposes
+   1.72%  n=  142431  A public amenity or service: parking. cleared area that is intended for parking vehicles
+
+Zeichenlaenge pixel_text (GEMESSEN): median=126.0, p99=452.0, max=2994
+
+Laengster Text (GEMESSEN, 2994 Zeichen):
+  A location containing A fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a leisure or recreation place: park. urban park in Clapham, south London; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness.
+
+Zeilen je Split (GEMESSEN, inkl. NaN = keine Split-Zelle):
+split
+train    6334985
+val       839186
+test      789104
+NaN       293749
+Name: count, dtype: int64
+
+Beispieltexte:
+  [1 POI] Kenley Common — a leisure or recreation place: park. permanently dedicated recreation area, often open to the public and generally characterized by natural, historic, or landscape features
+  [3 POIs] A location containing Kenley Common — a leisure or recreation place: park. permanently dedicated recreation area, often open to the public and generally characterized by natural, historic, or landscape features; a historic site: building. structure of historic nature; a military site: airfield. former Royal Air Force station in Croydon, Greater London, England, UK.
+  [dichtestes Pixel, n_pois=17] A location containing A public amenity or service: parking. cleared area that is intended for parking vehicles; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking. cleared area that is intended for parking vehicles; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle.
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pixels_tessera.parquet
+
+=== Backbone: ae ===
+  pairs_ae_full.parquet: 14008309 Zeilen gelesen (5s)
+  Nach Inner-Join mit poi_text_full (Fall D faellt raus): 11168927 Zeilen (6s)
+  EO-Vektor-Konsistenz verifiziert: 0 Abweichungen ueber 7664167 Pixel (13s)
+  Pixel mit 1 POI: 5044392, mit >1 POI: 2619775 (6124535 Zeilen) (18s)
+  Multi-POI-Aggregation fertig (221s)
+  Split zugeordnet (225s)
+  Validierung OK: Pixel-Schluessel eindeutig, kein leerer pixel_text.
+  Pixel ohne Split-Zelle (Ausnahme, GEMESSEN): 262775 (3.43% von 7664167)
+
+=== ae: Bericht ===
+Zeilen vorher (POI-Pixel-Paare, GEMESSEN): 14008309
+  davon mit Text (Fall A/B/C, GEMESSEN): 11168927
+Zeilen nachher (Pixel, GEMESSEN): 7664167
+
+Verteilung n_pois (GEMESSEN): median=1.0, mean=1.4573, p90=2.0, p99=4.0, max=18
+Anteil Pixel mit genau 1 POI (GEMESSEN): 65.82%
+
+*** Anteil eindeutiger pixel_text an allen Pixeln (GEMESSEN, DIE Zahl): 237811 von 7664167 = 3.10% ***
+
+Top-10 pixel_text (GEMESSEN):
+   8.76%  n=  671722  A natural feature: wood. subjective characterization of an area with trees
+   3.42%  n=  262483  A location containing A building: house. building usually intended for living in; a building: house.
+   3.28%  n=  251082  A building: house. building usually intended for living in
+   3.00%  n=  229743  A natural feature: scrub. vegetational formation dominated by shrubs
+   2.55%  n=  195231  A water natural feature and a river water feature. chemical compound whose molecules are formed by t
+   2.43%  n=  186353  A building: apartments. self-contained housing unit occupying part of a building
+   2.34%  n=  179141  A location containing A building: house. building usually intended for living in; a building: house.
+   2.24%  n=  171684  A building: terrace. external, raised, open, flat area in architecture
+   1.99%  n=  152704  A building: residential. building mainly used for residential purposes
+   1.72%  n=  131993  A public amenity or service: parking. cleared area that is intended for parking vehicles
+
+Zeichenlaenge pixel_text (GEMESSEN): median=126.0, p99=453.0, max=2102
+
+Laengster Text (GEMESSEN, 2102 Zeichen):
+  A location containing A fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a leisure or recreation place: park. urban park in Clapham, south London; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness.
+
+Zeilen je Split (GEMESSEN, inkl. NaN = keine Split-Zelle):
+split
+train    5878740
+val       778948
+test      743704
+NaN       262775
+Name: count, dtype: int64
+
+Beispieltexte:
+  [1 POI] A natural feature: wood. subjective characterization of an area with trees
+  [3 POIs] A location containing Potters Chase Wood — a leisure or recreation place: nature reserve. protected area for flora, fauna or features of geological interest; a natural feature: wood. subjective characterization of an area with trees; a natural feature: wood. subjective characterization of an area with trees.
+  [dichtestes Pixel, n_pois=18] A location containing LHR Terminal 2 Business Parking — a public amenity or service: parking. cleared area that is intended for parking vehicles; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle.
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pixels_ae.parquet

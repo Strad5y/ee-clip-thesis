@@ -1,0 +1,181 @@
+
+Lade tessera...
+  tessera: 4417428 -> 4416014 Zeilen (-1414: 1136 Klasse 12400, 278 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig projiziert, aus configs/tessera_v1.yaml): zscore, Statistik=data/processed/norm_stats_tessera_pixels.json
+  tessera: trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/tessera_v1/best.pt, Epoche 26)
+  Normalisierung (trainiert projiziert, aus Checkpoint-Config): zscore, Statistik=data/processed/norm_stats_tessera_pixels.json
+
+Laufzeit-Benchmark auf 'tessera_trainiert_projiziert' (volle Trainingsmenge: 3574522 Zeilen, 256 Dim, 24 Klassen, max_iter=1000)
+  n=20000: 0.79s (n_iter=[114])
+  n=50000: 2.37s (n_iter=[170])
+  n=100000: 4.80s (n_iter=[175])
+  Skalierungsexponent (Zeit ~ n^1.12)
+
+  Geschaetzte Zeit fuer EINEN vollen Fit (3574522 Zeilen): 4.4 min
+  Configs: 3, C-Werte im Grid: 3 -> 9 volle Fits
+  GESCHAETZTE GESAMTLAUFZEIT: 39.9 min (0.67 h)
+
+=== Voller Lauf: 3 Konfigurationen x C-Grid (Punktschaetzung, max_iter=1000) ===
+
+=== tessera_roh ===  train=3574522 val=418931 test=422561 dim=128
+  C=0.1: val_macro_f1=0.2410 val_oa=0.6050 test_macro_f1=0.2493 test_oa=0.6026 (302.6s)
+  C=1.0: val_macro_f1=0.2415 val_oa=0.6051 test_macro_f1=0.2485 test_oa=0.6027 (294.7s)
+  C=10.0: val_macro_f1=0.2428 val_oa=0.6050 test_macro_f1=0.2478 test_oa=0.6024 (308.2s)
+
+=== tessera_zufaellig_projiziert ===  train=3574522 val=418931 test=422561 dim=256
+  C=0.1: val_macro_f1=0.2201 val_oa=0.5999 test_macro_f1=0.2289 test_oa=0.5975 (214.8s)
+  C=1.0: val_macro_f1=0.2325 val_oa=0.5999 test_macro_f1=0.2375 test_oa=0.5975 (261.9s)
+  C=10.0: val_macro_f1=0.2303 val_oa=0.5999 test_macro_f1=0.2368 test_oa=0.5983 (263.6s)
+
+=== tessera_trainiert_projiziert ===  train=3574522 val=418931 test=422561 dim=256
+  C=0.1: val_macro_f1=0.2417 val_oa=0.6126 test_macro_f1=0.2448 test_oa=0.6113 (240.8s)
+  C=1.0: val_macro_f1=0.2454 val_oa=0.6115 test_macro_f1=0.2483 test_oa=0.6107 (186.7s)
+  C=10.0: val_macro_f1=0.2484 val_oa=0.6125 test_macro_f1=0.2498 test_oa=0.6119 (303.2s)
+
+Ergebnisse gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_results_tessera_dedup.csv
+                      config  dim    C   val_oa  val_macro_f1  test_oa  test_macro_f1
+                 tessera_roh  128 10.0 0.605018      0.242766 0.602372       0.247841
+tessera_zufaellig_projiziert  256  1.0 0.599884      0.232474 0.597542       0.237523
+tessera_trainiert_projiziert  256 10.0 0.612487      0.248414 0.611942       0.249801
+
+Speicherreduktion: volle X-Arrays aus 'configs' freigegeben (nur y/split behalten) - fits{} traegt bereits eigene Train/Val/Test-Kopien, keine Abhaengigkeit mehr.
+
+=== Haeufigkeitsniveau (immer die haeufigste Klasse aus Train) ===
+  tessera: Mehrheitsklasse=11210  val_oa=0.4723 val_macro_f1=0.0267  test_oa=0.4561 test_macro_f1=0.0272
+
+Haeufigkeitsniveau gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_majority_baseline_tessera_dedup.csv
+
+=== Per-Klassen-F1 (Test) ===
+
+  tessera_roh:
+11210    0.767400
+50000    0.723254
+12210    0.677966
+11100    0.486332
+12100    0.481211
+31000    0.466490
+14110    0.422702
+23000    0.417634
+14200    0.409943
+11220    0.357147
+12230    0.263058
+21000    0.258925
+13100    0.100000
+12300    0.033520
+11230    0.029843
+11300    0.024934
+13400    0.024490
+11240    0.003328
+14130    0.000000
+14120    0.000000
+13300    0.000000
+12220    0.000000
+32000    0.000000
+
+  tessera_zufaellig_projiziert:
+11210    0.764226
+50000    0.711189
+12210    0.609524
+11100    0.487748
+12100    0.479451
+31000    0.424580
+14200    0.419275
+14110    0.406902
+23000    0.389847
+11220    0.352662
+12230    0.249336
+21000    0.244286
+13100    0.047904
+11300    0.044185
+11230    0.033117
+13400    0.021244
+12300    0.015088
+14130    0.000000
+14120    0.000000
+13300    0.000000
+12220    0.000000
+32000    0.000000
+11240    0.000000
+
+  tessera_trainiert_projiziert:
+11210    0.773628
+50000    0.732995
+12210    0.546798
+12100    0.513522
+11100    0.503689
+31000    0.464063
+14110    0.457326
+23000    0.431863
+14200    0.430517
+11220    0.379736
+12230    0.273363
+21000    0.266370
+13100    0.076433
+11230    0.054259
+11300    0.041898
+12300    0.026337
+13400    0.013855
+14120    0.008584
+11240    0.000000
+14130    0.000000
+13300    0.000000
+12220    0.000000
+32000    0.000000
+
+  tessera_haeufigkeitsniveau:
+11210    0.626479
+11100    0.000000
+13300    0.000000
+32000    0.000000
+31000    0.000000
+23000    0.000000
+21000    0.000000
+14200    0.000000
+14130    0.000000
+14120    0.000000
+14110    0.000000
+13400    0.000000
+13100    0.000000
+12300    0.000000
+12230    0.000000
+12220    0.000000
+12210    0.000000
+12100    0.000000
+11300    0.000000
+11240    0.000000
+11230    0.000000
+11220    0.000000
+50000    0.000000
+
+Per-Klassen-F1 gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_per_class_f1_tessera_dedup.csv
+
+=== Konfusionsmatrizen (Test) ===
+  tessera_roh: gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_confusion_tessera_roh.csv (23x23)
+  tessera_zufaellig_projiziert: gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_confusion_tessera_zufaellig_projiziert.csv (23x23)
+  tessera_trainiert_projiziert: gespeichert unter /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_confusion_tessera_trainiert_projiziert.csv (23x23)
+
+Trainings-Bootstrap-Schaetzung: 15 Refits x ~264.1s (empirisch aus der C-Selektion oben) = 66.0 min (1.10 h)
+
+=== Trainings-Bootstrap (5 Seeds je Config, Verfahrensstreuung, max_iter=1000) ===
+  tessera_roh: Trainings-Bootstrap 5x fertig (C=10.0)
+  tessera_zufaellig_projiziert: Trainings-Bootstrap 5x fertig (C=1.0)
+  tessera_trainiert_projiziert: Trainings-Bootstrap 5x fertig (C=10.0)
+                      config  val_oa_mean  val_oa_std  val_macro_f1_mean  val_macro_f1_std  test_oa_mean  test_oa_std  test_macro_f1_mean  test_macro_f1_std
+                 tessera_roh     0.605011    0.000186           0.242624          0.000414      0.602659     0.000196            0.249201           0.000478
+tessera_trainiert_projiziert     0.613403    0.000161           0.248609          0.001094      0.612229     0.000227            0.252731           0.001140
+tessera_zufaellig_projiziert     0.602239    0.000235           0.230811          0.000851      0.600378     0.000198            0.240542           0.001093
+
+=== Test-Bootstrap (1000x je Config, Praezision der Schaetzung) ===
+  tessera_roh: Test-Bootstrap 1000x fertig (test_oa=0.6024+-0.0008, test_macro_f1=0.2478+-0.0017)
+  tessera_zufaellig_projiziert: Test-Bootstrap 1000x fertig (test_oa=0.5975+-0.0008, test_macro_f1=0.2376+-0.0016)
+  tessera_trainiert_projiziert: Test-Bootstrap 1000x fertig (test_oa=0.6119+-0.0008, test_macro_f1=0.2498+-0.0017)
+                      config  test_oa_mean  test_oa_std  test_macro_f1_mean  test_macro_f1_std
+                 tessera_roh      0.602363     0.000752            0.247831           0.001714
+tessera_zufaellig_projiziert      0.597522     0.000770            0.237571           0.001571
+tessera_trainiert_projiziert      0.611944     0.000768            0.249821           0.001749
+
+=== Gepaarter Test-Bootstrap: trainiert - roh je Backbone (95%-Intervall) ===
+backbone   metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+ tessera macro_f1                       0.001990  -0.001290    0.005197        False
+ tessera       oa                       0.009581   0.008661    0.010478         True

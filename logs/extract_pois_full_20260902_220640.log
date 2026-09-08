@@ -1,0 +1,72 @@
+Aktive Keys aus Klassentabelle (/home/minorai/PycharmProjects/ee-clip-thesis/wikidata tags/osm_wikidata_keys.xlsx): ['amenity', 'building', 'healthcare', 'historic', 'leisure', 'military', 'natural', 'office', 'shop', 'sport', 'tourism', 'water', 'waterway']
+Lese OSM-Daten gegen AOI-Polygon (nicht BBOX_TEST): /home/minorai/PycharmProjects/ee-clip-thesis/data/aoi/london.gpkg
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pyrosm/pyrosm.py:1178: UserWarning: 6 relation(s) extend beyond the bounding box and were returned with incomplete geometry (some member ways fall outside the box). Pass complete_relations=True to OSM(...) to fetch their full member set.
+  gdf = get_user_defined_data(
+  amenity: 180073 POIs, 6408 mit object_qid
+  building: 1159989 POIs, 7787 mit object_qid
+  healthcare: 4563 POIs, 224 mit object_qid
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pyrosm/pyrosm.py:1178: UserWarning: 3 relation(s) extend beyond the bounding box and were returned with incomplete geometry (some member ways fall outside the box). Pass complete_relations=True to OSM(...) to fetch their full member set.
+  gdf = get_user_defined_data(
+  historic: 3820 POIs, 930 mit object_qid
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pyrosm/pyrosm.py:1178: UserWarning: 9 relation(s) extend beyond the bounding box and were returned with incomplete geometry (some member ways fall outside the box). Pass complete_relations=True to OSM(...) to fetch their full member set.
+  gdf = get_user_defined_data(
+  leisure: 48885 POIs, 765 mit object_qid
+  military: 103 POIs, 25 mit object_qid
+  natural: 230491 POIs, 124 mit object_qid
+  office: 7848 POIs, 502 mit object_qid
+  shop: 43353 POIs, 259 mit object_qid
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pyrosm/pyrosm.py:1178: UserWarning: 1 relation(s) extend beyond the bounding box and were returned with incomplete geometry (some member ways fall outside the box). Pass complete_relations=True to OSM(...) to fetch their full member set.
+  gdf = get_user_defined_data(
+  sport: 12371 POIs, 154 mit object_qid
+  tourism: 8979 POIs, 1107 mit object_qid
+  water: 2184 POIs, 49 mit object_qid
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pyrosm/pyrosm.py:1178: UserWarning: 20 relation(s) extend beyond the bounding box and were returned with incomplete geometry (some member ways fall outside the box). Pass complete_relations=True to OSM(...) to fetch their full member set.
+  gdf = get_user_defined_data(
+  waterway: 4444 POIs, 72 mit object_qid
+  object_qid: 0 Mehrfachwerte verworfen (nicht aufgespalten), 0 ungueltige Werte (kein Q[0-9]+) auf null gesetzt
+
+key         gtype       
+amenity     MultiPolygon        136
+            Point            107367
+            Polygon           72249
+building    MultiPolygon        236
+            Point              6626
+            Polygon         1153116
+healthcare  MultiPolygon          1
+            Point              2736
+            Polygon            1825
+historic    MultiPolygon          6
+            Point              2986
+            Polygon             783
+leisure     MultiPolygon        119
+            Point              4276
+            Polygon           44368
+military    MultiPolygon          2
+            Point                15
+            Polygon              86
+natural     MultiPolygon         37
+            Point            208928
+            Polygon           18692
+office      MultiPolygon          1
+            Point              4784
+            Polygon            3062
+shop        MultiPolygon         15
+            Point             27664
+            Polygon           15669
+sport       MultiPolygon          5
+            Point              1419
+            Polygon           10708
+tourism     MultiPolygon         15
+            Point              6895
+            Polygon            1957
+water       MultiPolygon          3
+            Point                 4
+            Polygon            2175
+waterway    MultiPolygon          1
+            Point               306
+            Polygon              84
+dtype: int64
+
+Gesamt Zeilen: 1699357
+Eindeutige poi_id: 1645591
+Gespeichert (NEU, alte pois_london_test.parquet unveraendert): /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/pois_london_full.parquet
