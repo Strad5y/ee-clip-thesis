@@ -101,17 +101,25 @@ gewesen). SHA-256 vor und nach dem Umzug identisch, siehe unten.
 |---|---|---|---|---|
 | `data/raw/sdm/London_SDM.csv` | manuell geladen (Nomis Census 2021 Bulk, kein Skript) | Nomis, Tabelle **TS062** (NS-SeC), Geography ueber "select areas within" → Regions → **London**, Ebene **2021 LSOA lower layer**, alle **9 NS-SeC-Kategorien**, **Counts** (nicht Percent), Format **CSV**, **mit area codes** | Zugriff 8.9.2026 (Datei selbst traegt die Copyright-Zeile „ONS Crown Copyright Reserved [from Nomis on 8 September 2026]") | aktuell — SHA-256 `042e214ab5d73efb9360ae534808a7103553a6d6e2b7ac3aa06fc06c7688556a`, Lizenz OGL v3.0. Format: Nomis-Bulk mit Metadaten-Kopf, echte Kopfzeile Zeile 8, Daten Zeile 10–5003 (4.994 Zeilen), Footer ab Zeile 5004 — siehe `build_sdm_targets.py::HEADER_ROW/N_DATA_ROWS`. |
 | `data/raw/sdm/Lower_layer_Super_Output_Areas_December_2021_Boundaries_EW_BFC_V10_-672099234420024429.gpkg` | manuell geladen (ONS Open Geography Portal) | Produkt „Lower layer Super Output Areas (December 2021) Boundaries EW **BFC** (full resolution, clipped to coastline), V10" — ganz England & Wales (35.672 Features), CRS EPSG:27700, Layer `LSOA_2021_EW_BFC_V10`, Felder `LSOA21CD, LSOA21NM, LSOA21NMW, BNG_E, BNG_N, LAT, LONG, GlobalID` | Zugriff 8.9.2026 (Dateisystem-Zeitstempel des Downloads: 8.9. 16:16) | aktuell — SHA-256 `fae6b97592c3164294d291d42298f83c97a751fbb9b9149b6ed61796a2f255a9`, Lizenz OGL v3.0 (enthaelt OS- und ONS-IPR). BFC bestaetigt (nicht BGC) ueber Datei- und Layername. Noch **nicht** auf London geclippt, noch **nicht** nach EPSG:32630 reprojiziert (Phase 3). |
-| `data/processed/sdm_targets_london.parquet` | `build_sdm_targets.py` | `data/raw/sdm/London_SDM.csv` | 8.9.2026 | aktuell — 4.994 Zeilen (= alle Zeilen der Quelle, kein Filter), 9 NS-SeC-Kategorien inkl. **L15** (Nutzervorgabe, s. u.), Total-Spalte nur zur Validierung (0 von 4.994 Zeilen mit Summe(9 Kategorien) != Total, 0 Zeilen mit Summe=0), Anteile je Zeile normiert auf Summe=1,0 (max. Abweichung 2,22e-16). Join-Key `lsoa_code` (aus `mnemonic`), 0 doppelte Codes. Spalten: `lsoa_code, lsoa_name, total, {9 Rohzaehlungen}, category_sum, {9 Anteile p_*}`. |
+| `data/processed/sdm_targets_london_9cat.parquet` | `build_sdm_targets.py` | `data/raw/sdm/London_SDM.csv` | 8.9.2026 | aktuell (ersetzt die fruehere `sdm_targets_london.parquet`, umbenannt zur Abgrenzung von der 8cat-Variante) — 4.994 Zeilen (= alle Zeilen der Quelle, kein Filter), 9 NS-SeC-Kategorien inkl. **L15** (Nutzervorgabe, s. u.), Total-Spalte nur zur Validierung (0 von 4.994 Zeilen mit Summe(9 Kategorien) != Total, 0 Zeilen mit Summe=0), Anteile je Zeile normiert auf Summe=1,0 (max. Abweichung 2,22e-16). Join-Key `lsoa_code` (aus `mnemonic`), 0 doppelte Codes. Spalten: `lsoa_code, lsoa_name, total, {9 Rohzaehlungen}, category_sum, {9 Anteile p_*}`. |
+| `data/processed/sdm_targets_london_8cat.parquet` | `build_sdm_targets.py` | `data/raw/sdm/London_SDM.csv` | 8.9.2026 | aktuell — dieselben 4.994 Zeilen, aber **ohne L15**, erneut auf die Summe der verbleibenden 8 Kategorien normiert (NICHT die 9cat-Anteile ohne L15 weiterverwendet — sonst Zeilensumme < 1). Max. Abweichung Zeilensumme von 1,0: 2,22e-16, 0 Zeilen mit Summe=0. Spalten: `lsoa_code, lsoa_name, total, {8 Rohzaehlungen}, l15 (Referenz, nicht in category_sum), category_sum, {8 Anteile p_*}`. Verschiebung ggue. 9cat (mittlere \|Δ\| je Kategorie, absteigend): l4_l6 0,0204, l1_l3 0,0176, l14 0,0114, l8_l9 0,0113, l7 0,0097, l13 0,0092, l12 0,0092, l10_l11 0,0040 — max. Einzel-Δ bis 0,20 (l1_l3) bei LSOAs mit p_l15 > 0,6. Begruendung fuer beide Varianten: AETHERs eigene Kategorienwahl ist nicht rekonstruierbar (s. u.), daher werden beide Varianten durchgerechnet statt eine anzunehmen. |
 
-**Kategorienentscheidung (Phase 2a):** Nutzervorgabe — alle neun NS-SeC-Kategorien werden
-verwendet, inklusive L15 (Vollzeitstudierende), unabhaengig vom AETHER-Repo-Befund. Das
-oeffentliche AETHER-Repo (github.com/inwind0212/AETHER, `main`, Commit `cc52099`) enthaelt
-**keinen** SDM/NS-SeC/Census-Auswertungscode — nur die Contrastive-Pretraining-Pipeline
-(AE×POI-Alignment, `train.py`/`dataio.py`/`model.py`). Eine Grep ueber Code/Config/README nach
-`ns-sec|nssec|l15|student|occupation|sdm|census|socio|distribution|kl.diver|land.use|urban.atlas`
-ergab keinen Treffer. Die Frage "wie viele Kategorien, ist L15 enthalten" laesst sich aus
-diesem Repo **nicht** beantworten — die SDM-Auswertung aus Tabelle 1 des Papers ist nicht Teil
-der Veroeffentlichung.
+**Kategorienentscheidung (Phase 2a/2a-Vertiefung):** Nutzervorgabe — beide Varianten werden
+durchgerechnet (9cat mit L15, 8cat ohne L15, jeweils auf die eigene Kategoriensumme normiert),
+weil sich AETHERs eigene Kategorienwahl **nicht** rekonstruieren laesst. Das oeffentliche
+AETHER-Repo (github.com/inwind0212/AETHER, `main`, einziger Branch, einziger Commit `cc52099`,
+keine Tags) wurde zweimal durchsucht — zuerst per Fachbegriff-Grep, dann strukturell (Notebooks,
+Zahlenmuster fuer Klassenzahlen, Dateiendungen, Metrikbegriffe wie kl_div/chebyshev/l1_dist,
+Spaltennamen wie L1_L3/L4_L6/L14/lsoa, vollstaendige Markdown-Ausgabe, Verweise auf ein
+Zweit-Repo oder externe Datenablage). Ergebnis beider Durchgaenge: **kein** Treffer irgendeiner
+Art. Das Repo enthaelt genau 13 getrackte Dateien, ausschliesslich die Contrastive-Pretraining-
+Pipeline (AE×POI-Alignment: `train.py`, `dataio.py`, `model.py`, `infer_aether_raster.py`,
+`config.yaml`, `README.md`, ein Beispiel-POI-GeoJSON, eine Abbildung, zwei Pretraining-
+Checkpoints fuer London und Singapur). Keine `.ipynb`, keine zweite `.md`-Datei, keine
+Zielvariablen-Datei, kein Metrik- oder Downstream-Code, keine Klassifikationsschicht in den
+Checkpoints (nur `ae_state_dict`/`txt_state_dict`, reine Projektionsgewichte), kein Verweis auf
+ein Zweit-Repo oder eine externe Datenablage. Die SDM-Auswertung aus Tabelle 1 des Papers ist
+nachweislich nicht Teil der Veroeffentlichung.
 
 ## SDM-LSOA-Split (Phase 3, INSTRUCTIONS_sdm.md)
 
