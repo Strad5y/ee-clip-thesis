@@ -162,6 +162,42 @@ Raster-Durchlauf noetig): Mittel 0,9203, Median 1,0000, Min 0,3732, 5%-Quantil 0
 **1 von 4.994** LSOAs faellt nach dem Filter unter 100 Pixel (geschaetzt), **0 LSOAs** werden
 komplett leer. `n_pixels_total_est` (vor Filter): Min 97, Median 1.980, Max 158.049.
 
+## SDM-Projiziertes-Feld (Phase 4, INSTRUCTIONS_sdm.md)
+
+Projiziert jedes rohe EE-Pixel (Greater-London-Ausschnitt) einzeln durch den Projektionskopf,
+Arm B (untrainiert) und Arm C (trainiert), je Backbone - unabhaengig von Ziel-/Split-Variante,
+einmal gerechnet. Arm A braucht kein Feld (poolt direkt ueber das rohe Raster).
+
+**Pre-Flight norm_stats (Nutzervorgabe):** AE braucht laut Config/Checkpoint (`normalization:
+none`, AlphaEarth ist bereits L2-normalisiert) **gar keine** Statistikdatei - nichts fehlt,
+weil nichts erwartet wird (`check_norm_stats_available()`: `{'mode': 'none', 'stats_path':
+None, 'exists': None, 'tracked': None}`). TESSERA braucht `norm_stats_tessera_pixels.json` -
+vorhanden UND getrackt (der `-f`-Fund aus Commit 4 galt nur fuer TESSERA, AE hat strukturell
+kein Aequivalent, das fehlen koennte).
+
+| Datei/Ordner | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/interim/sdm_projected/{ae,tessera}_arm{b,c}/*_proj256.tif` | `build_sdm_projected_field.py` | rohe EE-Kacheln (`spatial_join.py::get_backbones('london')`), `data/aoi/london.gpkg`, `checkpoints/{ae,tessera}_v1/best.pt` (nur Arm C), `norm_stats_tessera_pixels.json` (nur TESSERA) | 8.9.2026 | aktuell — 2+2+50+50=104 GeoTIFFs, 256 Kanaele float32, BIGTIFF (AE-Kacheln > 4 GB), zeilenweise geschrieben (`ROW_CHUNK=200`) um den Speicherbedarf zu begrenzen (ungechunkt: eine einzelne AE-Kachel trieb den Prozess auf ueber 100 GB RSS, nahe am System-Limit von 119 GB - gefunden und behoben, bevor der volle Lauf startete). Gesamt 131 GB, gesamt ~30 min Rechenzeit (Summe der 4 Arm-Laeufe, sequenziell). Raeumlich auf die AOI-BBox je Kachel zugeschnitten (nicht die vollen 8192x8192-AlphaEarth-Rohkacheln - der Rest liegt ausserhalb Greater Londons). |
+
+Werte je Arm (Wertebereich ueber alle Kacheln, Backbone):
+- AE Arm B (untrainiert): [-0,2383, 0,2271], 26.581.324 gueltige Pixel, 486,8s
+- AE Arm C (trainiert, ep22): [-0,6064, 0,5699], 26.581.324 gueltige Pixel, 481,0s
+- TESSERA Arm B (untrainiert): [-0,3458, 0,3647], 28.831.211 gueltige Pixel, 418,7s
+- TESSERA Arm C (trainiert, ep26): [-0,4539, 0,4976], 28.831.211 gueltige Pixel, 414,0s
+
+Trainierte Koepfe (Arm C) haben durchgehend einen breiteren Wertebereich als die untrainierten
+(Arm B) - erwartbar, das Training draengt semantisch unterschiedliche Pixel im 256-dim-Raum
+auseinander.
+
+**Stichprobencheck L2-Norm == 1:** TESSERA (im Lauf selbst geprueft): 4.000 Pixel/Arm aus 20
+Kacheln, max. Abweichung 1,19e-07. AE: der im Lauf eingebaute Zufallscheck traf bei beiden
+Kacheln ein reines Nodata-Fenster (0 Pixel geprueft, gemeldeter Fehlbefund im Skript - AE-
+Kacheln haben grosse Nodata-Raender, ein einzelnes 64x64-Fenster kann leer sein) - nachtraeglich
+mit Wiederholungsversuchen bei leerem Fenster nachgeholt: 200 Pixel je Kachel/Arm (800 gesamt),
+max. Abweichung ebenfalls 1,19e-07. `sample_l2_norm_check()` danach mit Retry-bei-leerem-Fenster
+nachgeruestet (bis zu 10 Versuche je Kachel) - der obige Nodata-Fehlbefund kann bei einem
+kuenftigen Lauf nicht mehr auftreten.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)
