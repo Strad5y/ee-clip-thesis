@@ -134,8 +134,33 @@ Haengt nur an der Geometrie, nicht an den NS-SeC-Kategorien - identisch fuer 9ca
 |---|---|---|---|---|
 | `data/splits/sdm_lsoa_splits_london.csv` (Variante A, Mehrheitsregel) | `build_sdm_lsoa_splits.py` | `data/raw/sdm/Lower_layer_..._BFC_V10_....gpkg`, `data/aoi/london.gpkg`, `data/splits/splits_london.csv`, `data/raw/sdm/London_SDM.csv` (nur fuer die Codeliste) | 8.9.2026 | aktuell — 4.994 Zeilen (= alle TS062-LSOAs, alle gematcht). Join TS062↔Geometrie ueber `LSOA21CD`/`mnemonic`: 0 TS062-Codes ohne Geometrie, 119 Geometrie-Codes (AOI-Intersects) ohne TS062-Eintrag (verworfen - AOI ist die OSM-Verwaltungsgrenze admin_level=5 'Greater London', leicht groesser/anders geschnitten als Nomis' eigene Regionsauswahl an den Raendern). Split je LSOA: train=4.152, val=425, test=417. 1.966 LSOAs (39,4%) beruehren mehr als eine Partition (erwartbar: LSOAs sind i.d.R. kleiner als 1 km²-Zellen). max_frac: Median 1,0, Mittel 0,920, Min 0,373. 303 LSOAs (6,1%) mit max_frac < 60%. 2 LSOAs mit frac_covered < 99,9% (Restflaeche in Zellen ohne Split-Eintrag, randlich). |
 | `data/splits/sdm_lsoa_splits_london_min60.csv` (Variante B, Schwellwert) | `build_sdm_lsoa_splits.py` | wie oben | 8.9.2026 | aktuell — Variante A gefiltert auf `max_frac >= 0,60` (Schwellwert = derselbe, der ohnehin fuer den "< 60%"-Bericht verlangt war, keine zusaetzliche freie Zahl). 4.691 Zeilen (303 verworfen). Split: train=4.010, val=343, test=338. |
+| `data/splits/sdm_lsoa_cell_overlay_london.csv` | `build_sdm_lsoa_splits.py` | dieselben Inputs | 8.9.2026 | aktuell — 14.138 Zeilen, Spalten `lsoa_code, cell_row, cell_col, split, piece_area_m2`. Rohe LSOA×Zelle-Ueberlagerung (vor der Mehrheits-Aggregation) - Grundlage der **partitionsreinen Poolung** (s. u.): Phase 5 filtert damit auf Pixel, deren Zelle denselben `split` traegt wie das LSOA selbst, ohne die Ueberlagerung neu zu rechnen. |
 
-Beide Varianten teilen sich Spaltenschema: `lsoa_code, split, max_frac, frac_train, frac_val, frac_test, frac_covered, n_partitions_touched`.
+Beide Split-Varianten teilen sich das Spaltenschema: `lsoa_code, split, max_frac, second_max_frac,
+margin_frac, frac_train, frac_val, frac_test, frac_covered, n_partitions_touched, lsoa_area_m2,
+area_kept_m2, n_pixels_total_est, n_pixels_kept_est, frac_pixels_kept`.
+
+**Diagnose der 303 Grenzfaelle (max_frac < 60%):** 140 davon (46,2%) haben `margin_frac` < 0,10
+(zweitgroesster Flaechenanteil liegt weniger als 10 Prozentpunkte unter dem groessten - die
+Zuordnung ist dort de facto ein Muenzwurf). Raeumlich **nicht** am AOI-Rand geclustert, sondern
+ueber die Stadt verteilt: mittlerer Abstand der Grenzfall-Zentroide zum AOI-Rand 7.366 m, praktisch
+identisch zum Mittel ueber ALLE 4.994 LSOAs (7.778 m). Betrifft alle 33 Londoner Boroughs (keine
+Konzentration auf wenige Boroughs; Ealing/Hillingdon mit je 21 LSOAs am haeufigsten, aber das sind
+nur ~7% ihrer jeweiligen LSOA-Zahl). Strukturell erwartbar: die Zell→Split-Zuordnung ist ein
+zufaelliger Shuffle ueber ALLE 1.818 Zellen (`build_splits.py::assign_splits`), nicht raeumlich
+geblockt im Sinne zusammenhaengender Regionen - Val/Test-Zellen liegen zufaellig verstreut zwischen
+Train-Zellen, daher treten Grenzfaelle ueberall dort auf, wo ein LSOA-Rand zufaellig auf eine
+Zellgrenze mit unterschiedlichem Split faellt, nicht bevorzugt am AOI-Rand.
+
+**Partitionsreine Poolung (schliesst einen Leakage-Kanal):** ohne Filter wuerde der
+gepoolte Regionsvektor eines LSOA ueber Pixel aus bis zu drei Partitionen mitteln, obwohl das
+LSOA nur EINER Partition (der Mehrheits-Partition) zugewiesen ist - der Regionsvektor eines
+"Train"-LSOA enthaelt in bis zu 39,4% der Faelle auch Information aus Val-/Test-Zellen. Filter:
+nur Pixel aus Zellen mit `split == LSOA-split` behalten (`sdm_lsoa_cell_overlay_london.csv`).
+`frac_pixels_kept` (== `max_frac`, Flaechenanteil ≈ Pixelanteil bei 10-m-Aufloesung, kein
+Raster-Durchlauf noetig): Mittel 0,9203, Median 1,0000, Min 0,3732, 5%-Quantil 0,5819. Nur
+**1 von 4.994** LSOAs faellt nach dem Filter unter 100 Pixel (geschaetzt), **0 LSOAs** werden
+komplett leer. `n_pixels_total_est` (vor Filter): Min 97, Median 1.980, Max 158.049.
 
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 

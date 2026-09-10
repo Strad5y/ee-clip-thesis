@@ -15,7 +15,18 @@ die Umkehrung von deren Ganzzahl-Division (col=x-Achse/Easting, row=y-Achse/Nort
 
 Die Split-Zuordnung haengt nur an der Geometrie, nicht an den NS-SeC-Kategorien - wird daher
 EINMAL gerechnet und deckt beide Zielvarianten (9cat/8cat) gleichermassen ab.
+
+Nachtrag (Diagnose Grenzfaelle + partitionsreine Poolung): zusaetzlich zur Mehrheitsregel wird
+der LSOA-Zelle-Overlay selbst persistiert (data/splits/sdm_lsoa_cell_overlay_london.csv) -
+genau die Information, die Phase 5 braucht, um beim Pooling NUR Pixel aus Zellen der
+zugewiesenen Partition zu verwenden (partitionsreine Poolung, schliesst den Leakage-Kanal
+"Regionsvektor mittelt ueber mehrere Partitionen, obwohl die Zuordnung nur Mehrheits-basiert
+ist"). Pixelzahl-Schaetzung ueber Flaeche/Pixelflaeche (10 m x 10 m, beide Backbones laut
+CLAUDE.md) statt echtem Pixel-Durchlauf - genau die im Auftrag verlangte Abkuerzung ("ohne das
+Raster erneut zu durchlaufen"), da die Pixel auf einem regelmaessigen 10-m-Gitter liegen und
+Flaechenanteil und Pixelanteil bei dieser Aufloesung praktisch identisch sind.
 """
+import re
 from pathlib import Path
 
 import geopandas as gpd
@@ -34,10 +45,13 @@ LSOA_GPKG = cfg.DATA / "raw" / "sdm" / (
 SPLITS_LONDON = cfg.DATA / "splits" / "splits_london.csv"
 
 CELL_SIZE_M = 1000.0  # identisch zu build_splits.py/build_splits_pixels.py
+PIXEL_SIZE_M = 10.0   # TESSERA und AlphaEarth sind beide 10 m (CLAUDE.md, Abschnitt 0)
+PIXEL_AREA_M2 = PIXEL_SIZE_M ** 2
 
 OUT_MAJORITY = cfg.DATA / "splits" / "sdm_lsoa_splits_london.csv"
 MIN_MAX_FRAC = 0.60  # Schwellwert Variante B - siehe Begruendung im Bericht
 OUT_MIN60 = cfg.DATA / "splits" / "sdm_lsoa_splits_london_min60.csv"
+OUT_OVERLAY = cfg.DATA / "splits" / "sdm_lsoa_cell_overlay_london.csv"
 
 
 def get_aoi_utm_reference() -> tuple:
@@ -69,11 +83,66 @@ def load_lsoa_geometries_for_london(aoi: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 def build_cell_polygons(splits_df: pd.DataFrame, minx: float, miny: float,
                          cell_size_m: float, crs) -> gpd.GeoDataFrame:
     """Zellpolygon je (cell_row, cell_col) aus splits_london.csv - Umkehrung der
-    Ganzzahl-Division aus build_splits.py: col->x (Easting), row->y (Northing)."""
+    Ganzzahl-Division aus build_splits.py: col->x (Easting), row->y (Northing). cell_row/
+    cell_col bleiben als Spalten erhalten (nicht nur 'split') - werden fuer den persistierten
+    LSOA-Zelle-Overlay gebraucht (Phase-5-Filterregel)."""
     x0 = minx + splits_df["cell_col"].to_numpy() * cell_size_m
     y0 = miny + splits_df["cell_row"].to_numpy() * cell_size_m
     geoms = [box(x, y, x + cell_size_m, y + cell_size_m) for x, y in zip(x0, y0)]
-    return gpd.GeoDataFrame({"split": splits_df["split"].to_numpy()}, geometry=geoms, crs=crs)
+    return gpd.GeoDataFrame(
+        {"cell_row": splits_df["cell_row"].to_numpy(),
+         "cell_col": splits_df["cell_col"].to_numpy(),
+         "split": splits_df["split"].to_numpy()},
+        geometry=geoms, crs=crs,
+    )
+
+
+def borough_from_name(name: str) -> str:
+    """LSOA21NM-Format ist '<Borough-Name> <Ward-Code>' (z.B. 'City of London 001A') - der
+    Ward-Code ist immer das letzte, whitespace-getrennte Token."""
+    return re.sub(r"\s+\S+$", "", name)
+
+
+def compute_lsoa_cell_overlay(matched: gpd.GeoDataFrame, cells: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    overlay = gpd.overlay(matched[["lsoa_code", "geometry"]], cells, how="intersection")
+    overlay["piece_area_m2"] = overlay.geometry.area
+    return overlay
+
+
+def compute_split_assignment(matched: pd.DataFrame, overlay: pd.DataFrame) -> pd.DataFrame:
+    """Flaechenanteil je Partition, Mehrheitszuordnung, plus Diagnosespalten (margin_frac fuer
+    die Grenzfall-Analyse, Pixelzahl-Schaetzungen fuer die partitionsreine Poolung)."""
+    area_by_split = (overlay.groupby(["lsoa_code", "split"])["piece_area_m2"]
+                      .sum().unstack(fill_value=0.0))
+    for s in ["train", "val", "test"]:
+        if s not in area_by_split.columns:
+            area_by_split[s] = 0.0
+    area_by_split = area_by_split[["train", "val", "test"]]
+
+    result = matched[["lsoa_code", "lsoa_area_m2"]].merge(
+        area_by_split, left_on="lsoa_code", right_index=True, how="left"
+    ).fillna({"train": 0.0, "val": 0.0, "test": 0.0})
+
+    for s in ["train", "val", "test"]:
+        result[f"frac_{s}"] = result[s] / result["lsoa_area_m2"]
+    frac_cols = ["frac_train", "frac_val", "frac_test"]
+    result["frac_covered"] = result[frac_cols].sum(axis=1)
+
+    sorted_fracs = np.sort(result[frac_cols].to_numpy(), axis=1)  # aufsteigend
+    result["max_frac"] = sorted_fracs[:, -1]
+    result["second_max_frac"] = sorted_fracs[:, -2]
+    result["margin_frac"] = result["max_frac"] - result["second_max_frac"]
+    result["split"] = result[frac_cols].idxmax(axis=1).str.replace("frac_", "", regex=False)
+    result["n_partitions_touched"] = (result[frac_cols] > 0).sum(axis=1)
+
+    # Partitionsreine Poolung: nur die Flaeche/Pixel der ZUGEWIESENEN Partition zaehlen
+    # (= max_frac * lsoa_area_m2, per Konstruktion identisch zur Flaeche der Mehrheits-
+    # Partition). Pixelzahl ueber Flaeche/Pixelflaeche geschaetzt, kein Raster-Durchlauf.
+    result["area_kept_m2"] = result["max_frac"] * result["lsoa_area_m2"]
+    result["n_pixels_total_est"] = np.round(result["lsoa_area_m2"] / PIXEL_AREA_M2).astype(int)
+    result["n_pixels_kept_est"] = np.round(result["area_kept_m2"] / PIXEL_AREA_M2).astype(int)
+    result["frac_pixels_kept"] = result["max_frac"]  # identisch per Konstruktion, eigener Name fuer Klarheit in Phase 5
+    return result
 
 
 def main():
@@ -100,7 +169,10 @@ def main():
           + (f" -> {sorted(only_in_geom)}" if 0 < len(only_in_geom) <= 20 else ""))
 
     matched = lsoa_london[lsoa_london["LSOA21CD"].isin(ts062_codes)].copy()
-    matched = matched.rename(columns={"LSOA21CD": "lsoa_code"})[["lsoa_code", "geometry"]]
+    matched["borough"] = matched["LSOA21NM"].map(borough_from_name)
+    matched = matched.rename(columns={"LSOA21CD": "lsoa_code"})[
+        ["lsoa_code", "borough", "geometry"]
+    ]
     matched["lsoa_area_m2"] = matched.geometry.area
     print(f"  Gematcht (fuer die Split-Zuordnung verwendet): {len(matched)}")
 
@@ -111,26 +183,8 @@ def main():
     print(f"  Split-Verteilung der Zellen: {cells['split'].value_counts().to_dict()}")
 
     # --- Ueberlagerung: LSOA-Polygon x Zellpolygon ---
-    overlay = gpd.overlay(matched[["lsoa_code", "geometry"]], cells, how="intersection")
-    overlay["piece_area_m2"] = overlay.geometry.area
-    area_by_split = (overlay.groupby(["lsoa_code", "split"])["piece_area_m2"]
-                      .sum().unstack(fill_value=0.0))
-    for s in ["train", "val", "test"]:
-        if s not in area_by_split.columns:
-            area_by_split[s] = 0.0
-    area_by_split = area_by_split[["train", "val", "test"]]
-
-    result = matched[["lsoa_code", "lsoa_area_m2"]].merge(
-        area_by_split, left_on="lsoa_code", right_index=True, how="left"
-    ).fillna({"train": 0.0, "val": 0.0, "test": 0.0})
-
-    for s in ["train", "val", "test"]:
-        result[f"frac_{s}"] = result[s] / result["lsoa_area_m2"]
-    frac_cols = ["frac_train", "frac_val", "frac_test"]
-    result["frac_covered"] = result[frac_cols].sum(axis=1)
-    result["max_frac"] = result[frac_cols].max(axis=1)
-    result["split"] = result[frac_cols].idxmax(axis=1).str.replace("frac_", "", regex=False)
-    result["n_partitions_touched"] = (result[frac_cols] > 0).sum(axis=1)
+    overlay = compute_lsoa_cell_overlay(matched, cells)
+    result = compute_split_assignment(matched, overlay)
 
     # --- Berichte (Phase 3, Punkt 5) ---
     print(f"\n=== LSOAs je zugewiesener Partition (Mehrheitsregel) ===")
@@ -143,7 +197,8 @@ def main():
     print(f"\nVerteilung des maximalen Flaechenanteils (max_frac):")
     print(result["max_frac"].describe().to_string())
 
-    n_below_60 = int((result["max_frac"] < 0.60).sum())
+    below_60 = result["max_frac"] < 0.60
+    n_below_60 = int(below_60.sum())
     print(f"\nLSOAs mit maximalem Flaechenanteil < 60%: {n_below_60} von {len(result)} "
           f"({n_below_60 / len(result):.1%})")
 
@@ -154,9 +209,37 @@ def main():
         print(result.loc[result["frac_covered"] < 0.999, ["lsoa_code", "frac_covered"]]
               .sort_values("frac_covered").head(10).to_string(index=False))
 
+    # --- Diagnose Grenzfaelle (max_frac < 60%) ---
+    borderline = result[below_60].merge(matched[["lsoa_code", "borough", "geometry"]], on="lsoa_code")
+    borderline = gpd.GeoDataFrame(borderline, geometry="geometry", crs=utm_crs)
+    n_coinflip = int((borderline["margin_frac"] < 0.10).sum())
+    print(f"\n=== Diagnose: {len(borderline)} Grenzfaelle (max_frac < 60%) ===")
+    print(f"Davon mit margin_frac < 0.10 (zweitgroesster Anteil < 0.10 unter dem groessten, "
+          f"'Muenzwurf'): {n_coinflip} von {len(borderline)} ({n_coinflip / len(borderline):.1%})")
+    print(f"margin_frac-Verteilung der Grenzfaelle:")
+    print(borderline["margin_frac"].describe().to_string())
+
+    print(f"\nBoroughs der Grenzfaelle (Anzahl LSOAs, absteigend, Top 10 von "
+          f"{borderline['borough'].nunique()} betroffenen Boroughs):")
+    print(borderline["borough"].value_counts().head(10).to_string())
+    print(f"Boroughs insgesamt in London: {matched['borough'].nunique()}")
+
+    centroids = borderline.geometry.centroid
+    aoi_utm = aoi.to_crs(utm_crs)
+    aoi_boundary = aoi_utm.geometry.iloc[0].boundary
+    dist_to_aoi_edge = centroids.distance(aoi_boundary)
+    print(f"\nAbstand der Grenzfall-Zentroide zum AOI-Rand (Meter):")
+    print(dist_to_aoi_edge.describe().to_string())
+    all_centroids = matched.geometry.centroid
+    dist_all = all_centroids.distance(aoi_boundary)
+    print(f"Zum Vergleich, Abstand ALLER LSOA-Zentroide zum AOI-Rand (Meter):")
+    print(dist_all.describe().to_string())
+
     # --- Variante A: Mehrheitsregel, alle gematchten LSOAs ---
-    out_cols = ["lsoa_code", "split", "max_frac", "frac_train", "frac_val", "frac_test",
-                "frac_covered", "n_partitions_touched"]
+    out_cols = ["lsoa_code", "split", "max_frac", "second_max_frac", "margin_frac",
+                "frac_train", "frac_val", "frac_test", "frac_covered", "n_partitions_touched",
+                "lsoa_area_m2", "area_kept_m2", "n_pixels_total_est", "n_pixels_kept_est",
+                "frac_pixels_kept"]
     OUT_MAJORITY.parent.mkdir(parents=True, exist_ok=True)
     result[out_cols].to_csv(OUT_MAJORITY, index=False)
     print(f"\nVariante A (Mehrheitsregel, alle LSOAs) gespeichert: {OUT_MAJORITY} "
@@ -169,6 +252,27 @@ def main():
     print(f"Variante B (max_frac >= {MIN_MAX_FRAC:.0%} verworfen darunter) gespeichert: "
           f"{OUT_MIN60} ({len(variant_b)} Zeilen, {n_dropped} verworfen)")
     print(f"  Split-Verteilung Variante B: {variant_b['split'].value_counts().to_dict()}")
+
+    # --- Partitionsreine Poolung: Pixelretentions-Statistik + persistierter Cell-Overlay ---
+    print(f"\n=== Partitionsreine Poolung: verbleibende Pixel je LSOA nach Filter "
+          f"(Zellen != zugewiesener Split ausgeschlossen) ===")
+    print(f"frac_pixels_kept (== max_frac): Mittel={result['frac_pixels_kept'].mean():.4f} "
+          f"Median={result['frac_pixels_kept'].median():.4f} "
+          f"Min={result['frac_pixels_kept'].min():.4f} "
+          f"5%-Quantil={result['frac_pixels_kept'].quantile(0.05):.4f}")
+    n_under_100 = int((result["n_pixels_kept_est"] < 100).sum())
+    print(f"LSOAs mit < 100 verbleibenden Pixeln (geschaetzt, {PIXEL_SIZE_M:.0f}m-Raster): "
+          f"{n_under_100} von {len(result)} ({n_under_100 / len(result):.1%})")
+    n_empty = int((result["n_pixels_kept_est"] == 0).sum())
+    print(f"LSOAs komplett leer nach Filter (n_pixels_kept_est == 0): {n_empty}")
+    print(f"n_pixels_total_est-Verteilung (zum Vergleich, vor dem Filter):")
+    print(result["n_pixels_total_est"].describe().to_string())
+
+    overlay_out_cols = ["lsoa_code", "cell_row", "cell_col", "split", "piece_area_m2"]
+    overlay[overlay_out_cols].to_csv(OUT_OVERLAY, index=False)
+    print(f"\nLSOA-Zelle-Overlay gespeichert: {OUT_OVERLAY} ({len(overlay)} Zeilen) - "
+          f"Phase-5-Filterregel: Pixel behalten, wenn dessen Zelle (cell_row,cell_col) in "
+          f"dieser Datei mit split == LSOA-split (aus {OUT_MAJORITY.name}) vorkommt.")
 
 
 if __name__ == "__main__":
