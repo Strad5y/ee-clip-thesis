@@ -1,0 +1,13 @@
+LSOA-Datei (national): 35672 Features, CRS=EPSG:27700
+Nach Intersects-Filter gegen AOI 'Greater London': 5113 LSOAs
+LSOAs (gematcht): 4994
+
+=== ae / Arm A ===
+    [ae/a] Kachel 2/2 verarbeitet (134.8s)
+  [ae/a] fertig: 4994 LSOAs erreicht in 135.0s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_arma.parquet
+
+=== ae / Arm B ===

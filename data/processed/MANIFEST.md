@@ -198,6 +198,17 @@ max. Abweichung ebenfalls 1,19e-07. `sample_l2_norm_check()` danach mit Retry-be
 nachgeruestet (bis zu 10 Versuche je Kachel) - der obige Nodata-Fehlbefund kann bei einem
 kuenftigen Lauf nicht mehr auftreten.
 
+**Kritischer Bugfix (Nachtrag, vor Phase 5):** die urspruengliche Phase-4-Schreiblogik liess
+`tiled`/`interleave` auf dem GDAL-Default (ungetilte Streifen, `interleave='pixel'`) - fuer
+Phase 5s `exactextract`-Abfragen katastrophal, weil jede LSOA-Abfrage trotz "nur Band 1 noetig"
+alle 256 Baender pro Zeile dekomprimieren musste. Der erste Phase-5-Lauf haengte >26h bei der
+ersten AlphaEarth-Kachel (Arm B) fest, 69,8 GB RSS, keine einzige Kachel fertig - abgebrochen.
+Fix: `build_sdm_projected_field.py`-Schreibprofil auf `tiled=True, blockxsize=blockysize=256,
+interleave='band'` umgestellt (kuenftige Laeufe); die bereits berechneten 104 Dateien wurden
+verlustfrei per `retile_sdm_projected.py` konvertiert (Werte stichprobenartig bit-identisch
+verifiziert, keine Neuprojektion). Sanity-Check danach: dieselbe AlphaEarth-Kachel/-Abfrage
+(4.994 Kandidaten-LSOAs), die vorher nach >26h nicht fertig war, brauchte retiled 422,6s.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

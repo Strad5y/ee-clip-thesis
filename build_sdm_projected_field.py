@@ -124,8 +124,16 @@ def project_tile(tile_path: Path, backbone: str, head, norm_mode: str, norm_stat
 
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / f"{tile_path.stem}_proj256.tif"
+    # tiled=True + interleave='band' ist KRITISCH, nicht kosmetisch (Nachtrag nach Phase-5-
+    # Vorfall): der erste Lauf schrieb ungetilte Streifen mit interleave='pixel' (GDAL-Default) -
+    # exact_extract() (Phase 5) braucht fuer cell_id/coverage nur Band 1, musste bei
+    # Pixel-Interleave aber trotzdem JEDE Zeile ueber alle 256 Baender dekomprimieren, pro
+    # Kachel x Polygon. Bei der 19-GB-AlphaEarth-Kachel fuehrte das zu einem Lauf, der nach
+    # >26h noch keine einzige Kachel fertig hatte (siehe MANIFEST.md). Mit Tiling + Band-
+    # Interleave liest exact_extract nur die tatsaechlich beruehrten Bloecke von Band 1.
     profile = dict(driver="GTiff", height=h, width=w, count=LATENT_DIM, dtype="float32",
-                   crs=crs, transform=transform, compress="lzw", nodata=np.nan, BIGTIFF="YES")
+                   crs=crs, transform=transform, compress="lzw", nodata=np.nan, BIGTIFF="YES",
+                   tiled=True, blockxsize=256, blockysize=256, interleave="band")
 
     n_valid = int(valid.sum())
     running_min, running_max, running_sum = np.inf, -np.inf, 0.0
