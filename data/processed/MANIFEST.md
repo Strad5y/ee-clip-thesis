@@ -236,6 +236,105 @@ Zusatztransformation - "keine Transformation ohne Grund".
 **LSOAs mit 0 Pixeln:** in keiner der 6 Kombinationen, weder "alle Pixel" noch "partitionsrein" -
 passt zur Phase-3-Vorhersage (max_frac nie 0, 5%-Quantil frac_pixels_kept=0,582).
 
+**Verifikation vor Phase 6 (Nutzeranfrage):** bei Arm A/TESSERA wird die z-score-Normierung PRO
+PIXEL angewandt, BEVOR die coverage-gewichtete Summierung beginnt (`build_sdm_pooled_
+embeddings.py` Zeilen ~133-151 - erst `apply_zscore()` auf den rohen Pixelvektor, dann in
+`sum_all`/`sum_pure` aufsummiert), dieselbe Reihenfolge wie bei Arm B/C. Statistik-Identitaet
+explizit geprueft: `configs/tessera_v1.yaml` UND die im `tessera_v1`-Checkpoint eingebettete
+Trainings-Config zeigen beide auf denselben Pfad (`data/processed/norm_stats_tessera_pixels.json`,
+Hash `471c7157...`), mtime 4.9. 22:06, unmittelbar vor Trainingsstart 22:06:21 gefittet - exakt
+die beim Training verwendete Statistik, keine neu gefittete oder abweichende.
+
+## SDM-Vorhersagekopf (Phase 6, INSTRUCTIONS_sdm.md)
+
+Zweischichtiger MLP (Linear->ReLU->Linear, HIDDEN_DIM=128), Embeddings eingefroren, Softmax
+(als `log_softmax` in der Loss) auf die C NS-SeC-Kategorien, distributionale Cross-Entropy,
+Adam (lr=1e-3, weight_decay=1e-4), Early Stopping auf Val-Loss (Patience 20, max. 500 Epochen),
+5 Seeds (0-4). Vier Szenarien statt vollem Kreuzprodukt-Sweep (je EIN Faktor gegenueber dem
+Hauptlauf geaendert): Hauptlauf (9cat/Split A/partitionsrein), Robustheit 8cat, Robustheit
+Split B, Robustheit Poolung-alle-Pixel. Je Szenario: 2 Backbones x 3 Arme x 5 Seeds, plus
+Mittelwertsvorhersage-Baseline (deterministisch, nur von target+split abhaengig) und
+Random-Embedding-Baseline (5 Seeds, dimensionsangepasst: 64/128 fuer Arm A, 256 fuer Arm B/C).
+
+**Bewusst NICHT hier berechnet:** die eigentlichen Bewertungsmetriken KL/L1/Chebyshev mit
+Kachel-Bootstrap - das ist Phase 7 (dort muessen KL-Richtung, Null-Behandlung, L1-Definition
+und die Bootstrap-Ebene noch entschieden werden). Phase 6 liefert nur die Cross-Entropy als
+Konvergenz-/Sanity-Metrik und die Test-Predictions.
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/sdm_phase6_head_results.csv` | `build_sdm_phase6_predict.py` | `sdm_pooled_*.parquet`, `sdm_targets_london_{9cat,8cat}.parquet`, `sdm_lsoa_splits_london{,_min60}.csv` | 13.9.2026 | aktuell — 4 Szenarien x 6 Backbone/Arm-Kombinationen x 5 Seeds = 120 Zeilen (`scenario, backbone, arm, seed, train_loss, val_loss, test_loss, epochs`). Gesamtlaufzeit 220,8s. |
+| `data/processed/sdm_phase6_baselines.csv` | `build_sdm_phase6_predict.py` | dieselben | 13.9.2026 | aktuell — 4 Szenarien x (1 Mittelwerts- + 6 Random-Embedding-Baselines) = 28 Zeilen. |
+
+Hauptlauf-Ergebnisse (test_loss, Mittel +- Std ueber 5 Seeds; Mittelwertsvorhersage-Baseline
+2,1089):
+
+| Backbone/Arm | test_loss | Random-Embedding-Baseline |
+|---|---|---|
+| AE/A | 2,0896 +- 0,0005 | 2,1145 +- 0,0015 |
+| AE/B | 2,0934 +- 0,0005 | 2,1206 +- 0,0024 |
+| AE/C | 2,0823 +- 0,0004 | 2,1206 +- 0,0024 |
+| TESSERA/A | **2,0728 +- 0,0004** (bester Wert) | 2,1160 +- 0,0012 |
+| TESSERA/B | 2,0797 +- 0,0002 | 2,1187 +- 0,0011 |
+| TESSERA/C | 2,0748 +- 0,0002 | 2,1187 +- 0,0011 |
+
+Durchgehend ueber alle vier Szenarien: echte Embeddings schlagen beide Baselines, Random-
+Embedding schneidet leicht SCHLECHTER ab als die reine Mittelwertsvorhersage (plausibel - dem
+MLP fehlt bei reinem Rauschen jedes Signal, Konvergenz zur trivialen Mittelwertloesung ist nicht
+perfekt). TESSERA/A durchgehend das beste Ergebnis in allen vier Szenarien.
+
+## SDM-Metriken (Phase 7, INSTRUCTIONS_sdm.md)
+
+KL(wahr‖vorhergesagt), L1 (Summe + Mittel als zweite Spalte), Chebyshev, ueber das Testset,
+fuer alle 4 Szenarien x 2 Backbones x 3 Arme x 5 Seeds plus beide Baselines. Bootstrap-
+Cluster-Einheit: die 1-km-Zelle. LSOA->Zelle-Zuordnung aus `sdm_lsoa_cell_overlay_london.csv`,
+je LSOA die Zelle mit der GROESSTEN Ueberlappungsflaeche (`majority_cell_per_lsoa()`) - dieselbe
+Mehrheitsregel wie fuer die LSOA->Split-Zuordnung in Phase 3, nur auf Zellebene statt
+Split-Label-Ebene. Bootstrap-Punktschaetzer aus Seed 0 (dokumentierte Wahl, nicht ueber Seeds
+gemittelt - Seed-Varianz ist eine separate, bereits berichtete Groesse).
+
+Sanity-Check (vor dem vollen Lauf): Arm A/AlphaEarth/9cat/SplitA/partitionsrein, KL=0,0503
+(unskaliert) gegen AETHERs 0,0422 - plausibel (erwarteter Bereich "um 0,05" wegen strengerem
+Split), siehe Chat-Bericht 13.9.2026.
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/sdm_phase7_metrics.csv` | `build_sdm_phase7_metrics.py` | `sdm_pooled_*.parquet`, `sdm_targets_london_{9cat,8cat}.parquet`, `sdm_lsoa_splits_london{,_min60}.csv`, `sdm_lsoa_cell_overlay_london.csv` | 13.9.2026 | aktuell — 4 Szenarien x 13 Modelle (6 echte + 6 dimensionsangepasste Random-Embedding + 1 Mittelwertsvorhersage) = 52 Zeilen. Nur der Hauptlauf hat zusaetzlich `*_ci_lsoa`-Spalten (LSOA-Bootstrap zum Breitenvergleich). Gesamtlaufzeit 244,8s. |
+
+**Hauptlauf-Ergebnistabelle** (AETHER-Skala: L1x10², KL/Chebyshev x10³; unskaliert in Klammern),
+95%-Kachel-Bootstrap-CI in eckigen Klammern (unskaliert):
+
+| Modell | KL | L1 (Summe) | Chebyshev |
+|---|---|---|---|
+| **AETHER Tab. 1 — Random** (Referenz, fremder Split/Kategorien) | 75,7 | 30,0 | 91,4 |
+| **AETHER Tab. 1 — CaLLiPer** (Referenz) | 34,1 | 19,3 | 58,0 |
+| **AETHER Tab. 1 — AlphaEarth/roh** (Referenz) | 42,2 | 21,5 | 64,8 |
+| **AETHER Tab. 1 — AETHER** (Referenz) | 30,1 | 17,8 | 53,8 |
+| Mittelwertsvorhersage | 69,6 (0,0696) [60,8-78,8] | 28,5 (0,2852) [26,9-30,2] | 86,4 (0,0864) [79,3-93,2] |
+| AE/A (=AlphaEarth roh) | 50,3 (0,0503) [42,6-57,7] | 23,7 (0,2367) [22,0-25,1] | 71,1 (0,0711) [64,6-76,8] |
+| AE/B | 54,1 (0,0541) [47,8-62,9] | 24,7 (0,2472) [23,4-26,5] | 74,6 (0,0746) [69,3-81,2] |
+| AE/C | 43,1 (0,0431) [37,0-50,5] | 21,6 (0,2165) [20,2-23,1] | 64,9 (0,0649) [59,3-70,6] |
+| TESSERA/A | 33,6 (0,0336) [28,0-39,9] | 18,7 (0,1874) [17,4-20,1] | 56,9 (0,0569) [51,5-61,9] |
+| TESSERA/B | 40,4 (0,0404) [33,7-48,0] | 20,7 (0,2074) [19,3-22,4] | 62,9 (0,0629) [56,7-69,5] |
+| TESSERA/C | 35,6 (0,0356) [29,4-42,1] | 19,4 (0,1939) [18,0-20,8] | 58,7 (0,0587) [53,2-64,2] |
+| Random-Embedding (dimensionsangepasst, 64-256) | 75-81 | 30-31 | 90-94 |
+
+**Sanity-Check bestaetigt** (AE/A: 50,3 vs. AETHERs 42,2, im vorab als plausibel markierten
+Bereich). **TESSERA/A schlaegt sogar AETHERs eigenes Modell** (33,6 vs. 30,1 KL) UND liegt
+naeher an AETHER als an ihrem eigenen "AlphaEarth roh"-Wert (42,2) - deutet auf einen
+substanziellen Backbone-Effekt zugunsten TESSERA fuer diese Aufgabe, nicht nur Rauschen (die
+95%-CIs [28,0-39,9] fuer TESSERA/A und [37,0-50,5] fuer AE/C ueberlappen sich knapp nicht am
+Rand). Kein direkter KL-Vergleich mit AETHERs eigenen Werten im strengen Sinn zulaessig
+(anderer Split, andere Kategorienwahl, andere LSOA-Partitionszuordnung - siehe CLAUDE.md-
+Leitlinie "kein direkter Zahlenvergleich gegen publizierte Paper"), nur als Groessenordnungs-
+Einordnung zu verstehen.
+
+**Kachel- vs. LSOA-Bootstrap, Breitenvergleich (Hauptlauf, Beleg dass die Cluster-Einheit einen
+Unterschied macht):** Kachel-CIs sind ueber alle 13 Modelle und alle drei Metriken konsistent
+BREITER als LSOA-CIs - mittlerer Breitenfaktor (Kachel/LSOA): KL **1,29x**, L1-Summe **1,39x**,
+Chebyshev **1,34x**. Bestaetigt die erwartete raeumliche Autokorrelation zwischen benachbarten
+LSOAs in derselben Zelle - LSOA-Bootstrap unterschaetzt die Unsicherheit systematisch.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

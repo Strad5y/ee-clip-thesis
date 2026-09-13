@@ -1,0 +1,63 @@
+
+========== Szenario: Hauptlauf (9cat/A/pure) ==========
+  Mittelwertsvorhersage-Baseline: test_loss=2.1089 (deterministisch)
+  ae/a (d=64, n=4994=4152/425/417): test_loss=2.0896 +- 0.0005  (val=2.0622 +- 0.0005)
+    Random-Embedding-Baseline (d=64): test_loss=2.1145 +- 0.0015
+  ae/b (d=256, n=4994=4152/425/417): test_loss=2.0934 +- 0.0005  (val=2.0693 +- 0.0010)
+    Random-Embedding-Baseline (d=256): test_loss=2.1206 +- 0.0024
+  ae/c (d=256, n=4994=4152/425/417): test_loss=2.0823 +- 0.0004  (val=2.0532 +- 0.0003)
+    Random-Embedding-Baseline (d=256): test_loss=2.1206 +- 0.0024
+  tessera/a (d=128, n=4994=4152/425/417): test_loss=2.0728 +- 0.0004  (val=2.0457 +- 0.0005)
+    Random-Embedding-Baseline (d=128): test_loss=2.1160 +- 0.0012
+  tessera/b (d=256, n=4994=4152/425/417): test_loss=2.0797 +- 0.0002  (val=2.0517 +- 0.0002)
+    Random-Embedding-Baseline (d=256): test_loss=2.1187 +- 0.0011
+  tessera/c (d=256, n=4994=4152/425/417): test_loss=2.0748 +- 0.0002  (val=2.0465 +- 0.0002)
+    Random-Embedding-Baseline (d=256): test_loss=2.1187 +- 0.0011
+
+========== Szenario: Robustheit: 8cat ==========
+  Mittelwertsvorhersage-Baseline: test_loss=1.9843 (deterministisch)
+  ae/a (d=64, n=4994=4152/425/417): test_loss=1.9663 +- 0.0005  (val=1.9379 +- 0.0005)
+    Random-Embedding-Baseline (d=64): test_loss=1.9900 +- 0.0011
+  ae/b (d=256, n=4994=4152/425/417): test_loss=1.9701 +- 0.0004  (val=1.9451 +- 0.0006)
+    Random-Embedding-Baseline (d=256): test_loss=1.9962 +- 0.0021
+  ae/c (d=256, n=4994=4152/425/417): test_loss=1.9586 +- 0.0005  (val=1.9289 +- 0.0003)
+    Random-Embedding-Baseline (d=256): test_loss=1.9962 +- 0.0021
+  tessera/a (d=128, n=4994=4152/425/417): test_loss=1.9498 +- 0.0003  (val=1.9210 +- 0.0003)
+    Random-Embedding-Baseline (d=128): test_loss=1.9916 +- 0.0012
+  tessera/b (d=256, n=4994=4152/425/417): test_loss=1.9559 +- 0.0005  (val=1.9275 +- 0.0003)
+    Random-Embedding-Baseline (d=256): test_loss=1.9942 +- 0.0014
+  tessera/c (d=256, n=4994=4152/425/417): test_loss=1.9512 +- 0.0002  (val=1.9219 +- 0.0003)
+    Random-Embedding-Baseline (d=256): test_loss=1.9942 +- 0.0014
+
+========== Szenario: Robustheit: Split B ==========
+  Mittelwertsvorhersage-Baseline: test_loss=2.1084 (deterministisch)
+  ae/a (d=64, n=4691=4010/343/338): test_loss=2.0900 +- 0.0004  (val=2.0607 +- 0.0007)
+    Random-Embedding-Baseline (d=64): test_loss=2.1124 +- 0.0009
+  ae/b (d=256, n=4691=4010/343/338): test_loss=2.0935 +- 0.0004  (val=2.0688 +- 0.0008)
+    Random-Embedding-Baseline (d=256): test_loss=2.1190 +- 0.0015
+  ae/c (d=256, n=4691=4010/343/338): test_loss=2.0821 +- 0.0004  (val=2.0502 +- 0.0004)
+    Random-Embedding-Baseline (d=256): test_loss=2.1190 +- 0.0015
+  tessera/a (d=128, n=4691=4010/343/338): test_loss=2.0726 +- 0.0004  (val=2.0412 +- 0.0004)
+    Random-Embedding-Baseline (d=128): test_loss=2.1155 +- 0.0016
+  tessera/b (d=256, n=4691=4010/343/338): test_loss=2.0788 +- 0.0004  (val=2.0486 +- 0.0005)
+    Random-Embedding-Baseline (d=256): test_loss=2.1177 +- 0.0015
+  tessera/c (d=256, n=4691=4010/343/338): test_loss=2.0747 +- 0.0003  (val=2.0431 +- 0.0004)
+    Random-Embedding-Baseline (d=256): test_loss=2.1177 +- 0.0015
+
+========== Szenario: Robustheit: Poolung alle Pixel ==========
+  Mittelwertsvorhersage-Baseline: test_loss=2.1089 (deterministisch)
+  ae/a (d=64, n=4994=4152/425/417): test_loss=2.0881 +- 0.0003  (val=2.0617 +- 0.0005)
+    Random-Embedding-Baseline (d=64): test_loss=2.1145 +- 0.0015
+  ae/b (d=256, n=4994=4152/425/417): test_loss=2.0922 +- 0.0004  (val=2.0692 +- 0.0004)
+    Random-Embedding-Baseline (d=256): test_loss=2.1206 +- 0.0024
+  ae/c (d=256, n=4994=4152/425/417): test_loss=2.0808 +- 0.0004  (val=2.0520 +- 0.0004)
+    Random-Embedding-Baseline (d=256): test_loss=2.1206 +- 0.0024
+  tessera/a (d=128, n=4994=4152/425/417): test_loss=2.0712 +- 0.0003  (val=2.0437 +- 0.0004)
+    Random-Embedding-Baseline (d=128): test_loss=2.1160 +- 0.0012
+  tessera/b (d=256, n=4994=4152/425/417): test_loss=2.0782 +- 0.0002  (val=2.0510 +- 0.0002)
+    Random-Embedding-Baseline (d=256): test_loss=2.1187 +- 0.0011
+  tessera/c (d=256, n=4994=4152/425/417): test_loss=2.0735 +- 0.0002  (val=2.0457 +- 0.0003)
+    Random-Embedding-Baseline (d=256): test_loss=2.1187 +- 0.0011
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase6_head_results.csv, /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase6_baselines.csv
+Gesamtlaufzeit: 220.8s
