@@ -1,0 +1,60 @@
+LSOA-Datei (national): 35672 Features, CRS=EPSG:27700
+Nach Intersects-Filter gegen AOI 'Greater London': 5113 LSOAs
+LSOAs (gematcht): 4994
+
+=== ae / Arm A ===
+    [ae/a] Kachel 2/2 verarbeitet (129.3s)
+  [ae/a] fertig: 4994 LSOAs erreicht in 129.4s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_arma.parquet
+
+=== ae / Arm B ===
+    [ae/b] Kachel 2/2 verarbeitet (902.3s)
+  [ae/b] fertig: 4994 LSOAs erreicht in 903.1s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_armb.parquet
+
+=== ae / Arm C ===
+    [ae/c] Kachel 2/2 verarbeitet (954.3s)
+  [ae/c] fertig: 4994 LSOAs erreicht in 954.9s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_armc.parquet
+
+=== tessera / Arm A ===
+    [tessera/a] Kachel 10/50 verarbeitet (448.2s)
+    [tessera/a] Kachel 20/50 verarbeitet (763.1s)
+    [tessera/a] Kachel 30/50 verarbeitet (977.2s)
+    [tessera/a] Kachel 40/50 verarbeitet (1481.1s)
+  [tessera/a] fertig: 4994 LSOAs erreicht in 1653.5s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_tessera_arma.parquet
+
+=== tessera / Arm B ===
+    [tessera/b] Kachel 10/50 verarbeitet (252.2s)
+    [tessera/b] Kachel 20/50 verarbeitet (412.0s)
+    [tessera/b] Kachel 30/50 verarbeitet (448.5s)
+    [tessera/b] Kachel 40/50 verarbeitet (589.4s)
+  [tessera/b] fertig: 4994 LSOAs erreicht in 614.5s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_tessera_armb.parquet
+
+=== tessera / Arm C ===
+    [tessera/c] Kachel 10/50 verarbeitet (251.7s)
+    [tessera/c] Kachel 20/50 verarbeitet (412.4s)
+    [tessera/c] Kachel 30/50 verarbeitet (448.7s)
+    [tessera/c] Kachel 40/50 verarbeitet (589.2s)
+  [tessera/c] fertig: 4994 LSOAs erreicht in 614.2s
+  LSOAs ganz ohne Treffer (kein Tile-Overlap): 0
+  LSOAs mit 0 Pixeln (alle Pixel im Polygon): 0
+  LSOAs mit 0 Pixeln (partitionsrein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_tessera_armc.parquet

@@ -209,6 +209,33 @@ verlustfrei per `retile_sdm_projected.py` konvertiert (Werte stichprobenartig bi
 verifiziert, keine Neuprojektion). Sanity-Check danach: dieselbe AlphaEarth-Kachel/-Abfrage
 (4.994 Kandidaten-LSOAs), die vorher nach >26h nicht fertig war, brauchte retiled 422,6s.
 
+## SDM-Poolung (Phase 5, INSTRUCTIONS_sdm.md)
+
+Coverage-gewichtetes Mean-Pooling je LSOA per `exactextract` (`["cell_id","coverage"]`,
+identischer Mechanismus wie `spatial_join.py::_join_polygons`). Arm A poolt ueber das rohe
+Backbone-Raster (mit derselben Normalisierung wie ueberall sonst: z-score fuer TESSERA, none
+fuer AE - Konsistenz mit Arm B/C, die schon in Phase 4 normalisiert wurden), Arm B/C ueber das
+projizierte 256-Kanal-Feld aus Phase 4. Zwei Poolungsvarianten in EINEM Durchlauf (dieselben
+exact_extract-Treffer, zwei laufende Summen): partitionsrein (Hauptlauf, nur Pixel aus Zellen,
+deren Split mit dem LSOA-Split uebereinstimmt) und alle Pixel im Polygon (Robustheitscheck).
+Split-Variante B braucht keinen eigenen Poolungslauf (Teilmenge derselben Mehrheits-Zuordnung,
+Vektoren fuer verbleibende LSOAs sind bit-identisch - Filter statt Neuberechnung in Phase 6).
+
+**Re-Normalisierung nach dem Pooling (offene Entscheidung, explizit getroffen):** NEIN, fuer
+alle drei Arme gleich keine erneute L2-Normalisierung. Begruendung: TESSERAs rohe Kanaele sind
+z-score-normiert, nicht L2-normiert - eine nachtraegliche Zwangs-Normierung auf Einheitslaenge
+haette dort keine natuerliche Bedeutung und waere nur fuer AE/B/C (bereits unit-norm) motiviert,
+nicht einheitlich fuer alle drei Arme. Der Phase-6-Vorhersagekopf (MLP+Softmax) verlangt anders
+als der SigLIP-Pretraining-Loss keine Einheitsnorm. Einfacherer Default ohne Not-wendige
+Zusatztransformation - "keine Transformation ohne Grund".
+
+| Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/processed/sdm_pooled_{ae,tessera}_arm{a,b,c}.parquet` (6 Dateien) | `build_sdm_pooled_embeddings.py` | rohe/projizierte EE-Kacheln, `sdm_lsoa_splits_london.csv` (Variante A), `splits_london.csv`, LSOA-Geometrie | 11.9.2026 | aktuell — je 4.994 LSOAs erreicht (= alle), **0 LSOAs mit 0 Pixeln** in JEDER Kombination, in BEIDEN Poolungsvarianten (Spalten `n_pixels_all`/`n_pixels_pure`, `all_0..all_255`/`pure_0..pure_255` bzw. `all_0..all_127`/`pure_0..pure_127` fuer TESSERA-Arm-A, `all_0..all_63`/`pure_0..pure_63` fuer AE-Arm-A). Laufzeiten: ae/a 129s, ae/b 903s, ae/c 955s, tessera/a 1654s, tessera/b 615s, tessera/c 614s (nach dem Retiling-Fix). |
+
+**LSOAs mit 0 Pixeln:** in keiner der 6 Kombinationen, weder "alle Pixel" noch "partitionsrein" -
+passt zur Phase-3-Vorhersage (max_frac nie 0, 5%-Quantil frac_pixels_kept=0,582).
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)
