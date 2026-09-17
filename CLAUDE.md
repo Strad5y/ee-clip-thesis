@@ -20,7 +20,7 @@ Diese Entscheidungen sind settled und stehen in `CLAUDE.md`. Sie gelten für all
 | Normalisierung | z-score für TESSERA-Inputs. AlphaEarth **nicht** normalisieren (bereits unit-norm). |
 | Trainingspaare | Ein Eintrag pro geschnittenem 10-m-Pixel; Coverage-Fraction als Subsampling-Gewicht. |
 | POI-Daten | Long-Format (eine Zeile pro key-value-Tag pro `poi_id`). Tag-Linkage per `poi_id`-Merge **nach** dem Join. |
-| Aktive OSM-Keys | `amenity`, `shop`, `leisure`, `tourism`. `landuse` **nicht** im aktiven Key-Set — läuft komplett über den HILUCS-Crosswalk. |
+| Aktive OSM-Keys | Maßgeblich ist der Code (`build_poi_text.py::KEY_FRAME`/`FRAME_NOUN`), **13 Keys**: `amenity`, `shop`, `leisure`, `tourism`, `building`, `healthcare`, `historic`, `office`, `sport`, `water`, `waterway`, `military`, `natural`. Korrigiert 2026-09-17 — frühere Fassung nannte hier nur 4 Keys, das war nicht mehr der Ist-Stand des Codes. `landuse` **nicht** im aktiven Key-Set — läuft komplett über den HILUCS-Crosswalk. |
 | Multi-Tag | MultiPolygons **nicht** explodieren (sonst Duplikat-Paare). Carry-Columns beim Join dürfen `key`/`value` **nicht** enthalten. |
 | Vergleich | **Kein** direkter Zahlenvergleich gegen publizierte Paper (andere Regionen/Tasks/Splits). Nur Ablation auf eigenen Eval-Tasks: Delta raw ↔ enriched. |
 
