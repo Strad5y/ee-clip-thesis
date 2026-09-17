@@ -335,6 +335,65 @@ BREITER als LSOA-CIs - mittlerer Breitenfaktor (Kachel/LSOA): KL **1,29x**, L1-S
 Chebyshev **1,34x**. Bestaetigt die erwartete raeumliche Autokorrelation zwischen benachbarten
 LSOAs in derselben Zelle - LSOA-Bootstrap unterschaetzt die Unsicherheit systematisch.
 
+## Text-Query-Evaluation, Phase 1 (INSTRUCTIONS_text_query.md)
+
+**Entscheidung (Jakob, 2026-09-17):** Phase 1 rechnet KEINE neuen projizierten 256-d-Felder.
+Wiederverwendet werden unveraendert die bereits bestehenden Arm-C-Felder aus der SDM-Phase 4
+(s.o., `build_sdm_projected_field.py`) - selber Checkpoint, selbe Normalisierung, bereits AOI-
+zugeschnitten. Neu fuer diese Aufgabe: `src/eval/text_query/tiles.py` (Loader, ordnet jede
+Rohkachel ihrem Arm-C-Feld zu, nativ pro Kachel-CRS) und
+`src/eval/text_query/verify_projected_fields.py` (die drei geforderten Pruefungen).
+
+| Datei/Ordner | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/interim/sdm_projected/{ae,tessera}_armc/*_proj256.tif` | `build_sdm_projected_field.py` (SDM Phase 4, s.o., **unveraendert wiederverwendet**) | — | 8.9.2026 | aktuell fuer Text-Query Phase 1 — `checkpoints/ae_v1/best.pt` (Epoche 22), `checkpoints/tessera_v1/best.pt` (Epoche 26) |
+
+**Pruefung 1 (L2-Norm, Stichprobe):** TESSERA 8 Kacheln/4.000 Pixel, AE 2 Kacheln/1.000 Pixel,
+je max. Abweichung von 1,0: **1,19e-07** (Float32-Maschinenepsilon) — bestaetigt, keine neue
+Pruefung noetig (deckt sich mit dem bereits in Phase 4/SDM dokumentierten Wert).
+
+**Pruefung 2 (Reprojektions-Kosinus, 1.000 Pixel/Backbone):** min_cosine TESSERA/AE je
+**0,999999880...**, mean 1,0, 0 von 1.000 unter der Schwelle 0,9999 — **bestanden**, beide
+Backbones. Erster Lauf schlug fehl (min_cosine bis -0,29, 260/1000 unter Schwelle bzw. Abbruch
+bei AE) — Ursache war ein Bug im eigenen Pruefskript (Roh-Pixel wurden am selben (row,col) wie
+im AOI-zugeschnittenen Arm-C-Feld gelesen, ohne den Fenster-Offset aus `project_tile()` zu
+beruecksichtigen), kein Befund ueber die Arm-C-Daten selbst. Fix: Positionen laufen jetzt ueber
+Weltkoordinaten (Arm-C-Transform -> x,y -> Roh-Tile-Transform).
+
+**Pruefung 3 (raeumliche Kachel-Ueberlappung):** empirisch per Punktstichprobe verifiziert, ob
+sich geometrisch ueberlappende Kachel-Footprints auch in ECHTER (nicht-NoData) Datendopplung
+niederschlagen:
+
+- **TESSERA:** 133 von 1.225 moeglichen Kachelpaaren ueberlappen geometrisch, 283,43 km² Gesamt-
+  flaeche. Davon 13 Paare (26,22 km²) **zonenuebergreifend** (32630/32631 — die bereits in
+  `spatial_join.py` dokumentierte, bisher ungeloeste Leakage-Quelle) und **120 Paare (257,21 km²,
+  bisher nirgends dokumentiert) innerhalb derselben Zone** (Nachbarkacheln mit eingebautem
+  Rand-Overlap). Stichprobencheck (1.001 bzw. 500 Punkte) in je einem Beispiel-Paar: **100%**
+  der Punkte haben in BEIDEN Kacheln echte, gueltige Werte — die Ueberlappung ist real, nicht nur
+  ein Bounding-Box-Artefakt.
+  `spatial_join.py::assign_utm_zone()`/`join_pois_to_tiles()` verhindert Dopplung **nur**
+  zonenuebergreifend, und **nur** fuer den POI-Pixel-Join (`pairs_*.parquet` -> `pixels_*.parquet`)
+  — nicht fuer Nachbarkacheln derselben Zone (dafuer existiert ueberhaupt kein Dedup-Mechanismus)
+  und nicht fuer die rohen Arm-C-Felder dieser Aufgabe (`build_sdm_projected_field.py` verarbeitet
+  jede Kachel unabhaengig, ohne Zonenfilter). `build_splits_pixels.py` weist Splits ueber reale
+  Weltkoordinaten (`cell_row`/`cell_col`) zu — zwei Dopplungs-Pixel derselben Position landen daher
+  im selben Split (kein Train/Test-Leck ueber den Split selbst), aber beide Kopien bleiben als
+  separate `(tile,row,col)`-Zeilen im Datensatz bzw. als zwei potenziell abweichende Werte in den
+  Arm-C-Feldern bestehen.
+- **AlphaEarth:** nur 1 Kachelpaar, aber geometrisch riesige Ueberlappung (5.940,41 km² von
+  6.710,89 km² Kachelflaeche, ≈88,5%) — die beiden 8192×8192-Rohkacheln (30N/31N) decken in
+  ihrer vollen Bounding Box fast dieselbe Flaeche ab. Stichprobencheck (2.823 Punkte im
+  Ueberlappungspolygon): nur **0,1%** (2/2.823) haben in BEIDEN Kacheln gueltige (Nicht-NoData)
+  Werte — jede Kachel deckt real nur ihre eigene UTM-Zonen-Haelfte Greater Londons ab, der Rest
+  ist NoData (-128). Die grosse geometrische Bounding-Box-Ueberlappung ist damit fuer AlphaEarth
+  **praktisch folgenlos**.
+
+**Nicht selbst entschieden:** ob/wie die 283,43 km² TESSERA-Kachelueberlappung (v.a. die bisher
+undokumentierten 257,21 km² innerhalb derselben Zone) fuer die Text-Query-Similarity-Karten
+(Phase 2, `similarity.py`) und Ground-Truth-Rasterisierung (Phase 3, `gt.py`) behandelt werden
+soll — z.B. durch Kachel-Prioritaet, Mittelung oder Ausschluss der Randstreifen. Weitergabe an
+Jakob/Kai.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)
