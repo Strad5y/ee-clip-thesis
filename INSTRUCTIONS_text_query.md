@@ -82,18 +82,46 @@ Grund: die Felder benutzen bereits denselben Lade-/Normalisierungs-/Projektionsc
 **STOP.** Berichte die Ergebnisse aller drei Prüfungen (L2-Norm, Reprojektions-Kosinus,
 Kachel-Überlappung).
 
-## Phase 2 — Query-Encoder und Ähnlichkeits-Werkzeug
+## Phase 2 — Masken, Query-Encoder und Ähnlichkeits-Werkzeug
 
+0. **Kachel-Masken (Entscheidung 2026-09-17, Jakob)** — Reaktion auf die in Phase 1 gefundene
+   Kachel-Überlappung (TESSERA 283 km², davon 257 km² innerhalb derselben UTM-Zone; AlphaEarth
+   88,5% Bounding-Box-Überlappung, aber nur ~0,1% echte Valid-Daten-Dopplung). Gilt gleichermaßen
+   für `similarity.py`, `gt.py`, `metrics.py` und `hotspots.py`. Die Arm-C-Embeddings selbst
+   bleiben unverändert — es wird nur eine Maske pro Kachel dazugerechnet.
+   - **Eindeutigkeitsregel:** Jedes gültige Pixel gehört genau der Kachel, deren
+     **Kachelmittelpunkt** (Bounding-Box-Zentrum der ROHEN, unbeschnittenen Kachel, in
+     Weltkoordinaten, bei unterschiedlicher CRS gemeinsam in EPSG:32630 verglichen) seinem
+     Pixelzentrum am nächsten liegt. Bei exaktem Gleichstand gewinnt die Kachel mit dem
+     lexikographisch kleineren Dateinamen. Nur für Pixel relevant, die in einer anderen Kachel
+     ebenfalls gültige Daten haben (Kandidatenermittlung über die Kachel-Bounding-Box-
+     Überlappung aus Phase 1) — sonst ist die Zuordnung ohnehin eindeutig.
+   - **AOI-Prüfung zuerst:** Prüfen, ob die Arm-C-Felder auf das Polygon aus `data/aoi/london.gpkg`
+     oder nur auf dessen Bounding Box zugeschnitten sind (`build_sdm_projected_field.py` nutzt
+     `aoi_geom.bounds` fürs Fenster — voraussichtlich Bounding Box, nicht Polygon; explizit
+     verifizieren).
+   - **AOI-Polygon-Maske:** Pixelzentrum innerhalb des AOI-Polygons (Polygon in das jeweilige
+     Kachel-CRS reprojiziert, per `rasterio.features.rasterize` auf das Kachelraster gebrannt).
+   - **Kombination:** Eindeutigkeitsmaske UND AOI-Polygon-Maske ergeben EINE gespeicherte
+     bool-Maske pro Kachel und Backbone, im exakten Kachelraster (gleiche Shape/Transform/CRS
+     wie das zugehörige Arm-C-GeoTIFF) — `data/interim/text_query_masks/{backbone}/`.
+   - **Prüfung:** Summe der maskierten Pixel entspricht der vereinigten (nicht doppelt gezählten)
+     Fläche; Stichprobe bestätigt, dass kein Weltpunkt doppelt vergeben ist (an keiner
+     Pixelposition sind zwei Kacheln gleichzeitig als "gültig" markiert).
+   - Alle nachfolgenden Kennzahlen (Block A/B/C, Phase 5/6) beziehen sich **nur** auf maskierte
+     Pixel innerhalb des AOI-Polygons.
 1. Lege `src/eval/text_query/encode.py` an: `encode_queries(texts, backbone) -> [n, 256]`, über denselben Encoding-Pfad wie im Training, danach Text-Head und L2-Normalisierung.
    - Ensembling-Funktion: Die Texte werden einzeln kodiert und normalisiert, dann gemittelt und erneut normalisiert.
    - **Pflicht-Check:** 5 Texte aus dem Text-Cache neu kodieren und vor dem Head mit dem Cache vergleichen. Die Kosinus-Ähnlichkeit muss ≥ 0.9999 sein, sonst brichst du ab.
-2. Lege `src/eval/text_query/similarity.py` an: Es erzeugt aus den projizierten Embeddings (Phase 1) und einer Query-Matrix ein mehrbandiges float32-GeoTIFF (ein Band pro Query) im Raster des jeweiligen Backbones.
+2. Lege `src/eval/text_query/similarity.py` an: Es erzeugt aus den projizierten Embeddings (Phase 1) und einer Query-Matrix ein mehrbandiges float32-GeoTIFF (ein Band pro Query) im Raster des jeweiligen Backbones — **maskierte Pixel** (Schritt 0) werden dabei ausgeschlossen (NaN), nicht mitgerechnet.
 3. **Testlauf** mit den reinen Karten-Queries, die schon fest sind:
    - „Green Park and Natural Reserve“ (wörtlich aus AETHER v2)
    - „Central Business District“ (wörtlich aus AETHER v2)
    - „desert“ (Kontrolle)
 
-**STOP.** Berichte das Ergebnis des Pflicht-Checks sowie Minimum, Maximum, Mittelwert und 99. Perzentil pro Band.
+**STOP.** Berichte das Ergebnis des Pflicht-Checks, Minimum/Maximum/Mittelwert/99. Perzentil pro
+Band, sowie pro Backbone die Anzahl gültiger Pixel vor und nach der Maskierung und die
+resultierende Fläche in km².
 
 ## Phase 3 — Werkzeuge für Ground Truth, Kennzahlen, Karten und Hotspots
 
@@ -108,11 +136,20 @@ Alles wird generisch gebaut, damit später nur noch Configs eingesetzt werden m�
    - **AP** über alle gültigen Pixel Londons, ohne Subsampling. Auf 1 Mio. Pixeln gegen `sklearn.metrics.average_precision_score` verifizieren (Abweichung < 1e-6).
    - **Recall@Top-k%** für k ∈ {1, 5, 10}. Schwelle ist das (100−k)-Perzentil. Eine Instanz gilt als gefunden, wenn mindestens eines ihrer Pixel ≥ Schwelle ist.
    - **Zufallsbaseline:** 20 Permutationen der Scores; berichtet werden Mittelwert und Standardabweichung.
-   - **Bootstrap** über die 1-km-Zellen mit B = 200 und 95-%-Perzentil-Intervall. Für AP werden die Pixel der gezogenen Zellen verwendet, für Recall wird jede Instanz der Zelle ihres Zentroids zugeordnet. **Gepaarte Differenzen:** Alle Varianten einer Query verwenden dieselben Resamples.
+   - **Bootstrap** über die 1-km-Zellen mit B = 200 und 95-%-Perzentil-Intervall. **Zellzuordnung
+     (Entscheidung 2026-09-17, Jakob):** jedes Pixel wird über seine Weltkoordinaten derselben
+     Zelle aus `data/splits/splits_london.csv` zugeordnet, exakt wie in `build_splits_pixels.py`
+     (kein neues Gitter, keine eigene Zellgeometrie). Für AP werden die Pixel der gezogenen Zellen
+     verwendet, für Recall wird jede Instanz der Zelle ihres Zentroids zugeordnet. **Gepaarte
+     Differenzen:** Alle Varianten einer Query verwenden dieselben Resamples.
 3. **`maps.py`**
    - Heatmap über ganz London mit der Grenze von Greater London, optional mit OSM-Ground-Truth als Panel daneben.
+   - **Gemeinsames Kartengitter (Entscheidung 2026-09-17, Jakob):** NUR für die Darstellung — nie
+     für Kennzahlen (Phase 3 `metrics.py`, Phase 5/6-Zahlen bleiben auf dem jeweiligen nativen
+     Kachelraster) — werden die bereits maskierten Kacheln auf ein gemeinsames Gitter
+     (EPSG:32630, 50 m, Mittelwert-Resampling) reprojiziert, damit beide Backbones und alle
+     Kacheln in einem Bild darstellbar sind.
    - **Gemeinsame Farbskala:** `vmin` und `vmax` sind das globale 2. und 98. Perzentil über alle Queries und beide Backbones und werden in die Config geschrieben.
-   - Für die Darstellung darf auf 50 m gemittelt werden; das wird vermerkt.
    - Ausgabe als PNG mit 300 dpi.
 4. **`hotspots.py`**
    - Markiert alle Pixel im obersten 1 % einer Query.
