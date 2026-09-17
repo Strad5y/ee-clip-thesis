@@ -388,11 +388,65 @@ niederschlagen:
   ist NoData (-128). Die grosse geometrische Bounding-Box-Ueberlappung ist damit fuer AlphaEarth
   **praktisch folgenlos**.
 
-**Nicht selbst entschieden:** ob/wie die 283,43 km² TESSERA-Kachelueberlappung (v.a. die bisher
-undokumentierten 257,21 km² innerhalb derselben Zone) fuer die Text-Query-Similarity-Karten
-(Phase 2, `similarity.py`) und Ground-Truth-Rasterisierung (Phase 3, `gt.py`) behandelt werden
-soll — z.B. durch Kachel-Prioritaet, Mittelung oder Ausschluss der Randstreifen. Weitergabe an
-Jakob/Kai.
+**Wichtig — betrifft auch die bestehenden Trainingspaare:** die oben beschriebene Ueberlappung
+(283,43 km² TESSERA-Kachelflaeche, davon 257,21 km² innerhalb derselben UTM-Zone; AlphaEarths
+riesige Bounding-Box-Ueberlappung ist dagegen praktisch folgenlos) steckt strukturell auch in
+`pairs_tessera_full.parquet`/`pixels_tessera.parquet` und den daraus abgeleiteten
+Trainingspaaren — `spatial_join.py::assign_utm_zone()` dedupliziert dort NUR den
+zonenuebergreifenden Anteil (26,22 km²), die 257,21 km² innerhalb derselben Zone sind
+ungefiltert enthalten. Diese Dopplung wird hier NUR dokumentiert, NICHT korrigiert (keine
+Aenderung an `pairs_*`/`pixels_*`/Checkpoints) — Entscheidung, ob/wie das fuer das Training
+relevant ist, liegt bei Jakob/Kai, nicht Teil dieser Aufgabe.
+
+**Entscheidung (Jakob, 2026-09-17) fuer die Text-Query-Auswertung:** eigene Eindeutigkeits- und
+AOI-Maske pro Kachel, siehe Abschnitt "Text-Query-Masken (Phase 2)" unten — die Arm-C-Embeddings
+selbst bleiben unveraendert, nur eine zusaetzliche Maskenschicht wird ergaenzt.
+
+## Text-Query-Masken, Phase 2 (INSTRUCTIONS_text_query.md)
+
+**Eindeutigkeitsregel:** ein gueltiges Pixel gehoert der Kachel, deren Kachelmittelpunkt
+(Bounding-Box-Zentrum der ROHEN Kachel, in EPSG:32630 verglichen) seinem Pixelzentrum am
+naechsten liegt; bei exaktem Gleichstand gewinnt die Kachel mit dem lexikographisch kleineren
+Dateinamen. **AOI-Maskierung:** zusaetzlich muss das Pixelzentrum innerhalb des Greater-London-
+Polygons (`data/aoi/london.gpkg`) liegen — verifiziert, dass die Arm-C-Felder nur auf die
+Bounding Box des AOI-Polygons zugeschnitten sind, nicht auf das Polygon selbst (Beispiel-Kachel
+`grid_-0.05_51.25_2025.tiff`: 135.044 laut Arm-C "gueltige" Pixel, aber nur 1.931 davon liegen
+tatsaechlich innerhalb des Polygons — 133.113 sind Bounding-Box-Eckflaechen ausserhalb Greater
+Londons).
+
+| Datei/Ordner | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
+|---|---|---|---|---|
+| `data/interim/text_query_masks/{tessera,ae}/*_mask.tif` | `src/eval/text_query/masks.py` | Arm-C-Felder (Phase 1), `data/aoi/london.gpkg`, Roh-Kachel-Bounds (fuer Kachelmittelpunkte) | 17.9.2026 | aktuell — 1 Byte-GeoTIFF (0/1) pro Kachel, identisches Raster wie das zugehoerige Arm-C-Feld |
+
+**Ergebnis pro Backbone** (gueltige Pixel vor/nach Maskierung, Flaeche bei 100 m²/Pixel):
+
+| Backbone | gueltig vorher | Fläche vorher | gueltig nachher | Fläche nachher |
+|---|---|---|---|---|
+| TESSERA | 28.831.211 | 2.883,12 km² | 15.954.158 | 1.595,42 km² |
+| AlphaEarth | 26.581.324 | 2.658,13 km² | 15.954.033 | 1.595,40 km² |
+
+Beide Backbones landen nach Maskierung auf praktisch identische Flaeche (Differenz 125 Pixel,
+0,00078%) — plausibel, da beide auf dasselbe AOI-Polygon maskiert werden; die minimale
+Restdifferenz kommt aus der unterschiedlichen nativen Rasterausrichtung/Kachelgrenzen der
+beiden Backbones. Referenzwert Greater London (offizielle Flaeche): ≈1.572 km² — die 1.595 km²
+hier sind der AOI-**Polygon**-Flaeche (OSM-Verwaltungsgrenze `admin_level=5`, s. Phase 3 SDM)
+zuzurechnen, keine neue Abweichung.
+
+**Pruefungen:**
+- **Flaechenpruefung** (unabhaengige Berechnung: Vereinigung aller Kachel-Footprints ∩
+  AOI-Polygon, in EPSG:32630): TESSERA 1.595,49 km² vs. maskierte Pixelflaeche 1.595,42 km²
+  (Verhaeltnis 0,99996); AlphaEarth 1.595,49 km² vs. 1.595,40 km² (Verhaeltnis 0,99995) — beide
+  bestanden.
+- **Stichprobe gegen Doppelvergabe:** AlphaEarth 500 Punkte, 0 doppelt vergeben. TESSERA 370
+  Punkte, **2 scheinbar doppelt vergeben** — untersucht: beide Faelle liegen exakt auf der
+  mathematischen Grenzlinie zwischen zwei Kacheln, deren 10-m-Pixelgitter **nicht phasengleich**
+  sind (unabhaengige Downloads, kein gemeinsamer Rasterursprung). Der Punkt aus Kachel A und der
+  von der Pruefung in Kachel B gefundene "naechste" Pixel sind dadurch zwei **verschiedene**
+  reale Orte, nur ca. 5 m auseinander (weniger als eine Pixelbreite) — beide sind, einzeln
+  nachgerechnet, korrekt ihrer jeweils naeheren Kachel zugeordnet. Kein Fehler in der
+  Zuordnungsregel, sondern ein inhaerenter Diskretisierungseffekt am Kachelrand im Bereich von
+  weniger als einer Pixelbreite, quantitativ vernachlaessigbar (bestaetigt durch die
+  Flaechenpruefung oben, die auf 0,004%–0,005% genau aufgeht).
 
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
