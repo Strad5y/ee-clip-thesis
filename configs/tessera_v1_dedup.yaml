@@ -1,0 +1,41 @@
+backbone: tessera
+ablation: v1_dedup   # -> Checkpoint-Ordner checkpoints/tessera_v1_dedup/ (train.py: run_name = backbone_ablation)
+
+ee_dim: 128
+text_dim: 1024
+latent_dim: 256
+hidden_dim: 256
+dropout: 0.1
+
+# Identisch zu configs/tessera_v1.yaml - nur die Daten aendern sich (Hauptaufgabe, 2026-09-18,
+# Jakob: "Trainiere tessera_v1 mit identischer Config, identischem Seed und identischem
+# Early-Stopping-Kriterium auf den deduplizierten Paaren neu. Nur die Daten aendern sich.")
+normalization: zscore
+
+data:
+  # Dedupliziertes pixels_tessera (Eindeutigkeits+AOI-Maske, siehe tessera_dedup_utils.py) -
+  # einzige inhaltliche Aenderung ggue. configs/tessera_v1.yaml. text_embeddings_path
+  # unveraendert: Dedup entfernt nur Zeilen, erzeugt keine neuen pixel_text-Werte - der
+  # bestehende Cache deckt die deduplizierte Teilmenge vollstaendig ab (PairDataset prueft
+  # das ohnehin hart, siehe dataset.py).
+  pixels_path: data/processed/pixels_tessera_dedup.parquet
+  text_embeddings_path: data/processed/pixel_text_embeddings.parquet
+  # NEUER Pfad (nicht norm_stats_tessera_pixels.json ueberschreiben) - wird frisch auf dem
+  # deduplizierten Trainings-Split gefittet (train.py::apply_normalization fitted immer neu,
+  # dieser Pfad ist nur das Speicherziel fuer spaetere Eval-Laeufe mit diesem Checkpoint).
+  norm_stats_path: data/processed/norm_stats_tessera_pixels_dedup.json
+
+train:
+  batch_size: 256
+  lr: 3.0e-4   # identisch zu tessera_v1.yaml - siehe dortige Begruendung (LR-Sweep)
+  weight_decay: 0.01
+  epochs: 100
+  patience: 10
+  early_stopping_metric: recall@10_diag
+  device: cuda
+  temp_guard: 50.0
+  num_workers: 0
+
+loss:
+  init_t: 10.0
+  init_b: -10.0
