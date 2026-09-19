@@ -1,0 +1,43 @@
+=== run_class_retrieval_tessera_v1dedup.py gestartet ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/class_retrieval_tessera_v1_dedup_20260919_134544.log
+Device: cuda
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+
+--- Galerie: Klassenmenge je Pixel ---
+  238139 eindeutige Texte geparst (1.8s), 77276 unaufloesbare Einheiten insgesamt (siehe Bericht).
+  Test-Split: 728865 Pixel
+  Klassenanzahl je Test-Pixel: median=1.0 p90=2.0 max=8
+
+--- EO-Embeddings laden, normalisieren, projizieren ---
+Normalisierung: zscore, Statistik geladen aus data/processed/norm_stats_tessera_pixels_dedup.json
+  Galeriegroesse: 728865 Pixel, 256 Dim
+
+--- Queries: Klassen mit >= 100 relevanten Test-Pixeln ---
+  Klassen insgesamt (>=1 Pixel): 463
+  Queries (>= 100 relevante Pixel): 186
+
+--- Query-Texte einbetten ---
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  80%|#######9  | 318/398 [00:00<00:00, 3173.76it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 3197.13it/s]
+  186 Queries eingebettet (49.0s)
+
+--- Relevanz-Membership-Matrix ---
+
+--- Kosinus-Ranking ---
+
+Gespeichert: data/processed/class_retrieval_tessera_v1_dedup.csv
+
+=== Makro-Mittelwerte (186 Queries) ===
+p_at_10                            0.073656
+p_at_50                            0.074946
+p_at_100                           0.074624
+r_precision                        0.049425
+average_precision                  0.035339
+random_baseline                    0.007579
+p_at_10_random_actual              0.007527
+p_at_50_random_actual              0.007634
+p_at_100_random_actual             0.007204
+r_precision_random_actual          0.007654
+average_precision_random_actual    0.007598
+
+Gesamtlaufzeit: 1.7 min

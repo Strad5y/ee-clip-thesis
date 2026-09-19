@@ -1,0 +1,106 @@
+=== run_retrieval_baselines_tessera_v1dedup.py gestartet ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/retrieval_baselines_tessera_v1_dedup_20260919_134250.log
+Device: cuda
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+Alignment-Check OK: primary_key aus unabhaengigem Read stimmt fuer alle 7268807 Zeilen mit ds.primary_key ueberein.
+Normalisierung: zscore, Statistik geladen aus data/processed/norm_stats_tessera_pixels_dedup.json
+
+Val: 742439 Zeilen, Test: 728865 Zeilen
+
+primary_key (Test): 728865 Zeilen, 0 (0.0000%) mit leerem Label (aus Mittel ausgeschlossen), 13 unterschiedliche Klassen unter den restlichen 728865.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure                        n=   251544  34.5117%
+    natural                        n=   184287  25.2841%
+    building                       n=   177647  24.3731%
+    amenity                        n=    98138  13.4645%
+    shop                           n=     7170  0.9837%
+    historic                       n=     3279  0.4499%
+    tourism                        n=     2669  0.3662%
+    sport                          n=     2090  0.2867%
+    office                         n=     1554  0.2132%
+    military                       n=      207  0.0284%
+    healthcare                     n=      148  0.0203%
+    water                          n=      104  0.0143%
+    waterway                       n=       28  0.0038%
+
+primary_value (Test): 728865 Zeilen, 0 (0.0000%) mit leerem Label (aus Mittel ausgeschlossen), 392 unterschiedliche Klassen unter den restlichen 728865.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure=park                   n=   152630  20.9408%
+    natural=wood                   n=    94272  12.9341%
+    building=house                 n=    72733  9.9789%
+    natural=water                  n=    50606  6.9431%
+    leisure=golf course            n=    47660  6.5389%
+    amenity=school                 n=    43660  5.9901%
+    building=apartments            n=    29926  4.1058%
+    leisure=garden                 n=    22683  3.1121%
+    amenity=parking                n=    19294  2.6471%
+    building=residential           n=    19026  2.6104%
+    natural=scrub                  n=    18152  2.4904%
+    building=terrace               n=    17713  2.4302%
+    natural=wetland                n=    10368  1.4225%
+    leisure=pitch                  n=     9117  1.2508%
+    amenity=hospital               n=     8982  1.2323%
+
+Test-Auswertung fertig (30.0s)
+
+=== TEST ===
+
+  [all] n=728865
+    Modell        recall@1_diag=0.1564  recall@10_diag=0.5058
+    Ceiling       ceil@1_diag=0.6078  ceil@10_diag=0.9512
+    Ausschoepfung @1=0.2573  @10=0.5317
+    class_recall@10   Key=0.8545  Value=0.7286
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9158+-0.0019  Value=0.5229+-0.0016
+    Haeufigkeitsniveau class_recall@10  Key=0.9996  Value=0.7580
+
+  [single] n=480183
+    Modell        recall@1_diag=0.1518  recall@10_diag=0.5310
+    Ceiling       ceil@1_diag=0.5386  ceil@10_diag=0.9305
+    Ausschoepfung @1=0.2818  @10=0.5706
+    class_recall@10   Key=0.8627  Value=0.7351
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9166+-0.0019  Value=0.5102+-0.0016
+    Haeufigkeitsniveau class_recall@10  Key=0.9997  Value=0.7385
+
+  [multi] n=248682
+    Modell        recall@1_diag=0.1652  recall@10_diag=0.4570
+    Ceiling       ceil@1_diag=0.7415  ceil@10_diag=0.9912
+    Ausschoepfung @1=0.2229  @10=0.4611
+    class_recall@10   Key=0.8387  Value=0.7159
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9142+-0.0021  Value=0.5475+-0.0022
+    Haeufigkeitsniveau class_recall@10  Key=0.9994  Value=0.7958
+
+Val-Auswertung fertig (30.9s)
+
+=== VAL ===
+
+  [all] n=742439
+    Modell        recall@1_diag=0.1516  recall@10_diag=0.4712
+    Ceiling       ceil@1_diag=0.6024  ceil@10_diag=0.9409
+    Ausschoepfung @1=0.2517  @10=0.5008
+    class_recall@10   Key=0.8469  Value=0.7138
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9150+-0.0017  Value=0.5325+-0.0016
+    Haeufigkeitsniveau class_recall@10  Key=0.9998  Value=0.7556
+
+  [single] n=470470
+    Modell        recall@1_diag=0.1445  recall@10_diag=0.4995
+    Ceiling       ceil@1_diag=0.5194  ceil@10_diag=0.9178
+    Ausschoepfung @1=0.2783  @10=0.5443
+    class_recall@10   Key=0.8548  Value=0.7171
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9135+-0.0018  Value=0.5119+-0.0016
+    Haeufigkeitsniveau class_recall@10  Key=0.9999  Value=0.7478
+
+  [multi] n=271969
+    Modell        recall@1_diag=0.1638  recall@10_diag=0.4223
+    Ceiling       ceil@1_diag=0.7459  ceil@10_diag=0.9809
+    Ausschoepfung @1=0.2196  @10=0.4306
+    class_recall@10   Key=0.8332  Value=0.7081
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9176+-0.0017  Value=0.5681+-0.0020
+    Haeufigkeitsniveau class_recall@10  Key=0.9997  Value=0.7691
+
+Ergebnistabelle gespeichert: data/processed/retrieval_baselines_tessera_v1_dedup.csv
