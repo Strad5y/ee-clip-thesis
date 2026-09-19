@@ -34,6 +34,22 @@ e1e8a62450a15f55aed0639f613d1d5f  data/processed/sdm_phase6_baselines_dedup.csv
 # zu data/splits/splits_london.csv, siehe Bericht Schritt 1.
 6736022f5733ca8af11b0c9efd2c0489  data/processed/diag_splits_rebuild_dedup_comparison.csv
 
+=== Nachtrag (Ergaenzung 2026-09-19 17:45): Seitenuntersuchungen (methodische Diagnosen, nicht in Schritt-1-3-Berichten zitiert, auf Jakobs Wunsch dennoch gesichert) ===
+# Geo-Alignment-Diagnose TESSERA-vs-AE (Commit 1a03a7d) und SDM-Pooling-Reihenfolge-/
+# Seed-Varianz-Hypothesentests (Commit 32b5d38) - eigenstaendige Nebenuntersuchungen aus
+# derselben Zeitspanne wie diese Aufgabe, aber nicht Teil der Schritt-1-3-Zahlen oben.
+c97301deda393834a2c13c644a9c4bc7  data/processed/diag_knn_info_loss.csv
+8da8b434b417d5b2fd4187f1f373f0f0  data/processed/diag_offset_test_ae.csv
+f0cc9b62c75e8edaeeb2efc733ec5d9c  data/processed/diag_offset_test_tessera.csv
+301485f696e23b3554ebb6fbf2207f45  data/processed/diag_utm_zone_consistency.csv
+02f4118970c011321b0e50052d111547  data/processed/diag_sdm_reversed_cosine_ae_all.csv
+e80a251cff1230d3c077630ef4460318  data/processed/diag_sdm_reversed_cosine_ae_pure.csv
+9107d6729182bd399294dd3193b329e4  data/processed/diag_sdm_reversed_cosine_tessera_all.csv
+7b9de9f04ace3ca8dbfc845dfc26774e  data/processed/diag_sdm_reversed_cosine_tessera_pure.csv
+0f8e8d073d0c10053a21ac20d26fabea  data/processed/sdm_phase6_head_results_reversed.csv
+02abe220c1c098e57130cb49d49531c8  data/processed/sdm_phase7_metrics_reversed.csv
+0ac789482f294899112fc2621016e124  data/processed/diag_sdm_seed_variance_arm_a_c.csv
+
 === Referenzdateien (Alt-Seite der Vergleiche, nicht Teil dieser Aufgabe, aus frueheren Sitzungen) ===
 97bc3c0a94a7c0f2ee7e7a09e4e45787  checkpoints/tessera_v1/best.pt
 1bf31ace8569580a9ba26c906fc92c0f  data/processed/retrieval_baselines_tessera_v1.csv
@@ -62,3 +78,16 @@ results/sdm_paired_bootstrap_tessera_v1dedup_c_minus_a.csv  <- Original: data/pr
 results/diag_splits_rebuild_dedup_comparison.csv  <- Original: data/processed/diag_splits_rebuild_dedup_comparison.csv (md5 6736022f5733ca8af11b0c9efd2c0489)
 results/norm_stats_tessera_pixels_dedup.json  <- Original: data/processed/norm_stats_tessera_pixels_dedup.json (md5 86ffca414b320f25632631204e55807e)
 results/norm_stats_tessera_pixels_predup_control.json  <- Original: data/processed/norm_stats_tessera_pixels_predup_control.json (md5 fb62b6dc3420ca97d2290bdbd2bbb5c8)
+
+=== Nachtrag (Ergaenzung 2026-09-19 17:45): Kopien der Seitenuntersuchungen nach results/ ===
+results/diag_knn_info_loss.csv  <- Original: data/processed/diag_knn_info_loss.csv (md5 c97301deda393834a2c13c644a9c4bc7)
+results/diag_offset_test_ae.csv  <- Original: data/processed/diag_offset_test_ae.csv (md5 8da8b434b417d5b2fd4187f1f373f0f0)
+results/diag_offset_test_tessera.csv  <- Original: data/processed/diag_offset_test_tessera.csv (md5 f0cc9b62c75e8edaeeb2efc733ec5d9c)
+results/diag_utm_zone_consistency.csv  <- Original: data/processed/diag_utm_zone_consistency.csv (md5 301485f696e23b3554ebb6fbf2207f45)
+results/diag_sdm_reversed_cosine_ae_all.csv  <- Original: data/processed/diag_sdm_reversed_cosine_ae_all.csv (md5 02f4118970c011321b0e50052d111547)
+results/diag_sdm_reversed_cosine_ae_pure.csv  <- Original: data/processed/diag_sdm_reversed_cosine_ae_pure.csv (md5 e80a251cff1230d3c077630ef4460318)
+results/diag_sdm_reversed_cosine_tessera_all.csv  <- Original: data/processed/diag_sdm_reversed_cosine_tessera_all.csv (md5 9107d6729182bd399294dd3193b329e4)
+results/diag_sdm_reversed_cosine_tessera_pure.csv  <- Original: data/processed/diag_sdm_reversed_cosine_tessera_pure.csv (md5 7b9de9f04ace3ca8dbfc845dfc26774e)
+results/sdm_phase6_head_results_reversed.csv  <- Original: data/processed/sdm_phase6_head_results_reversed.csv (md5 0f8e8d073d0c10053a21ac20d26fabea)
+results/sdm_phase7_metrics_reversed.csv  <- Original: data/processed/sdm_phase7_metrics_reversed.csv (md5 02abe220c1c098e57130cb49d49531c8)
+results/diag_sdm_seed_variance_arm_a_c.csv  <- Original: data/processed/diag_sdm_seed_variance_arm_a_c.csv (md5 0ac789482f294899112fc2621016e124)
