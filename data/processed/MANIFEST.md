@@ -448,6 +448,101 @@ zuzurechnen, keine neue Abweichung.
   weniger als einer Pixelbreite, quantitativ vernachlaessigbar (bestaetigt durch die
   Flaechenpruefung oben, die auf 0,004%–0,005% genau aufgeht).
 
+## TESSERA-Vollständige-Dedup: Ursache, Regel, Artefakte (Schritt 1, Hauptaufgabe 2026-09-18)
+
+**Ursache:** TESSERA-Rohkacheln überlappen sich flächenmäßig (Phase 2 der Text-Query-Aufgabe,
+siehe Abschnitt "Text-Query-Masken, Phase 2" oben) — insgesamt ≈283 km², davon ≈257 km²
+**innerhalb derselben UTM-Zone** (bis dahin unbekannt/undokumentiert, weil die Kachel-Footprint-
+Prüfung dort nur zonenübergreifende Überlappung [30N/31N, ≈26 km²] betrachtet hatte) sowie die
+bereits bekannten ≈26 km² zonenübergreifend. Grund: unabhängig heruntergeladene, nicht
+phasengleiche 10-m-Rohkachel-Grids. Governing-Prinzip (Jakob): "Jeder Weltort existiert in
+jedem TESSERA-Datensatz genau einmal" — betrifft alle drei zentralen TESSERA-Pixel-/Paar-
+Tabellen (`pairs_tessera_full`, `pixels_tessera`, `landuse_pairs_tessera`), nicht nur die
+Text-Query-Arm-C-Felder, für die die Maske ursprünglich gebaut wurde.
+
+**Eindeutigkeitsregel** (identisch zu Phase 2 oben, hier auf Pixel-/Paar-Tabellenebene
+angewendet statt auf Rasterfelder): ein Pixel gehört der Kachel, deren Rohkachel-Bounding-Box-
+Mittelpunkt (in EPSG:32630) seinem Pixelzentrum am nächsten liegt; Tie-Break über den
+lexikographisch kleineren Dateinamen. Zusätzlich muss das Pixelzentrum innerhalb des Greater-
+London-AOI-Polygons liegen (nicht nur dessen Bounding Box).
+
+**Restauflösung über Weltkoordinaten** (`tessera_dedup_utils.py::resolve_residual_duplicates()`):
+die beiden Masken werden JE KACHEL unabhängig berechnet — an der exakten mathematischen
+Kachelgrenze können deshalb zwei verschiedene reale Orte (nur wenige Meter auseinander, unter
+einer Pixelbreite, wegen nicht-phasengleicher Grids) BEIDE als "gültig" markiert werden, weil
+jede Maske nur ihre eigene Kachel sieht (identischer Diskretisierungseffekt wie in Phase 2,
+Zeile 440–449 oben, dort mit 2 von 370 Stichprobenpunkten quantifiziert). Fix: iterativer
+zweiter Schritt, der `find_duplicate_rows()` (siehe `check_tile_overlap_side_effects.py`) direkt
+auf den bereits primär gemaskten Zeilen paarweise über Weltkoordinaten erneut anwendet und die
+laut Eindeutigkeitsregel unterlegene Zeile entfernt, bis 0 Dopplungen verbleiben (konvergierte
+in allen drei Fällen nach 2 Runden).
+
+**Betroffene Artefakte (Zeilen vorher → nachher):**
+
+| Datei | Vorher | Nachher | Entfernt | Anteil |
+|---|---|---|---|---|
+| `pairs_tessera_full_dedup.parquet` | 15.093.377 | 13.553.817 | 1.539.560 | 10,20% |
+| `pixels_tessera_dedup.parquet` | 8.257.024 | 7.268.807 | 988.217 | 11,97% |
+| `landuse_pairs_tessera_dedup.parquet` | 4.417.428 | 4.359.468 | 57.960 | 1,31% (netto — die primäre Maske entfernt VOR der bestehenden Max-Coverage-Sampling-Deckelung [max 100 Pixel/Polygon], die ohnehin viele der betroffenen Zeilen entfernt hätte; brutto vor Sampling: 1.547.169 primär + 5.122 Restauflösung von 21.016.428 Pixel-Polygon-Zeilen) |
+
+Alle drei Dateien: **0 verbleibende Dopplungs-Weltorte** nach Verifikation. `pairs_tessera_full`
+und `landuse_pairs_tessera` durchliefen je einen eigenen, 2-Runden-Restauflösungsschritt
+(3.258 bzw. 5.122 zusätzlich entfernte Zeilen); `pixels_tessera_dedup` wird direkt aus dem
+bereits dedupliierten `pairs_tessera_full_dedup` aggregiert (`aggregate_pixel_pairs.py`,
+unverändert) und brauchte keinen eigenen Restauflösungsschritt.
+
+**Nebenbefund (`diag_removal_rate_breakdown.py`): 5,14% der ursprünglichen,
+undeduplizierten `pixels_tessera.parquet`-Zeilen lagen außerhalb des Greater-London-AOI-
+Polygons.** Zerlegung der 988.217 aus `pixels_tessera` entfernten Zeilen:
+
+| Ursache | Zeilen | Anteil an allen | Anteil an Entfernten |
+|---|---|---|---|
+| Eindeutigkeitsmaske (innerhalb AOI, aber nicht nächste Kachel) | 561.759 | 6,80% | 56,8% |
+| **AOI-Polygon-Maske (außerhalb Greater London)** | **424.795** | **5,14%** | **43,0%** |
+| Restauflösung (Grenzlinien-Rest) | 1.663 | 0,02% | 0,2% |
+
+Die 424.795 Zeilen liegen unabhängig von jeder Eindeutigkeitsfrage außerhalb des Polygons —
+das heißt, das **alte, undeduplizierte** `pixels_tessera.parquet` enthielt bereits vor jeglicher
+Kachel-Überlappungs-Korrektur Trainingspaare außerhalb der eigentlichen Studienregion.
+Wahrscheinliche Ursache: die POI-Extraktion nutzte vermutlich die Geofabrik-PBF-
+Bounding-Box statt der präzisen `admin_level=5`-Verwaltungsgrenze (dieselbe Grenze, die auch
+als AOI-Polygon in dieser Aufgabe verwendet wird) — nicht unabhängig re-verifiziert, plausibelste
+Erklärung angesichts des Musters (viele Zeilen knapp aber eindeutig außerhalb eines rechteckigen
+Bereichs um die eigentliche Polygongrenze).
+
+**Splits-Rebuild** (`check_splits_rebuild_dedup.py`, `SEED=0`, unverändert gegenüber
+`build_splits.py`): Vereinigung aus `pixels_tessera_dedup` (1.723 Zellen) und unverändertem
+`pixels_ae` (1.818 Zellen) ergibt dieselben 1.818 distinkten 1-km-Zellen wie das bestehende
+`data/splits/splits_london.csv` — **0 Zellen nur in einer der beiden Mengen, 0/1.818 Zellen mit
+abweichendem Split**. Erwartbar: Dedup entfernt Pixel innerhalb bestehender Zellen, eliminiert
+aber keine ganze Zelle — die Zellmenge (und damit die Seed-0-Permutation) bleibt unverändert.
+
+**`verify_provenance.py`** blieb nach dem Dedup unverändert grün (prüft die alten, unangetasteten
+Dateien). Zusätzlich manuell `verify_pair()` gegen die neuen `_dedup`-Dateien aufgerufen:
+konsistent (1.916.851 gemeinsame Pixel).
+
+**AlphaEarth ist von diesem gesamten Schritt 1 (und auch Schritt 2/3) NICHT betroffen** — es
+bleibt bei den bisherigen, undeduplizierten `pixels_ae`/`pairs_ae_full`/`landuse_pairs_ae`.
+AlphaEarths eigene Kachel-Überlappung (≈5.940 km² Bounding-Box-Overlap, aber nur ≈0,1% echter
+Dual-valid-Data-Overlap, siehe frühere Diagnose) wurde in dieser Aufgabe **nicht** bearbeitet.
+**Alle TESSERA-vs-AlphaEarth-Backbone-Vergleiche in Schritt 3 (Retrieval, Land-Use, SDM) sind
+deshalb weiterhin nicht direkt vergleichbar** — TESSERA-Zahlen beruhen auf deduplizierten,
+AlphaEarth-Zahlen auf undeduplizierten Daten. Ein direkter Backbone-Vergleich TESSERA-dedup vs.
+AlphaEarth ist erst nach einer analogen AlphaEarth-Dedup-Runde methodisch sauber möglich.
+
+## TESSERA-Vollständige-Dedup: Auswertungen mit neuem Checkpoint (Schritt 3, Hauptaufgabe 2026-09-19)
+
+Vollständige Zahlen (Retrieval, Land-Use-Probe inkl. Zellebenen-Bootstrap, Class-Retrieval inkl.
+Duplikat-Befund, SDM Arm-C-Neuauswertung inkl. gepaartem Bootstrap), jeweils mit Baseline,
+Konfidenzintervall und Quelldatei: **`results/tessera_dedup_summary.md`** (nicht hier dupliziert,
+um Divergenz zwischen zwei Kopien derselben Zahlen zu vermeiden). Zugrundeliegende Skripte:
+`run_retrieval_baselines_tessera_v1dedup.py`, `build_landuse_pixel_cells_tessera_dedup.py`,
+`run_landuse_probe_tessera_v1dedup.py`, `check_class_retrieval_duplicates.py`,
+`run_class_retrieval_tessera_v1dedup.py`, `build_sdm_arm_c_tessera_v1dedup.py`,
+`build_sdm_phase7_metrics_tessera_v1dedup.py` (alle committet). Der Land-Use-Zellebenen-Bootstrap
+nutzt einen Fix (`run_landuse_probe.py::test_bootstrap_by_cell()`), der bereits als uncommittete
+Vorarbeit vorlag und in dieser Aufgabe committet und für den neuen Checkpoint angewendet wurde.
+
 ## TESSERA-Vollständige-Dedup: Training (Schritt 2, Hauptaufgabe 2026-09-18/19)
 
 **Der Alt-Neu-Vergleich `checkpoints/tessera_v1` (0,4581) vs. `tessera_v1_dedup` (0,4712) war
