@@ -1,0 +1,33 @@
+md5-Checksummen gesammelt: 2026-09-19 17:30:22 +0200
+Gerechnet mit: md5sum, Host spark-d114, Repo /home/minorai/PycharmProjects/ee-clip-thesis
+
+=== Ergebnisdateien dieser Aufgabe (TESSERA-Vollstaendige-Dedup, Schritt 1-3) ===
+8978927ee04a32e13187a4d21ebe82f6  data/processed/pairs_tessera_full_dedup.parquet
+68c27e33c74d8515288e3ab168e37249  data/processed/pixels_tessera_dedup.parquet
+a8f98a9d0cbf8d5c19d50a6ab5e3cb0a  data/processed/landuse_pairs_tessera_dedup.parquet
+1dbf8d47d8ad28b1ff1c43b3193255cf  data/processed/landuse_pixel_cells_tessera_dedup.parquet
+86ffca414b320f25632631204e55807e  data/processed/norm_stats_tessera_pixels_dedup.json
+fb62b6dc3420ca97d2290bdbd2bbb5c8  data/processed/norm_stats_tessera_pixels_predup_control.json
+5278d100a5d5d08e904e3c3ca6caf7b7  checkpoints/tessera_v1_dedup/best.pt
+60e9539d5c691783b332fb8a7f94a8f0  checkpoints/tessera_v1_dedup/last.pt
+bcf9b3a83c327a61c5c972d0be70b2f5  checkpoints/tessera_v1_predup_control/best.pt
+9847def9b1c5560e3f475b41065e2feb  checkpoints/tessera_v1_predup_control/last.pt
+c385f4cab371e40b477621f3b602a61f  data/processed/retrieval_baselines_tessera_v1_dedup.csv
+947ad6fd83042a03476366b468e550f7  data/processed/landuse_probe_results_tessera_dedup_ckpt.csv
+d4ca4ec53f80f725e338aa66237000b8  data/processed/landuse_probe_cell_bootstrap_tessera_dedup_ckpt.csv
+0afa2c5b41c92fc7022e298f71229614  data/processed/landuse_probe_paired_diff_cell_tessera_dedup_ckpt.csv
+0b1036633213a3da953d6e6d9405b7ae  data/processed/class_retrieval_tessera_v1_dedup.csv
+094d65d755491cf1cf04ea14fb66f2db  data/processed/sdm_pooled_tessera_armc_v1dedup_ckpt.parquet
+20138c1f01dd4c3ba6f1e4694e1b354c  data/processed/sdm_phase7_metrics_tessera_v1dedup.csv
+8126c2ea1adab4ee04aec5d5623b2fd2  data/processed/sdm_paired_bootstrap_tessera_v1dedup_c_minus_a.csv
+
+=== Referenzdateien (Alt-Seite der Vergleiche, nicht Teil dieser Aufgabe, aus frueheren Sitzungen) ===
+97bc3c0a94a7c0f2ee7e7a09e4e45787  checkpoints/tessera_v1/best.pt
+1bf31ace8569580a9ba26c906fc92c0f  data/processed/retrieval_baselines_tessera_v1.csv
+cab7d2959fb60ff6a8cb48bdf01a3139  data/processed/class_retrieval_tessera.csv
+cfcfce569dd7f775fd6d44d08764547d  data/processed/landuse_probe_results_tessera_dedup.csv
+b5dc6c337e2112f3e2d30130fec18829  data/processed/sdm_phase7_metrics.csv
+7596340e54e8276d2cc1d4f3b71ad2d3  data/processed/sdm_phase7_metrics_dedup.csv
+032ee92d8991045bae51cae10bd5bcee  data/processed/sdm_pooled_tessera_arma_dedup.parquet
+67e34cd154580bd340068135f177b5cf  data/processed/pixels_tessera.parquet
+68c27e33c74d8515288e3ab168e37249  data/processed/pixels_tessera_dedup.parquet
