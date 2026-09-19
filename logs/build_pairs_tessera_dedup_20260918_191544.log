@@ -1,0 +1,16 @@
+Lade /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pairs_tessera_full.parquet...
+  15093377 Zeilen
+Baue volle Kachel-Masken (Eindeutigkeit + AOI-Polygon)...
+  Nach primaerer Maskierung: 13557075 Zeilen
+
+Zweiter Auflösungsschritt (Grenzlinien-Rest zwischen unabhaengigen Masken)...
+  3258 Zeilen in 2 Runde(n) zusaetzlich entfernt (Grenzlinien-Rest, siehe tessera_dedup_utils.py-Docstring)
+
+Zeilen vorher: 15093377
+Zeilen nachher: 13553817
+Entfernt gesamt: 1539560 (10.20%)
+
+Verifikation: verbleibende Dopplungen (Soll: 0)...
+  Verbleibende Dopplungs-Weltorte: 0 (Soll: 0)
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pairs_tessera_full_dedup.parquet

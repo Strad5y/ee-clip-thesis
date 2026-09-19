@@ -1,0 +1,49 @@
+=== Konfigurationen aufbauen (roh/zufaellig/trainiert) ===
+  tessera_dedup: 4359468 -> 4358064 Zeilen (-1404: 1136 Klasse 12400, 268 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/tessera_v1_dedup.yaml): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/tessera_v1_dedup/best.pt, Epoche 48)
+  Normalisierung (trainiert, aus Checkpoint-Config): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+
+=== Punktschaetzung (C-Grid-Suche) ===
+
+=== tessera_dedup_roh === train=3528644 val=412565 test=416855 dim=128
+  C=0.1: val_macro_f1=0.2400 val_oa=0.6071 test_macro_f1=0.2513 test_oa=0.6044 (404.4s)
+  C=1.0: val_macro_f1=0.2400 val_oa=0.6071 test_macro_f1=0.2510 test_oa=0.6043 (350.8s)
+  C=10.0: val_macro_f1=0.2406 val_oa=0.6071 test_macro_f1=0.2511 test_oa=0.6042 (341.6s)
+
+=== tessera_dedup_zufaellig_projiziert === train=3528644 val=412565 test=416855 dim=256
+  C=0.1: val_macro_f1=0.2197 val_oa=0.6013 test_macro_f1=0.2312 test_oa=0.5992 (234.1s)
+  C=1.0: val_macro_f1=0.2271 val_oa=0.6016 test_macro_f1=0.2375 test_oa=0.6001 (237.6s)
+  C=10.0: val_macro_f1=0.2297 val_oa=0.6011 test_macro_f1=0.2397 test_oa=0.5993 (252.8s)
+
+=== tessera_dedup_trainiert_projiziert === train=3528644 val=412565 test=416855 dim=256
+  C=0.1: val_macro_f1=0.2439 val_oa=0.6142 test_macro_f1=0.2523 test_oa=0.6162 (184.0s)
+  C=1.0: val_macro_f1=0.2497 val_oa=0.6141 test_macro_f1=0.2531 test_oa=0.6160 (191.3s)
+  C=10.0: val_macro_f1=0.2515 val_oa=0.6138 test_macro_f1=0.2532 test_oa=0.6158 (175.3s)
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_results_tessera_dedup_ckpt.csv
+                            config  dim    C   val_oa  val_macro_f1  test_oa  test_macro_f1
+                 tessera_dedup_roh  128 10.0 0.607087      0.240552 0.604241       0.251070
+tessera_dedup_zufaellig_projiziert  256 10.0 0.601100      0.229718 0.599321       0.239662
+tessera_dedup_trainiert_projiziert  256 10.0 0.613784      0.251514 0.615816       0.253223
+
+=== Zellzuordnung Testpixel laden ===
+  416855 Testpixel, 167 eindeutige Zellen
+
+=== Zellebenen-Bootstrap (Test, 1000x) ===
+  tessera_dedup_roh: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6035+-0.0128, test_macro_f1=0.2479+-0.0116)
+  tessera_dedup_zufaellig_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.5986+-0.0132, test_macro_f1=0.2371+-0.0111)
+  tessera_dedup_trainiert_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6151+-0.0128, test_macro_f1=0.2501+-0.0097)
+                            config   metric     mean   ci_low  ci_high
+                 tessera_dedup_roh       oa 0.603545 0.580348 0.628741
+                 tessera_dedup_roh macro_f1 0.247853 0.222553 0.272251
+tessera_dedup_zufaellig_projiziert       oa 0.598581 0.574895 0.624855
+tessera_dedup_zufaellig_projiziert macro_f1 0.237101 0.215655 0.260699
+tessera_dedup_trainiert_projiziert       oa 0.615145 0.592125 0.640172
+tessera_dedup_trainiert_projiziert macro_f1 0.250108 0.229391 0.268081
+
+=== Gepaarter Zellebenen-Bootstrap (trainiert - roh) ===
+     backbone   metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+tessera_dedup macro_f1                       0.002255  -0.010545    0.012077        False
+tessera_dedup       oa                       0.011600   0.008737    0.014477         True

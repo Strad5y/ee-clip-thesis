@@ -1,0 +1,13 @@
+AOI-UTM-CRS: EPSG:32630, minx=672920.2, miny=5685642.4
+  tessera: 7268807 Pixel -> 1723 Zellen
+  ae: 7664167 Pixel -> 1818 Zellen
+
+Vereinigung (neu): 1818 distinkte Zellen (SEED=0)
+Bestehende Datei: 1818 Zellen
+
+Zellen nur in NEUER Vereinigung (nicht in altem splits_london.csv): 0
+Zellen nur in ALTER splits_london.csv (im neuen Pixelbestand nicht mehr vorhanden): 0
+Zellen in BEIDEN, aber mit ABWEICHENDEM Split: 0/1818 (0.00%)
+Zellen in BEIDEN mit GLEICHEM Split: 1818/1818
+
+Gespeichert (nur zur Dokumentation, ersetzt data/splits/splits_london.csv NICHT): /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/diag_splits_rebuild_dedup_comparison.csv
