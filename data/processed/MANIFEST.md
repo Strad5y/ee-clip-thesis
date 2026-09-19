@@ -448,6 +448,99 @@ zuzurechnen, keine neue Abweichung.
   weniger als einer Pixelbreite, quantitativ vernachlaessigbar (bestaetigt durch die
   Flaechenpruefung oben, die auf 0,004%–0,005% genau aufgeht).
 
+## TESSERA-Vollständige-Dedup: Training (Schritt 2, Hauptaufgabe 2026-09-18/19)
+
+**Der Alt-Neu-Vergleich `checkpoints/tessera_v1` (0,4581) vs. `tessera_v1_dedup` (0,4712) war
+NICHT belastbar** (Jakob, 2026-09-19, korrekt erkannt): der Dedup-Lauf hatte MEHR
+Trainingszeilen (5.797.503) als der ursprünglich als Vergleichsbasis herangezogene alte
+Log-Wert (4.105.455), obwohl Dedup nur entfernen kann. Deshalb ein Kontrolllauf
+(`tessera_v1_predup_control`): identische Config/identischer `torch.manual_seed(0)` wie
+`tessera_v1_dedup`, aber auf der **unveränderten, undeduplizierten** `pixels_tessera.parquet`.
+Kontroll- und Dedup-Lauf unterscheiden sich dadurch **ausschließlich** in der Deduplizierung.
+
+**Der für die Arbeit geltende Vergleich ist Kontrolllauf vs. Dedup-Lauf, NICHT alter
+Checkpoint vs. Dedup-Lauf.** Der alte Checkpoint dient nur noch der Dokumentation.
+
+| | Alter Checkpoint (`tessera_v1`) | Kontrolllauf (`tessera_v1_predup_control`) | Dedup-Lauf (`tessera_v1_dedup`) |
+|---|---|---|---|
+| Trainingszeilen | 4.105.455 (siehe Klärung unten) | 6.583.295 | 5.797.503 |
+| Val-Zeilen | 480.817 | 843.989 | 742.439 |
+| Beste Epoche | 26 | 32 | 48 |
+| recall@10_diag (Val, beste Epoche) | 0,4581 | **0,4602** | **0,4712** |
+| Early Stopping nach Epoche | 36 | 42 | 58 |
+| Finale Temperatur (bei Stop) | 27,51 | 27,71 | 28,95 |
+| Seed | **keiner** (siehe unten) | `torch.manual_seed(0)` | `torch.manual_seed(0)` |
+
+**Gültiger Dedup-Effekt (Kontrolllauf → Dedup-Lauf, gleicher Seed, gleiche Config):**
+recall@10_diag (Val, beste Epoche) 0,4602 → 0,4712 (**+0,0110**). Rein deskriptiv berichtet,
+keine Signifikanzaussage (Einzellauf je Konfiguration, kein Seed-Sweep).
+
+### Seed-Status je Lauf (train.py setzt im echten Trainingspfad KEINEN eigenen Seed)
+
+`train.py::train()` ruft `torch.manual_seed()` an keiner Stelle auf — nur die Smoke-Tests
+und `overfit_sanity_check()` tun das. Jeder reale Trainingslauf ist deshalb nur dann geseedet,
+wenn der AUFRUFENDE Code (Wrapper-Skript) das vorher explizit setzt:
+
+| Lauf | Geseedet? | Wie |
+|---|---|---|
+| `checkpoints/tessera_v1/best.pt` (alt, 4.9.) | **Nein** | direkter `python train.py --config ...`-Aufruf, kein Seed gesetzt |
+| `checkpoints/ae_v1/best.pt` | **Nein** (nicht erneut geprüft, gleiches Muster zu erwarten) | direkter `python train.py --config ...`-Aufruf |
+| `checkpoints/tessera_v1_predup_control/best.pt` | **Ja**, `torch.manual_seed(0)` | `train_tessera_v1_predup_control.py` |
+| `checkpoints/tessera_v1_dedup/best.pt` | **Ja**, `torch.manual_seed(0)` | `train_tessera_v1_dedup.py` |
+
+`train.py` selbst wurde nicht geändert (kein Seed nachgerüstet) — die beiden neuen Läufe
+seeden nur über ihre eigenen Wrapper-Skripte.
+
+### Klärung: welche Daten hat der alte Checkpoint (`checkpoints/tessera_v1/best.pt`, Epoche 26) gesehen?
+
+**Nicht abschließend geklärt — hier dokumentiert, nicht plausibel gemacht.** Geprüfte Belege,
+die sich teilweise widersprechen:
+
+1. **Eingebettete Checkpoint-Config** (`ckpt['cfg']`, von `train.py` beim Speichern selbst
+   serialisiert): zeigt Gen-2-Pfade — `pixels_path: data/processed/pixels_tessera.parquet`,
+   `text_embeddings_path: data/processed/pixel_text_embeddings.parquet`,
+   `norm_stats_path: data/processed/norm_stats_tessera_pixels.json`. Kein `splits_path`/
+   `pairs_path`/`poi_text_path` (Gen-1-Config-Schema) vorhanden.
+2. **Trainings-Log** (`logs/train_tessera_v1_20260904_220621.log`, Start 4.9. 22:06:21):
+   druckt "4105455 Trainings-/480817 Val-Zeilen" — passt NICHT zum heutigen
+   `pixels_tessera.parquet` (6.583.295 Train-/843.989 Val-Zeilen, Datei unveraendert seit
+   3.9. 14:52:42 laut mtime/Checksum, also bereits VOR dem Trainingsstart in ihrem heutigen
+   Zustand).
+3. **Git-Historie:** `configs/tessera_v1.yaml`/`train.py`/`dataset.py` zeigen am letzten
+   Commit VOR dem Trainingsdatum (`7486012`, 1.9. 21:41) noch das Gen-1-Schema
+   (`pairs_path: data/processed/pairs_tessera.parquet`, `poi_text_path`, `splits_path`).
+   Der naechste Commit, der das Gen-2-Schema einfuehrt (`eaee511 "feat: gen-2 pixel-level
+   pipeline"`), liegt aber erst am 8.9. — **zwischen `29b7e19` (1.9. 21:41:57) und `525ad4d`
+   (8.9. 16:49:18) liegt eine 7-taegige Luecke ohne jeden Commit** (`git reflog`
+   verifiziert). Der tatsaechliche Arbeitsstand am 4.9. (Trainingszeitpunkt) ist damit aus
+   der Git-Historie NICHT rekonstruierbar — er kann Gen-2-Code bereits lokal (uncommitted)
+   enthalten haben, ohne dass das irgendwo sichtbar waere.
+4. **Starkes Gegenindiz zu Punkt 2** (Kernbefund dieser Klaerung): die AKTIVE
+   `data/processed/norm_stats_tessera_pixels.json` hat mtime **4.9. 22:06:53** — also
+   Sekunden NACH dem Start des fraglichen Trainingslaufs (`apply_normalization()` fittet und
+   speichert die Statistik unmittelbar bei Trainingsbeginn). Diese Datei ist **bit-identisch**
+   (max. Differenz 0,0 ueber alle 128 Kanaele, siehe `diag_norm_stats_consistency.py`) mit
+   einer frischen Z-Score-Anpassung auf dem TRAIN-Split des HEUTIGEN
+   `pixels_tessera.parquet`. Das ist ein sehr starkes Indiz (keine acht Nachkommastellen ueber
+   128 Kanaele treffen zufaellig exakt zu), dass der Trainings-Split dieses Laufs tatsaechlich
+   der heutige 6.583.295-Zeilen-Train-Split war — die gedruckte Zeilenzahl im Log waere dann
+   ein Anzeige-/Logging-Fehler im damaligen `train.py`, keine echte Abweichung der
+   tatsaechlich verwendeten Daten.
+5. Ein archiviertes, ANDERES, AELTERES tessera_v1 (`data/archive_gen1/checkpoints/tessera_v1/`,
+   1.9. 16:19/16:36 — bereits vor dieser Session als Gen-1 dokumentiert) trainierte
+   nachweislich auf dem separat archivierten `data/archive_gen1/processed/pairs_tessera.parquet`
+   (5.287.941 POI-Pixel-Zeilen, POI-Ebene) — das ist ein ANDERER, frueherer Checkpoint als der
+   hier untersuchte (`checkpoints/tessera_v1/best.pt`, Epoche 26, 4.9.), nicht dessen
+   Datenquelle.
+
+**Einordnung:** Punkt 4 spricht dafuer, dass der alte Checkpoint trotz der irrefuehrenden
+Log-Zeile wahrscheinlich doch auf der heutigen Datenmenge (Gen-2, undedupliziert) trainiert
+wurde. Sicher ist das nicht - die genaue Ursache der falschen Log-Zeilenzahl bleibt ungeklaert.
+Unabhaengig davon bleibt der Kontrolllauf-vs-Dedup-Vergleich der methodisch sauberere Weg
+(gleicher Seed, keine Restunsicherheit ueber die Datenmenge), weil der alte Checkpoint ohnehin
+unseeded war (siehe Seed-Tabelle oben) und deshalb fuer einen fairen Punktvergleich nicht
+geeignet ist.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

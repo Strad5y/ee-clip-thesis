@@ -1,0 +1,41 @@
+backbone: tessera
+ablation: v1_predup_control   # -> Checkpoint-Ordner checkpoints/tessera_v1_predup_control/
+
+ee_dim: 128
+text_dim: 1024
+latent_dim: 256
+hidden_dim: 256
+dropout: 0.1
+
+# Kontrolllauf (2026-09-19, Jakob): der Alt-Neu-Vergleich (altes checkpoints/tessera_v1/best.pt
+# vs. tessera_v1_dedup) war nicht belastbar - der neue Dedup-Lauf hatte MEHR Trainingszeilen
+# als der alte, obwohl Dedup nur entfernt, UND die eingebettete Checkpoint-Config (Gen-2-Pfade)
+# widerspricht der Git-Historie von configs/tessera_v1.yaml zum damaligen Zeitpunkt (Gen-1-
+# Pfade) - der alte Checkpoint beruht vermutlich auf einer anderen Datengeneration. Dieser
+# Kontrolllauf trainiert stattdessen auf der HEUTIGEN, UNdeduplizierten pixels_tessera.parquet,
+# mit exakt derselben Config/demselben Seed wie configs/tessera_v1_dedup.yaml - unterscheidet
+# sich von diesem NUR noch in der Deduplizierung. Der Vergleich, der fuer die Arbeit gilt, ist
+# Kontrolllauf vs. Dedup-Lauf, nicht alter Checkpoint vs. Dedup-Lauf (siehe MANIFEST.md).
+normalization: zscore
+
+data:
+  # UNdedupliziertes pixels_tessera.parquet - einzige inhaltliche Differenz zu
+  # configs/tessera_v1_dedup.yaml.
+  pixels_path: data/processed/pixels_tessera.parquet
+  text_embeddings_path: data/processed/pixel_text_embeddings.parquet
+  norm_stats_path: data/processed/norm_stats_tessera_pixels_predup_control.json
+
+train:
+  batch_size: 256
+  lr: 3.0e-4
+  weight_decay: 0.01
+  epochs: 100
+  patience: 10
+  early_stopping_metric: recall@10_diag
+  device: cuda
+  temp_guard: 50.0
+  num_workers: 0
+
+loss:
+  init_t: 10.0
+  init_b: -10.0
