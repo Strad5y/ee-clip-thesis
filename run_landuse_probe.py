@@ -369,6 +369,86 @@ def test_bootstrap(fits: dict, n_resamples: int = N_TEST_BOOTSTRAP, seed0: int =
     return samples
 
 
+def load_test_pixel_cell_ids(name: str) -> np.ndarray:
+    """Nachtrag (INSTRUCTIONS_landuse_cell_bootstrap.md, Phase 2): Zell-ID je Testzeile, IN
+    DERSELBEN REIHENFOLGE wie load_clean()/build_configs() X_test/y_test erzeugen - identischer
+    Filter (Klasse EXCLUDED_CLASS, split='missing') auf denselben Rohdaten garantiert
+    Row-Order-Uebereinstimmung, OHNE load_clean()/build_configs()/run_probe() selbst anzufassen
+    (Nutzervorgabe: keine Aenderung am Probe-Fit). Zellzuordnung kommt aus dem einmalig
+    persistierten Begleitartefakt (build_landuse_pixel_cells.py), nicht aus einer Neuberechnung."""
+    path = cfg.DATA / "processed" / f"landuse_pairs_{name}.parquet"
+    df = pd.read_parquet(path, columns=["code_2021", "split", "tile", "row", "col"])
+    df = df[(df["code_2021"] != EXCLUDED_CLASS) & (df["split"] != "missing")].reset_index(drop=True)
+    test_pixels = df[df["split"] == "test"][["tile", "row", "col"]].reset_index(drop=True)
+
+    cells_path = cfg.DATA / "processed" / f"landuse_pixel_cells_{name}.parquet"
+    cells = pd.read_parquet(cells_path)
+    merged = test_pixels.merge(cells, on=["tile", "row", "col"], how="left")
+    assert len(merged) == len(test_pixels), (
+        f"{name}: Merge mit {cells_path} hat Zeilen dupliziert oder verloren - "
+        f"(tile,row,col) sollte in beiden Dateien eindeutig sein."
+    )
+    n_missing = int(merged["cell_row"].isna().sum())
+    if n_missing > 0:
+        print(f"  WARNUNG [{name}]: {n_missing} von {len(merged)} Testpixeln ohne Zellzuordnung "
+              f"(NaN in landuse_pixel_cells_{name}.parquet) - werden im Kachel-Bootstrap als "
+              f"eigene 'NaN-Zelle' behandelt, nicht stillschweigend verworfen.")
+    cell_id = merged["cell_row"].astype(str) + "_" + merged["cell_col"].astype(str)
+    return cell_id.to_numpy()
+
+
+def test_bootstrap_by_cell(fits: dict, cell_ids_by_backbone: dict, n_resamples: int = N_TEST_BOOTSTRAP,
+                            seed0: int = TEST_BOOTSTRAP_SEED0) -> dict:
+    """Wie test_bootstrap(), aber Cluster-Bootstrap auf 1-km-Zellebene statt Zeilenebene
+    (INSTRUCTIONS_landuse_cell_bootstrap.md, Phase 2) - benachbarte Testpixel sind raeumlich
+    autokorreliert (dieselbe Zelle), ein zeilenweiser Bootstrap unterschaetzt die Unsicherheit
+    systematisch (Effekt in SDM bereits quantifiziert: 1,29x-1,39x breitere Kachel-CIs).
+
+    Resample-Einheit: die EINDEUTIGEN Zellen des jeweiligen Backbone-Testsets, mit Zuruecklegen
+    gezogen - eine gezogene Zelle bringt ALLE ihre Testpixel mit (mehrfach bei Mehrfachziehung),
+    analog zu build_sdm_phase7_metrics.py::cluster_bootstrap(). Die alte zeilenweise Variante
+    (test_bootstrap()) bleibt UNVERAENDERT bestehen, wird hier nicht ersetzt.
+
+    Gepaarter Vergleich bleibt korrekt: wie in test_bootstrap() werden die Resample-Zellsets
+    NUR EINMAL pro Backbone gezogen (erster Config-Name dieses Backbones) und fuer die beiden
+    weiteren Arme desselben Backbones wiederverwendet - dieselben gezogenen Zellen betreffen
+    in allen drei Armen dieselben konzeptuellen Testpixel (identisches y_test, identische
+    Reihenfolge, identische cell_ids)."""
+    def backbone_of(name: str) -> str:
+        return name.split("_", 1)[0]
+
+    resample_cellsets_by_backbone = {}
+    samples = {}
+    for name, fit in fits.items():
+        bb = backbone_of(name)
+        y_test, pred_test = fit["y_test"], fit["pred_test"]
+        cell_ids = cell_ids_by_backbone[bb]
+        assert len(cell_ids) == len(y_test), (
+            f"{name}: {len(cell_ids)} Zell-IDs vs. {len(y_test)} Testzeilen - Laenge muss uebereinstimmen."
+        )
+        unique_cells = np.unique(cell_ids)
+        cell_to_idx = {c: np.where(cell_ids == c)[0] for c in unique_cells}
+
+        if bb not in resample_cellsets_by_backbone:
+            rng = np.random.default_rng(seed0)
+            n_cells = len(unique_cells)
+            resample_cellsets_by_backbone[bb] = [
+                rng.choice(unique_cells, size=n_cells, replace=True) for _ in range(n_resamples)
+            ]
+        cellsets = resample_cellsets_by_backbone[bb]
+
+        oa = np.empty(n_resamples)
+        f1 = np.empty(n_resamples)
+        for i, cells in enumerate(cellsets):
+            idx = np.concatenate([cell_to_idx[c] for c in cells])
+            oa[i] = accuracy_score(y_test[idx], pred_test[idx])
+            f1[i] = f1_score(y_test[idx], pred_test[idx], average="macro")
+        samples[name] = {"oa": oa, "macro_f1": f1}
+        print(f"  {name}: Kachel-Test-Bootstrap {n_resamples}x fertig ueber {len(unique_cells)} Zellen "
+              f"(test_oa={oa.mean():.4f}+-{oa.std():.4f}, test_macro_f1={f1.mean():.4f}+-{f1.std():.4f})")
+    return samples
+
+
 def paired_diff(samples: dict, alpha: float = 0.05, backbones: tuple = ("ae", "tessera")) -> pd.DataFrame:
     """Gepaarter Test-Bootstrap: Differenz trainiert-roh PRO RESAMPLE (dieselben Indizes, siehe
     test_bootstrap()), daraus Mittelwert + 95%-Perzentilintervall der Differenz. Schliesst das
