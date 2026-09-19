@@ -1,0 +1,3 @@
+backbone,metric,mean_diff_trainiert_minus_roh,ci_low_95,ci_high_95,significant
+tessera_dedup,macro_f1,0.002255132260853085,-0.010545264517661053,0.012077408227388314,False
+tessera_dedup,oa,0.011599854587127038,0.008736855636664528,0.0144770736487419,True

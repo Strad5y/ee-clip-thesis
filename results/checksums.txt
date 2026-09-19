@@ -21,13 +21,44 @@ d4ca4ec53f80f725e338aa66237000b8  data/processed/landuse_probe_cell_bootstrap_te
 20138c1f01dd4c3ba6f1e4694e1b354c  data/processed/sdm_phase7_metrics_tessera_v1dedup.csv
 8126c2ea1adab4ee04aec5d5623b2fd2  data/processed/sdm_paired_bootstrap_tessera_v1dedup_c_minus_a.csv
 
+=== Nachtrag (Ergaenzung 2026-09-19 17:35): weitere Ergebnis-/Diagnose-CSVs dieser Aufgabe ===
+# Schritt-1-Runde SDM (Arm A dedupliziert, Arm C damals noch alter Checkpoint) - Skripte bereits
+# in dieser Aufgabe committet (85b46da, af96449), Dateien selbst bisher nicht separat gepinnt.
+# sdm_phase7_metrics_dedup.csv dient zugleich als Zwischenstufe im SDM-Dreistufenvergleich
+# (Original -> Schritt-1-Dedup/alter Checkpoint -> Schritt-3-Dedup/neuer Checkpoint).
+92b0329b21f6e36f5d56d44e81ec650d  data/processed/sdm_phase6_head_results_dedup.csv
+e1e8a62450a15f55aed0639f613d1d5f  data/processed/sdm_phase6_baselines_dedup.csv
+7596340e54e8276d2cc1d4f3b71ad2d3  data/processed/sdm_phase7_metrics_dedup.csv
+5ab4e06efb4b9c5a75755ee281243440  data/processed/diag_sdm_paired_bootstrap_arm_diff.csv
+# Schritt-1 Splits-Rebuild-Vergleich (check_splits_rebuild_dedup.py, Commit b002bcf): 0 Differenzen
+# zu data/splits/splits_london.csv, siehe Bericht Schritt 1.
+6736022f5733ca8af11b0c9efd2c0489  data/processed/diag_splits_rebuild_dedup_comparison.csv
+
 === Referenzdateien (Alt-Seite der Vergleiche, nicht Teil dieser Aufgabe, aus frueheren Sitzungen) ===
 97bc3c0a94a7c0f2ee7e7a09e4e45787  checkpoints/tessera_v1/best.pt
 1bf31ace8569580a9ba26c906fc92c0f  data/processed/retrieval_baselines_tessera_v1.csv
 cab7d2959fb60ff6a8cb48bdf01a3139  data/processed/class_retrieval_tessera.csv
 cfcfce569dd7f775fd6d44d08764547d  data/processed/landuse_probe_results_tessera_dedup.csv
 b5dc6c337e2112f3e2d30130fec18829  data/processed/sdm_phase7_metrics.csv
-7596340e54e8276d2cc1d4f3b71ad2d3  data/processed/sdm_phase7_metrics_dedup.csv
 032ee92d8991045bae51cae10bd5bcee  data/processed/sdm_pooled_tessera_arma_dedup.parquet
 67e34cd154580bd340068135f177b5cf  data/processed/pixels_tessera.parquet
 68c27e33c74d8515288e3ab168e37249  data/processed/pixels_tessera_dedup.parquet
+
+=== Nachtrag (Ergaenzung 2026-09-19 17:35): Kopien nach results/ (Original bleibt in data/processed/, nur dort per .gitignore ausgeschlossen) ===
+# Alle Kopien vor dem Schreiben dieser Zeilen per `cmp` byte-identisch zum Original verifiziert.
+# MD5 der Kopie ist identisch zum jeweiligen Original-MD5 oben - hier nochmal mit explizitem
+# Kopie-Pfad und Verweis auf den Original-Pfad, wie angefordert.
+results/retrieval_baselines_tessera_v1_dedup.csv  <- Original: data/processed/retrieval_baselines_tessera_v1_dedup.csv (md5 c385f4cab371e40b477621f3b602a61f)
+results/landuse_probe_results_tessera_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_results_tessera_dedup_ckpt.csv (md5 947ad6fd83042a03476366b468e550f7)
+results/landuse_probe_cell_bootstrap_tessera_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_cell_bootstrap_tessera_dedup_ckpt.csv (md5 d4ca4ec53f80f725e338aa66237000b8)
+results/landuse_probe_paired_diff_cell_tessera_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_paired_diff_cell_tessera_dedup_ckpt.csv (md5 0afa2c5b41c92fc7022e298f71229614)
+results/class_retrieval_tessera_v1_dedup.csv  <- Original: data/processed/class_retrieval_tessera_v1_dedup.csv (md5 0b1036633213a3da953d6e6d9405b7ae)
+results/sdm_phase6_head_results_dedup.csv  <- Original: data/processed/sdm_phase6_head_results_dedup.csv (md5 92b0329b21f6e36f5d56d44e81ec650d)
+results/sdm_phase6_baselines_dedup.csv  <- Original: data/processed/sdm_phase6_baselines_dedup.csv (md5 e1e8a62450a15f55aed0639f613d1d5f)
+results/sdm_phase7_metrics_dedup.csv  <- Original: data/processed/sdm_phase7_metrics_dedup.csv (md5 7596340e54e8276d2cc1d4f3b71ad2d3)
+results/diag_sdm_paired_bootstrap_arm_diff.csv  <- Original: data/processed/diag_sdm_paired_bootstrap_arm_diff.csv (md5 5ab4e06efb4b9c5a75755ee281243440)
+results/sdm_phase7_metrics_tessera_v1dedup.csv  <- Original: data/processed/sdm_phase7_metrics_tessera_v1dedup.csv (md5 20138c1f01dd4c3ba6f1e4694e1b354c)
+results/sdm_paired_bootstrap_tessera_v1dedup_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_tessera_v1dedup_c_minus_a.csv (md5 8126c2ea1adab4ee04aec5d5623b2fd2)
+results/diag_splits_rebuild_dedup_comparison.csv  <- Original: data/processed/diag_splits_rebuild_dedup_comparison.csv (md5 6736022f5733ca8af11b0c9efd2c0489)
+results/norm_stats_tessera_pixels_dedup.json  <- Original: data/processed/norm_stats_tessera_pixels_dedup.json (md5 86ffca414b320f25632631204e55807e)
+results/norm_stats_tessera_pixels_predup_control.json  <- Original: data/processed/norm_stats_tessera_pixels_predup_control.json (md5 fb62b6dc3420ca97d2290bdbd2bbb5c8)
