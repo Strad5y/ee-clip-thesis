@@ -729,6 +729,31 @@ Nachbarzeile muss nicht denselben POI-Ort meinen). Restgröße: `check_location_
 Rivalen-Zeile selbst ebenfalls entfernt wurde. Größenordnung insgesamt klein
 (≤ 0,4 % der Original-Pixel), verändert die Aussage „0 verbleibende Dopplungen" nicht.
 
+### AlphaEarth Schritt 3: bekannte Einschränkungen (2026-09-21)
+
+**Fest verdrahtetes `"tessera"` in `build_sdm_phase7_metrics.py::evaluate_mean_baseline()`.**
+Die Funktion ruft `build_xy("tessera", "a", scenario)` auf, unabhängig vom ausgewerteten
+Backbone (Datei bewusst NICHT geändert). Sie benötigt nur Zielmatrix, Split und LSOA-Codes; die
+Mittelwertsvorhersage (Trainingsmittel der Ziele) ist deshalb bei jedem Backbone-Wrapper dieselbe
+Zahl. Geprüft (2026-09-21) für AE: Test-LSOA-Menge in `sdm_pooled_ae_arma_v1dedup_ckpt.parquet` und
+`sdm_pooled_tessera_arma_dedup.parquet` identisch (417 Test-LSOAs, symmetrische Differenz 0; auch
+val 425 / train 4.152 gleich). Die Zeilenreihenfolge der beiden Dateien unterscheidet sich (Reihenfolge
+der gepoolten LSOAs), nach Angleichen über `lsoa_code` sind Split, Zielmatrix und Trainingsmittel
+identisch (max. Abweichung des Trainingsmittels in float64: 0). Die Mittelwert-Baseline ist also
+für TESSERA und AE gültig. Der AE-Wrapper `build_sdm_phase7_metrics_ae_v1dedup.py` bedient diese
+feste Anfrage mit der bestehenden TESSERA-Arm-A-Datei (`load_pooled_variant()`, Kommentar dort).
+Der erste Metrik-Lauf (`logs/build_sdm_phase7_metrics_ae_v1dedup_20260921_172134.log`) brach daran
+mit `FileNotFoundError` ab, der Rerun (`..._rerun_20260921_181334.log`) ist gültig.
+
+**Bekannte numerische Abweichung SDM Arm B (AlphaEarth), nicht weiter verfolgt.** Die am
+2026-09-21 neu berechnete `sdm_pooled_ae_armb_v1dedup_ckpt.parquet` ist gegenüber
+`sdm_pooled_ae_armb_dedup.parquet` (17.9.) NICHT bit-identisch: Zählspalten gleich, 512 von 514
+numerischen Spalten weichen ab, **max. 1,8e-8** (gepoolt). Die Abweichung entsteht bereits in der
+Projektion (Fensterstichprobe 1,08 Mio. gültige Pixel: bis 3,7e-7 je Pixel, Nodata-Masken
+identisch), nicht in der Poolung; Float32-Rundung, Ursache nicht geklärt. **KL-Effekt +0,00003**
+(Arm B, Hauptlauf: 0,05440 → 0,05443, weit unter der Seed-Streuung ±0,0006). Arm A ist bit-identisch
+(130 Spalten, 0 Abweichungen). Arm C weicht erwartungsgemäß ab (anderer Checkpoint).
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

@@ -1,0 +1,36 @@
+185 Queries (identisch in alt/neu)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  88%|########7 | 349/398 [00:00<00:00, 3480.73it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 3565.58it/s]
+
+=== Galerie alt: data/processed/pixels_ae.parquet ===
+  237811 eindeutige Texte geparst (1.7s), 77219 unaufloesbare Einheiten insgesamt (siehe Bericht).
+  Galerie: 777608 Pixel; Klassen mit < 100 relevanten Pixeln: 0
+Modell geladen: checkpoints/ae_v1/best.pt (Epoche 22, cfg backbone=ae)
+  ae_v1: AP macro=0.04556
+Modell geladen: checkpoints/ae_v1_predup_control/best.pt (Epoche 19, cfg backbone=ae)
+  predup_control: AP macro=0.04143
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+  ae_v1_dedup: AP macro=0.04091
+
+=== Galerie neu: data/processed/pixels_ae_dedup.parquet ===
+  237737 eindeutige Texte geparst (1.7s), 77204 unaufloesbare Einheiten insgesamt (siehe Bericht).
+  Galerie: 728588 Pixel; Klassen mit < 100 relevanten Pixeln: 0
+Modell geladen: checkpoints/ae_v1/best.pt (Epoche 22, cfg backbone=ae)
+  ae_v1: AP macro=0.04522
+Modell geladen: checkpoints/ae_v1_predup_control/best.pt (Epoche 19, cfg backbone=ae)
+  predup_control: AP macro=0.04124
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+  ae_v1_dedup: AP macro=0.04081
+
+Galerie gesamt: alt 777608 -> neu 728588 (6.30% weniger)
+Konsistenz (ae_v1, alt) vs. gespeicherte Datei: max|diff| ueber p@10/p@50/r_prec/AP = 9.888e-17
+Konsistenz (ae_v1_dedup, neu) vs. gespeicherte Datei: max|diff| ueber p@10/p@50/r_prec/AP = 9.780e-17
+
+=== Makro-Mittel (185 Queries) ===
+    checkpoint gallery  p_at_10  p_at_50  p_at_100  r_precision  average_precision  random_baseline  ap_lift
+         ae_v1     alt  0.07081  0.07859   0.07519      0.05679            0.04556          0.00756 21.76640
+         ae_v1     neu  0.07081  0.07914   0.07546      0.05608            0.04522          0.00762 20.47266
+   ae_v1_dedup     alt  0.06486  0.06703   0.06605      0.05234            0.04091          0.00756 17.27737
+   ae_v1_dedup     neu  0.06486  0.06649   0.06562      0.05226            0.04081          0.00762 16.28135
+predup_control     alt  0.07243  0.07005   0.06859      0.05120            0.04143          0.00756 16.90076
+predup_control     neu  0.07243  0.07038   0.06930      0.05102            0.04124          0.00762 15.91472
