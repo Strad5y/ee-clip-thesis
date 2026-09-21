@@ -29,6 +29,12 @@ BACKBONE = "ae"
 
 
 def load_pooled_variant(backbone: str, arm: str) -> pd.DataFrame:
+    if backbone != BACKBONE:
+        # bsp7.evaluate_mean_baseline() ruft FEST build_xy("tessera", "a", ...) auf (fest verdrahteter
+        # TESSERA-Wert in build_sdm_phase7_metrics.py, dort nur fuer Ziele/Split/LSOA-Codes noetig,
+        # die vom Backbone unabhaengig sind). Diese Anfrage bedient die bestehende, unveraenderte
+        # TESSERA-Arm-A-Dedup-Datei - exakt die Datei, die auch der TESSERA-Wrapper dafuer nutzt.
+        return pd.read_parquet(cfg.DATA / "processed" / f"sdm_pooled_{backbone}_arm{arm}_dedup.parquet")
     return pd.read_parquet(cfg.DATA / "processed" / f"sdm_pooled_{backbone}_arm{arm}_v1dedup_ckpt.parquet")
 
 

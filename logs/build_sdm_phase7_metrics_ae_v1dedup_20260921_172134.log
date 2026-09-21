@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/home/minorai/PycharmProjects/ee-clip-thesis/build_sdm_phase7_metrics_ae_v1dedup.py", line 109, in <module>
+    main()
+  File "/home/minorai/PycharmProjects/ee-clip-thesis/build_sdm_phase7_metrics_ae_v1dedup.py", line 59, in main
+    mb = bsp7.evaluate_mean_baseline(scenario, do_lsoa_bootstrap=False)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/minorai/PycharmProjects/ee-clip-thesis/build_sdm_phase7_metrics.py", line 140, in evaluate_mean_baseline
+    _, y, split_arr, n_classes, lsoa_codes = build_xy("tessera", "a", scenario)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/minorai/PycharmProjects/ee-clip-thesis/build_sdm_phase6_predict.py", line 106, in build_xy
+    pooled = load_pooled(backbone, arm)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/minorai/PycharmProjects/ee-clip-thesis/build_sdm_phase7_metrics_ae_v1dedup.py", line 32, in load_pooled_variant
+    return pd.read_parquet(cfg.DATA / "processed" / f"sdm_pooled_{backbone}_arm{arm}_v1dedup_ckpt.parquet")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pandas/io/parquet.py", line 671, in read_parquet
+    return impl.read(
+           ^^^^^^^^^^
+  File "/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pandas/io/parquet.py", line 253, in read
+    path_or_handle, handles, filesystem = _get_path_or_handle(
+                                          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pandas/io/parquet.py", line 141, in _get_path_or_handle
+    handles = get_handle(
+              ^^^^^^^^^^^
+  File "/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/pandas/io/common.py", line 939, in get_handle
+    handle = open(handle, ioargs.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_tessera_arma_v1dedup_ckpt.parquet'

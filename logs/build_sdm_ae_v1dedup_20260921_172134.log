@@ -1,0 +1,48 @@
+=== Arm B, AlphaEarth: Reprojektion (Random-Head Seed 0) ===
+
+=== ae / Arm B ===
+  Normalisierung: none
+  2 Rohkacheln (London)
+    xv3kz2lbcvqtied12-0000008192-0000000000.tiff: 4509x5827 (15973263/26273943 gueltig), 172.9s, min=-0.2356 max=0.2229
+    xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff: 4523x5893 (10608061/26654039 gueltig), 139.8s, min=-0.2383 max=0.2271
+  Fertig: 2 Kacheln geschrieben nach /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/sdm_projected_ae_v1dedup/ae_armb, 26,581,324 gueltige Pixel gesamt, 312.8s (84,983 Pixel/s)
+2 Kacheln projiziert nach /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/sdm_projected_ae_v1dedup/ae_armb
+=== Arm C, AlphaEarth: Reprojektion (checkpoints/ae_v1_dedup/best.pt) ===
+
+=== ae / Arm C ===
+  ae: trainierter Kopf geladen (checkpoints/ae_v1_dedup/best.pt, Epoche 32)
+  Normalisierung: none
+  2 Rohkacheln (London)
+    xv3kz2lbcvqtied12-0000008192-0000000000.tiff: 4509x5827 (15973263/26273943 gueltig), 168.5s, min=-0.5651 max=0.7502
+    xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff: 4523x5893 (10608061/26654039 gueltig), 143.2s, min=-0.5735 max=0.7329
+  Fertig: 2 Kacheln geschrieben nach /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/sdm_projected_ae_v1dedup/ae_armc, 26,581,324 gueltige Pixel gesamt, 311.8s (85,264 Pixel/s)
+2 Kacheln projiziert nach /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/sdm_projected_ae_v1dedup/ae_armc
+LSOA-Datei (national): 35672 Features, CRS=EPSG:27700
+Nach Intersects-Filter gegen AOI 'Greater London': 5113 LSOAs
+  4994 LSOAs
+
+=== Arm A, AlphaEarth: Poolung (mit Dedup-Maske) ===
+    [ae/a] Kachel 2/2 verarbeitet (132.1s)
+  [ae/a] Maskierung: 64429/16773774 exact_extract-Treffer ausgeschlossen (0.38%)
+  [ae/a] fertig: 4994 LSOAs erreicht in 132.3s
+  LSOAs erreicht: 4994/4994, 0-Pixel (alle): 0, (rein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_arma_v1dedup_ckpt.parquet
+
+=== Arm B, AlphaEarth: Poolung (mit Dedup-Maske) ===
+    [ae/b] Kachel 2/2 verarbeitet (1142.3s)
+  [ae/b] Maskierung: 64422/16773767 exact_extract-Treffer ausgeschlossen (0.38%)
+  [ae/b] fertig: 4994 LSOAs erreicht in 1143.6s
+  LSOAs erreicht: 4994/4994, 0-Pixel (alle): 0, (rein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_armb_v1dedup_ckpt.parquet
+
+=== Arm C, AlphaEarth: Poolung (mit Dedup-Maske) ===
+    [ae/c] Kachel 2/2 verarbeitet (1102.3s)
+  [ae/c] Maskierung: 64422/16773767 exact_extract-Treffer ausgeschlossen (0.38%)
+  [ae/c] fertig: 4994 LSOAs erreicht in 1102.9s
+  LSOAs erreicht: 4994/4994, 0-Pixel (alle): 0, (rein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_ae_armc_v1dedup_ckpt.parquet
+
+=== Vergleich mit den Dateien vom 17.9. (sdm_pooled_ae_arm*_dedup.parquet) ===
+  Arm A: BIT-IDENTISCH (4994 LSOAs, 130 numerische Spalten, 0 mit Abweichung, max|diff|=0.000e+00)
+  Arm B: NICHT bit-identisch (4994 LSOAs, 514 numerische Spalten, 512 mit Abweichung, max|diff|=1.778e-08)
+  Arm C: NICHT bit-identisch (4994 LSOAs, 514 numerische Spalten, 512 mit Abweichung, max|diff|=5.230e-01)

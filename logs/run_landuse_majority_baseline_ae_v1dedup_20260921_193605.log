@@ -1,0 +1,5 @@
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+                     config majority_class   val_oa  val_macro_f1  test_oa  test_macro_f1
+ae_dedup_haeufigkeitsniveau          11210 0.473995      0.026798 0.456481       0.027253
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_majority_baseline_ae_dedup_ckpt.csv

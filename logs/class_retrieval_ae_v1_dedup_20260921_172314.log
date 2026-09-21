@@ -1,0 +1,43 @@
+=== run_class_retrieval_ae_v1dedup.py gestartet ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/class_retrieval_ae_v1_dedup_20260921_172314.log
+Device: cuda
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+
+--- Galerie: Klassenmenge je Pixel ---
+  237737 eindeutige Texte geparst (1.7s), 77204 unaufloesbare Einheiten insgesamt (siehe Bericht).
+  Test-Split: 728588 Pixel
+  Klassenanzahl je Test-Pixel: median=1.0 p90=2.0 max=9
+
+--- EO-Embeddings laden, normalisieren, projizieren ---
+Normalisierung: none (No-Op, wie in Checkpoint-Config 'normalization')
+  Galeriegroesse: 728588 Pixel, 256 Dim
+
+--- Queries: Klassen mit >= 100 relevanten Test-Pixeln ---
+  Klassen insgesamt (>=1 Pixel): 464
+  Queries (>= 100 relevante Pixel): 185
+
+--- Query-Texte einbetten ---
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  87%|########6 | 346/398 [00:00<00:00, 3363.32it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 3589.15it/s]
+  185 Queries eingebettet (47.5s)
+
+--- Relevanz-Membership-Matrix ---
+
+--- Kosinus-Ranking ---
+
+Gespeichert: data/processed/class_retrieval_ae_v1_dedup.csv
+
+=== Makro-Mittelwerte (185 Queries) ===
+p_at_10                            0.064865
+p_at_50                            0.066486
+p_at_100                           0.065622
+r_precision                        0.052258
+average_precision                  0.040806
+random_baseline                    0.007621
+p_at_10_random_actual              0.008108
+p_at_50_random_actual              0.007351
+p_at_100_random_actual             0.007514
+r_precision_random_actual          0.007784
+average_precision_random_actual    0.007648
+
+Gesamtlaufzeit: 1.6 min

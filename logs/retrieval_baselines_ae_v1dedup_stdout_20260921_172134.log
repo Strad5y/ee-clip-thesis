@@ -1,0 +1,106 @@
+=== run_retrieval_baselines_ae_v1dedup.py gestartet ===
+Log-Datei: /home/minorai/PycharmProjects/ee-clip-thesis/logs/retrieval_baselines_ae_v1_dedup_20260921_172137.log
+Device: cuda
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+Alignment-Check OK: primary_key aus unabhaengigem Read stimmt fuer alle 7268678 Zeilen mit ds.primary_key ueberein.
+Normalisierung: none (No-Op, wie in Checkpoint-Config 'normalization')
+
+Val: 742550 Zeilen, Test: 728588 Zeilen
+
+primary_key (Test): 728588 Zeilen, 0 (0.0000%) mit leerem Label (aus Mittel ausgeschlossen), 13 unterschiedliche Klassen unter den restlichen 728588.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure                        n=   251513  34.5206%
+    natural                        n=   184199  25.2816%
+    building                       n=   177392  24.3474%
+    amenity                        n=    98273  13.4881%
+    shop                           n=     7165  0.9834%
+    historic                       n=     3263  0.4479%
+    tourism                        n=     2676  0.3673%
+    sport                          n=     2095  0.2875%
+    office                         n=     1531  0.2101%
+    military                       n=      203  0.0279%
+    healthcare                     n=      137  0.0188%
+    water                          n=      109  0.0150%
+    waterway                       n=       32  0.0044%
+
+primary_value (Test): 728588 Zeilen, 0 (0.0000%) mit leerem Label (aus Mittel ausgeschlossen), 395 unterschiedliche Klassen unter den restlichen 728588.
+  Top-15 (Anteil an nicht-leeren Zeilen):
+    leisure=park                   n=   152925  20.9892%
+    natural=wood                   n=    94270  12.9387%
+    building=house                 n=    72673  9.9745%
+    natural=water                  n=    50585  6.9429%
+    leisure=golf course            n=    47636  6.5381%
+    amenity=school                 n=    43726  6.0015%
+    building=apartments            n=    29898  4.1036%
+    leisure=garden                 n=    22570  3.0978%
+    amenity=parking                n=    19268  2.6446%
+    building=residential           n=    19135  2.6263%
+    natural=scrub                  n=    18107  2.4852%
+    building=terrace               n=    17557  2.4097%
+    natural=wetland                n=    10364  1.4225%
+    leisure=pitch                  n=     9038  1.2405%
+    amenity=hospital               n=     8985  1.2332%
+
+Test-Auswertung fertig (29.3s)
+
+=== TEST ===
+
+  [all] n=728588
+    Modell        recall@1_diag=0.1942  recall@10_diag=0.5465
+    Ceiling       ceil@1_diag=0.6085  ceil@10_diag=0.9511
+    Ausschoepfung @1=0.3191  @10=0.5746
+    class_recall@10   Key=0.8765  Value=0.7569
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9158+-0.0016  Value=0.5234+-0.0017
+    Haeufigkeitsniveau class_recall@10  Key=0.9996  Value=0.7586
+
+  [single] n=479834
+    Modell        recall@1_diag=0.1885  recall@10_diag=0.5690
+    Ceiling       ceil@1_diag=0.5394  ceil@10_diag=0.9304
+    Ausschoepfung @1=0.3494  @10=0.6115
+    class_recall@10   Key=0.8816  Value=0.7614
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9166+-0.0016  Value=0.5102+-0.0017
+    Haeufigkeitsniveau class_recall@10  Key=0.9998  Value=0.7391
+
+  [multi] n=248754
+    Modell        recall@1_diag=0.2051  recall@10_diag=0.5031
+    Ceiling       ceil@1_diag=0.7418  ceil@10_diag=0.9908
+    Ausschoepfung @1=0.2765  @10=0.5078
+    class_recall@10   Key=0.8668  Value=0.7482
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9144+-0.0017  Value=0.5487+-0.0024
+    Haeufigkeitsniveau class_recall@10  Key=0.9993  Value=0.7962
+
+Val-Auswertung fertig (30.0s)
+
+=== VAL ===
+
+  [all] n=742550
+    Modell        recall@1_diag=0.1802  recall@10_diag=0.5058
+    Ceiling       ceil@1_diag=0.6021  ceil@10_diag=0.9405
+    Ausschoepfung @1=0.2993  @10=0.5378
+    class_recall@10   Key=0.8689  Value=0.7400
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9149+-0.0018  Value=0.5328+-0.0018
+    Haeufigkeitsniveau class_recall@10  Key=0.9998  Value=0.7557
+
+  [single] n=470512
+    Modell        recall@1_diag=0.1684  recall@10_diag=0.5308
+    Ceiling       ceil@1_diag=0.5192  ceil@10_diag=0.9172
+    Ausschoepfung @1=0.3244  @10=0.5787
+    class_recall@10   Key=0.8760  Value=0.7429
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9134+-0.0018  Value=0.5120+-0.0019
+    Haeufigkeitsniveau class_recall@10  Key=0.9998  Value=0.7481
+
+  [multi] n=272038
+    Modell        recall@1_diag=0.2005  recall@10_diag=0.4626
+    Ceiling       ceil@1_diag=0.7455  ceil@10_diag=0.9808
+    Ausschoepfung @1=0.2690  @10=0.4716
+    class_recall@10   Key=0.8567  Value=0.7351
+    Zufallsniveau recall@10_diag=0.0391
+    Zufallsniveau class_recall@10  Key=0.9175+-0.0018  Value=0.5688+-0.0021
+    Haeufigkeitsniveau class_recall@10  Key=0.9997  Value=0.7689
+
+Ergebnistabelle gespeichert: data/processed/retrieval_baselines_ae_v1_dedup.csv

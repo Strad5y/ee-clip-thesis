@@ -1,0 +1,68 @@
+=== Konfigurationen aufbauen (roh/zufaellig/trainiert) ===
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/ae_v1_dedup.yaml): none
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/ae_v1_dedup/best.pt, Epoche 32)
+  Normalisierung (trainiert, aus Checkpoint-Config): none
+
+=== Punktschaetzung (C-Grid-Suche) ===
+
+=== ae_dedup_roh === train=3528281 val=412869 test=417308 dim=64
+  C=0.1: val_macro_f1=0.2386 val_oa=0.6330 test_macro_f1=0.2587 test_oa=0.6346 (273.3s)
+  C=1.0: val_macro_f1=0.2535 val_oa=0.6322 test_macro_f1=0.2811 test_oa=0.6352 (279.9s)
+  C=10.0: val_macro_f1=0.2512 val_oa=0.6326 test_macro_f1=0.2735 test_oa=0.6346 (221.7s)
+
+=== ae_dedup_zufaellig_projiziert === train=3528281 val=412869 test=417308 dim=256
+  C=0.1: val_macro_f1=0.2101 val_oa=0.6267 test_macro_f1=0.2242 test_oa=0.6279 (202.8s)
+  C=1.0: val_macro_f1=0.2419 val_oa=0.6261 test_macro_f1=0.2624 test_oa=0.6294 (323.1s)
+  C=10.0: val_macro_f1=0.2398 val_oa=0.6264 test_macro_f1=0.2532 test_oa=0.6302 (265.5s)
+
+=== ae_dedup_trainiert_projiziert === train=3528281 val=412869 test=417308 dim=256
+  C=0.1: val_macro_f1=0.2888 val_oa=0.6417 test_macro_f1=0.2797 test_oa=0.6431 (198.3s)
+  C=1.0: val_macro_f1=0.2947 val_oa=0.6422 test_macro_f1=0.2831 test_oa=0.6433 (216.2s)
+  C=10.0: val_macro_f1=0.2919 val_oa=0.6420 test_macro_f1=0.2853 test_oa=0.6428 (280.3s)
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_results_ae_dedup_ckpt.csv
+                       config  dim   C   val_oa  val_macro_f1  test_oa  test_macro_f1
+                 ae_dedup_roh   64 1.0 0.632169      0.253495 0.635241       0.281145
+ae_dedup_zufaellig_projiziert  256 1.0 0.626102      0.241899 0.629365       0.262425
+ae_dedup_trainiert_projiziert  256 1.0 0.642245      0.294741 0.643280       0.283135
+
+=== Zellzuordnung Testpixel laden ===
+  417308 Testpixel, 167 eindeutige Zellen
+
+=== Zellebenen-Bootstrap (Test, 1000x) ===
+  ae_dedup_roh: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6347+-0.0127, test_macro_f1=0.2798+-0.0139)
+  ae_dedup_zufaellig_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6287+-0.0130, test_macro_f1=0.2625+-0.0178)
+  ae_dedup_trainiert_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6427+-0.0126, test_macro_f1=0.2792+-0.0125)
+                       config   metric     mean   ci_low  ci_high
+                 ae_dedup_roh       oa 0.634665 0.611851 0.660544
+                 ae_dedup_roh macro_f1 0.279842 0.254248 0.311111
+ae_dedup_zufaellig_projiziert       oa 0.628683 0.605226 0.655305
+ae_dedup_zufaellig_projiziert macro_f1 0.262524 0.233350 0.301468
+ae_dedup_trainiert_projiziert       oa 0.642692 0.619500 0.667725
+ae_dedup_trainiert_projiziert macro_f1 0.279206 0.255899 0.303237
+
+=== Gepaarter Zellebenen-Bootstrap (trainiert - roh) ===
+backbone   metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+ae_dedup macro_f1                      -0.000636  -0.021648    0.016853        False
+ae_dedup       oa                       0.008027   0.003903    0.011999         True
+
+=== Nebendiagnose: Stabilitaet des Zellebenen-Bootstraps (zweiter Startseed) ===
+    (Hauptzahlen oben bleiben 1000x/Seed 2000 - KEINE Eskalation durch dieses Skript)
+  ae_dedup_roh: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6347+-0.0127, test_macro_f1=0.2798+-0.0139)
+  ae_dedup_zufaellig_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6287+-0.0130, test_macro_f1=0.2625+-0.0178)
+  ae_dedup_trainiert_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6427+-0.0126, test_macro_f1=0.2792+-0.0125)
+  ae_dedup_roh: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6352+-0.0134, test_macro_f1=0.2801+-0.0142)
+  ae_dedup_zufaellig_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6293+-0.0137, test_macro_f1=0.2634+-0.0180)
+  ae_dedup_trainiert_projiziert: Kachel-Test-Bootstrap 1000x fertig ueber 167 Zellen (test_oa=0.6434+-0.0132, test_macro_f1=0.2793+-0.0127)
+                       config   metric                                      ci_a                                      ci_b  rel_diff_lo  rel_diff_hi
+                 ae_dedup_roh       oa  (0.6118514887136283, 0.6605439542618475)  (0.6080622984672677, 0.6605791466039116)      0.00619      0.00005
+                 ae_dedup_roh macro_f1 (0.2542480811439671, 0.31111109896189093) (0.2530147946834458, 0.31289582765814355)      0.00485      0.00570
+ae_dedup_zufaellig_projiziert       oa  (0.6052262146783015, 0.6553050618397034)  (0.6022704659271434, 0.6557747408215265)      0.00488      0.00072
+ae_dedup_zufaellig_projiziert macro_f1 (0.23335004747675028, 0.3014679355148028) (0.23347717928068093, 0.3025478388437037)      0.00054      0.00357
+ae_dedup_trainiert_projiziert       oa  (0.6194997972718739, 0.6677249124449463)  (0.6179625309605407, 0.6690194324376256)      0.00248      0.00193
+ae_dedup_trainiert_projiziert macro_f1  (0.2558988614180222, 0.3032369954019706) (0.2541600869669007, 0.30460535811088446)      0.00679      0.00449
+
+Maximale relative Abweichung der CI-Grenzen (Seed 2000 vs. 9000): 0.6795%
+STABILITAET_OK: Abweichung <= 1 %.

@@ -1,0 +1,15 @@
+Mittelwertsvorhersage: KL=0.0696 (CI Zelle (0.06077441796660423, 0.07876063846051692))
+ae/a: KL=0.0503+-0.0004 (CI Zelle (0.0425243180245161, 0.057735194358974694))
+ae/b: KL=0.0544+-0.0006 (CI Zelle (0.04682327564805746, 0.06181516284123063))
+ae/c: KL=0.0426+-0.0004 (CI Zelle (0.03615937326103449, 0.04937288584187626))
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase7_metrics_ae_v1dedup.csv
+
+=== Gepaarter Zell-Bootstrap C (ae_v1_dedup) minus A ===
+  Gemeinsame Test-LSOAs: 417 (A: 417, C: 417)
+  kl: Punktdiff (C-A)=-0.00726  95%-CI=[-0.01019, -0.00459]  Anteil Resamples>0=0.000  signifikant=True
+  l1_sum: Punktdiff (C-A)=-0.02012  95%-CI=[-0.02740, -0.01370]  Anteil Resamples>0=0.000  signifikant=True
+  l1_mean: Punktdiff (C-A)=-0.00224  95%-CI=[-0.00304, -0.00152]  Anteil Resamples>0=0.000  signifikant=True
+  chebyshev: Punktdiff (C-A)=-0.00635  95%-CI=[-0.00882, -0.00412]  Anteil Resamples>0=0.000  signifikant=True
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv
