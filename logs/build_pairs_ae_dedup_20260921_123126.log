@@ -1,0 +1,21 @@
+Lade /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pairs_ae_full.parquet...
+  14008309 Zeilen
+Baue volle Kachel-Masken (Eindeutigkeit + AOI-Polygon) und reine AOI-Maske...
+  Nach primaerer Maskierung: 13552722 Zeilen
+
+Zweiter Aufloesungsschritt (Grenzlinien-Rest zwischen unabhaengigen Masken)...
+  105 Zeilen in 2 Runde(n) zusaetzlich entfernt
+
+Zeilen vorher: 14008309
+Zeilen nachher: 13552617
+Entfernt gesamt: 455692 (3.25%)
+
+Zerlegung der entfernten Zeilen (pairs_ae_full): 455692 von 14008309 (3.253%)
+  Eindeutigkeitsmaske (innerhalb AOI, nicht naechste Kachel): 6720 (0.048% von allen, 1.5% der Entfernten)
+  AOI-Polygon-Maske (ausserhalb Greater London): 448867 (3.204% von allen, 98.5% der Entfernten)
+  Restaufloesung (Grenzlinien-Rest): 105 (0.001% von allen, 0.0% der Entfernten)
+
+Verifikation: verbleibende Dopplungen (Soll: 0)...
+  Verbleibende Dopplungs-Weltorte: 0 (Soll: 0)
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pairs_ae_full_dedup.parquet

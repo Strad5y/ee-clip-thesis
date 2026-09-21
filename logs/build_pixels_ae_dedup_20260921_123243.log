@@ -1,0 +1,68 @@
+Lade Split-Zellen-Referenz (unveraendert, aktuelles splits_london.csv)...
+  1818 Zellen mit bekanntem Split
+poi_text_full.parquet: 884765 POIs geladen
+  pairs_ae_full_dedup.parquet: 13552617 Zeilen gelesen (4s)
+  Nach Inner-Join mit poi_text_full (Fall D faellt raus): 10714536 Zeilen (6s)
+  EO-Vektor-Konsistenz verifiziert: 0 Abweichungen ueber 7268678 Pixel (12s)
+  Pixel mit 1 POI: 4705695, mit >1 POI: 2562983 (6008841 Zeilen) (18s)
+  Multi-POI-Aggregation fertig (215s)
+  Split zugeordnet (219s)
+  Validierung OK: Pixel-Schluessel eindeutig, kein leerer pixel_text.
+  Pixel ohne Split-Zelle (Ausnahme, GEMESSEN): 0 (0.00% von 7268678)
+
+=== ae_dedup: Bericht ===
+Zeilen vorher (POI-Pixel-Paare, GEMESSEN): 13552617
+  davon mit Text (Fall A/B/C, GEMESSEN): 10714536
+Zeilen nachher (Pixel, GEMESSEN): 7268678
+
+Verteilung n_pois (GEMESSEN): median=1.0, mean=1.4741, p90=2.0, p99=4.0, max=18
+Anteil Pixel mit genau 1 POI (GEMESSEN): 64.74%
+
+*** Anteil eindeutiger pixel_text an allen Pixeln (GEMESSEN, DIE Zahl): 237737 von 7268678 = 3.27% ***
+
+Top-10 pixel_text (GEMESSEN):
+   7.88%  n=  572811  A natural feature: wood. subjective characterization of an area with trees
+   3.61%  n=  262446  A location containing A building: house. building usually intended for living in; a building: house.
+   3.45%  n=  250945  A building: house. building usually intended for living in
+   2.83%  n=  205843  A natural feature: scrub. vegetational formation dominated by shrubs
+   2.56%  n=  186266  A building: apartments. self-contained housing unit occupying part of a building
+   2.46%  n=  179128  A location containing A building: house. building usually intended for living in; a building: house.
+   2.36%  n=  171664  A building: terrace. external, raised, open, flat area in architecture
+   2.26%  n=  164006  A water natural feature and a river water feature. chemical compound whose molecules are formed by t
+   2.10%  n=  152602  A building: residential. building mainly used for residential purposes
+   1.81%  n=  131811  A public amenity or service: parking. cleared area that is intended for parking vehicles
+
+Zeichenlaenge pixel_text (GEMESSEN): median=128.0, p99=458.0, max=2102
+
+Laengster Text (GEMESSEN, 2102 Zeichen):
+  A location containing A fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness; a leisure or recreation place: park. urban park in Clapham, south London; a fitness station leisure spot and a fitness sports facility. fitness place outside – gym equipment in a public outdoor location; bodily activity that enhances or maintains physical fitness and overall health and wellness.
+
+Zeilen je Split (GEMESSEN, inkl. NaN = keine Split-Zelle):
+split
+train    5797540
+val       742550
+test      728588
+Name: count, dtype: int64
+
+Beispieltexte:
+  [1 POI] A natural feature: wood. subjective characterization of an area with trees
+  [3 POIs] A location containing A building: residential. building mainly used for residential purposes; a building: residential. building mainly used for residential purposes; a building: residential. building mainly used for residential purposes.
+  [dichtestes Pixel, n_pois=18] A location containing LHR Terminal 2 Business Parking — a public amenity or service: parking. cleared area that is intended for parking vehicles; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle; a public amenity or service: parking space. designated location for parking a vehicle.
+
+Zeilen vorher (bestehendes pixels_ae.parquet): 7664167
+Zeilen nachher (dedupliziert): 7268678
+Entfernt: 395489 (5.16%)
+
+Ursachen-Zerlegung der aus pixels_ae entfernten Zeilen...
+
+Zerlegung der entfernten Zeilen (pixels_ae): 395489 von 7664167 (5.160%)
+  Eindeutigkeitsmaske (innerhalb AOI, nicht naechste Kachel): 5605 (0.073% von allen, 1.4% der Entfernten)
+  AOI-Polygon-Maske (ausserhalb Greater London): 389831 (5.086% von allen, 98.6% der Entfernten)
+  Restaufloesung (Grenzlinien-Rest): 53 (0.001% von allen, 0.0% der Entfernten)
+
+Kontrolle: Dopplungs-Weltorte im ORIGINAL pixels_ae (vor jeder Maske): 1432
+
+Verifikation: verbleibende Dopplungen (Soll: 0)...
+  Verbleibende Dopplungs-Weltorte: 0 (Soll: 0)
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/pixels_ae_dedup.parquet

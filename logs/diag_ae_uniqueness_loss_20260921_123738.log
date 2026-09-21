@@ -1,0 +1,8 @@
+Eindeutigkeits-entfernte Zeilen: 5605
+/home/minorai/PycharmProjects/ee-clip-thesis/diag_ae_uniqueness_loss.py:56: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  b1 = src.read(1)
+  A) echte Dopplung (Rival hat Zeile im Original): 1407
+  B) Rival gueltig, aber KEINE Zeile im Original (Zeile verloren): 4197
+  C) kein Rival mit gueltigen Daten (unerklaert): 1
+  (nodata der Kacheln: [-128.0, -128.0])
