@@ -687,6 +687,17 @@ Zellen (1-km, `splits_london.csv`): 1.818 (1.454 / 182 / 182); davon mit Pixeln 
 `_dedup`-Beständen: 1.723 (1.384 / 171 / 168). `landuse_pairs_ae_dedup`: 273 Pixel mit
 `split='missing'` (Original: 317; UA-Pixel in Zellen ohne POI-Pixel, markiert, nicht verworfen).
 
+**Namenshinweis (Verwechslungsgefahr):** Die Land-Use-Ergebnisdateien vom 4./5.9. mit
+`ae_dedup` im Namen (`landuse_probe_results_ae_dedup*.csv`, `landuse_probe_c_grid_ae_dedup.csv`,
+`landuse_probe_confusion_ae_dedup_*.csv`, `landuse_probe_paired_diff_ae_dedup*.csv`,
+`landuse_probe_*_bootstrap*_ae_dedup.csv`, …) stammen aus der **Polygon-Dedup-Runde**
+(`build_landuse_pairs.py::deduplicate_pixels()`: ein Pixel, das von mehreren Urban-Atlas-Polygonen
+getroffen wird, behält nur die Zeile mit maximaler Coverage) — NICHT aus der Kachel-Dedup dieses
+Abschnitts. Die Ergebnisse der Kachel-Dedup (`landuse_pairs_ae_dedup.parquet`, Checkpoint
+`ae_v1_dedup`) tragen das Suffix **`_ckpt`** (z. B. `landuse_probe_results_ae_dedup_ckpt.csv`,
+`landuse_probe_cell_bootstrap_ae_dedup_ckpt.csv`, `landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv`)
+bzw. `_v1_dedup`/`_v1dedup` (Retrieval, Class-Retrieval, SDM). Die alten Dateien bleiben unverändert.
+
 **Nebenbefund: die Eindeutigkeitsmaske entfernt teils Orte ganz, statt zu deduplizieren**
 (`diag_ae_uniqueness_loss.py --backbone {ae,tessera}`, Ergebnisse
 `results/diag_uniqueness_loss_{ae,tessera}.csv`; nur dokumentiert, NICHT korrigiert, die
