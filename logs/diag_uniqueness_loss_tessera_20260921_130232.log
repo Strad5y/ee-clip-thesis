@@ -1,0 +1,16 @@
+[tessera] Zeilen pixels_tessera: 8257024, Eindeutigkeits-entfernt (innerhalb AOI): 561759
+  backbone: tessera
+  n_pixels_orig: 8257024
+  n_uniqueness_removed: 561759
+  A_true_duplicate: 531439
+  B_location_vanishes: 30320
+  B_rival_other_crs(zone_assignment): 10914
+  B_rival_same_crs: 19406
+  B_with_row_in_3x3_neighbourhood_of_rival_pixel: 21211
+  B_rival_other_crs_without_neighbour_row: 9109
+  B_rival_same_crs_without_neighbour_row: 0
+  C_no_valid_rival: 0
+  check_location_absent_in_dedup_result: 33521
+  check_A_but_absent_in_dedup_result: 3201
+  share_of_all_orig_pixels_B: 0.0036720251751720715
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/diag_uniqueness_loss_tessera.csv

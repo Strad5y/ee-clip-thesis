@@ -521,7 +521,7 @@ aber keine ganze Zelle — die Zellmenge (und damit die Seed-0-Permutation) blei
 Dateien). Zusätzlich manuell `verify_pair()` gegen die neuen `_dedup`-Dateien aufgerufen:
 konsistent (1.916.851 gemeinsame Pixel).
 
-**AlphaEarth ist von diesem gesamten Schritt 1 (und auch Schritt 2/3) NICHT betroffen** — es
+**[Stand 2026-09-21: AlphaEarth-Dedup-Daten existieren inzwischen, Training/Auswertung stehen noch aus — siehe Abschnitt "AlphaEarth-Vollständige-Dedup" weiter unten; dieser Absatz beschreibt den Stand 2026-09-18/19.]** AlphaEarth ist von diesem gesamten Schritt 1 (und auch Schritt 2/3) NICHT betroffen — es
 bleibt bei den bisherigen, undeduplizierten `pixels_ae`/`pairs_ae_full`/`landuse_pairs_ae`.
 AlphaEarths eigene Kachel-Überlappung (≈5.940 km² Bounding-Box-Overlap, aber nur ≈0,1% echter
 Dual-valid-Data-Overlap, siehe frühere Diagnose) wurde in dieser Aufgabe **nicht** bearbeitet.
@@ -635,6 +635,88 @@ Unabhaengig davon bleibt der Kontrolllauf-vs-Dedup-Vergleich der methodisch saub
 (gleicher Seed, keine Restunsicherheit ueber die Datenmenge), weil der alte Checkpoint ohnehin
 unseeded war (siehe Seed-Tabelle oben) und deshalb fuer einen fairen Punktvergleich nicht
 geeignet ist.
+
+## AlphaEarth-Vollständige-Dedup: Datenbasis & Split-Entscheidung (Schritt 1, Hauptaufgabe 2026-09-21)
+
+Dieselbe Prozedur wie bei TESSERA (Eindeutigkeitsmaske + AOI-Polygon-Maske + Restauflösung über
+Weltkoordinaten; Logik unverändert aus `tessera_dedup_utils.py`, `backbone="ae"`; Skripte
+`build_pairs_ae_dedup.py`, `build_pixels_ae_dedup.py`, `build_landuse_pairs_ae_dedup.py`,
+`ae_dedup_utils.py`). Alte Dateien unverändert; neue Dateien tragen den Suffix `_dedup`.
+
+| Datei | Vorher | Nachher | Entfernt | Davon Eindeutigkeit / AOI-Polygon / Restauflösung |
+|---|---|---|---|---|
+| `pairs_ae_full_dedup.parquet` | 14.008.309 | 13.552.617 | 455.692 (3,25 %) | 6.720 (1,5 %) / 448.867 (98,5 %) / 105 (0,0 %) |
+| `pixels_ae_dedup.parquet` | 7.664.167 | 7.268.678 | 395.489 (5,16 %) | 5.605 (1,4 %) / 389.831 (98,6 %) / 53 (0,0 %) |
+| `landuse_pairs_ae_dedup.parquet` | 4.363.718 | 4.359.867 | 3.851 (0,09 % netto) | vor Coverage-Dedup/Sampling, von 19.508.778 Pixel-Polygon-Zeilen: 22.071 (56,2 %) / 17.090 (43,5 %) / 101 (0,3 %) |
+
+Bei AlphaEarth dominiert (anders als bei TESSERA) fast vollständig die AOI-Maske: die
+Rohkacheln (30N/31N, 8192×8192) überlappen als Bounding Box zu ≈88 %, echte Datenüberlappung ist
+aber nur ≈0,1 % (siehe Text-Query-Phase-2). Beim Landuse-Artefakt ist das Bild umgekehrt
+(Eindeutigkeit 56 %), weil Urban Atlas bereits vor dem Join auf die AOI geclippt wird und die
+AOI-Maske nur noch Randpixel trifft. 0 verbleibende Dopplungs-Weltorte in allen drei Dateien
+(im Original `pixels_ae`: 1.432 Dopplungs-Weltorte). `verify_pair()` für `pixels_ae_dedup` ↔
+`landuse_pairs_ae_dedup`: konsistent (1.915.221 gemeinsame Pixel); `verify_provenance.py` für die
+alten Paare unverändert grün. `pixels_ae_dedup` und `pixels_tessera_dedup` decken praktisch
+dieselben Pixel ab (7.268.678 vs. 7.268.807 Zeilen, Differenz 129) und dieselben 1.723 Zellen.
+
+**Entscheidung Splits (Jakob, 2026-09-21): `data/splits/splits_london.csv` bleibt unverändert,
+KEIN Neubau.** `check_splits_rebuild_dedup_ae.py` (SEED=0, `assign_splits()` importiert) baut
+die Zellen auf dem Pixelbestand NACH beiden Deduplizierungen neu: nur noch **1.723** statt 1.818
+Zellen (die 95 fehlenden Zellen liegen komplett außerhalb des AOI-Polygons und haben in keinem
+der beiden Backbones mehr Pixel; Split der 95 in `splits_london.csv`: 70 train / 11 val /
+14 test). Ein Neubau würde wegen der geänderten Zellmenge die globale Seed-0-Permutation
+verändern und **574 von 1.723 Zellen (33,3 %) umsortieren** (Kreuztabelle alt→neu:
+train→test 141, train→val 134, val→train 139, test→train 130, …). Das würde die
+TESSERA-dedup-Ergebnisse (Training, Auswertung) ungültig machen — sie wurden auf den bestehenden
+Splits gemessen — und ebenso den auf der Zellzuordnung beruhenden SDM-LSOA-Split
+(`sdm_lsoa_splits_london.csv`, `sdm_lsoa_cell_overlay_london.csv`). Der räumliche Split ist eine
+feste Größe der Arbeit; die 95 Zellen bleiben in `splits_london.csv` stehen und sind schlicht
+leer. Dokumentiert in `data/processed/diag_splits_rebuild_dedup_ae_comparison.csv` (nur
+Dokumentation, ersetzt `splits_london.csv` nicht).
+
+**Split-Größen (Pixel, Anteil an allen Pixeln des Artefakts):**
+
+| Datei | Gesamt | train | val | test |
+|---|---|---|---|---|
+| `pixels_ae` (alt) | 7.664.167 | 6.095.537 (79,53 %) | 791.022 (10,32 %) | 777.608 (10,15 %) |
+| `pixels_ae_dedup` | 7.268.678 | 5.797.540 (79,76 %) | 742.550 (10,22 %) | 728.588 (10,02 %) |
+| `pixels_tessera` (alt) | 8.257.024 | 6.583.295 (79,73 %) | 843.989 (10,22 %) | 829.740 (10,05 %) |
+| `pixels_tessera_dedup` | 7.268.807 | 5.797.503 (79,76 %) | 742.439 (10,21 %) | 728.865 (10,03 %) |
+
+Zellen (1-km, `splits_london.csv`): 1.818 (1.454 / 182 / 182); davon mit Pixeln in den
+`_dedup`-Beständen: 1.723 (1.384 / 171 / 168). `landuse_pairs_ae_dedup`: 273 Pixel mit
+`split='missing'` (Original: 317; UA-Pixel in Zellen ohne POI-Pixel, markiert, nicht verworfen).
+
+**Nebenbefund: die Eindeutigkeitsmaske entfernt teils Orte ganz, statt zu deduplizieren**
+(`diag_ae_uniqueness_loss.py --backbone {ae,tessera}`, Ergebnisse
+`results/diag_uniqueness_loss_{ae,tessera}.csv`; nur dokumentiert, NICHT korrigiert, die
+Prozedur bleibt für beide Backbones identisch). Bei manchen durch die Eindeutigkeitsmaske
+entfernten `pixels_*`-Zeilen existiert in der Gewinner-Kachel keine Zeile (die Maske spricht
+den Ort der Gewinner-Kachel zu, der POI war aber nur der Verlierer-Kachel zugewiesen):
+
+| | AlphaEarth | TESSERA |
+|---|---|---|
+| durch Eindeutigkeitsmaske entfernte Zeilen (innerhalb AOI) | 5.605 | 561.759 |
+| A) echte Dopplung (Rival hat Zeile im Original) | 1.407 | 531.439 |
+| B) Ort verschwindet (Rival gültig, aber keine Zeile) | 4.197 (0,055 % von `pixels_ae`) | 30.320 (0,37 % von `pixels_tessera`) |
+| — B, Rivale in ANDERER UTM-Zone (Zonenzuweisung `assign_utm_zone`) | 4.197 | 10.914 |
+| — B, Rivale in GLEICHER UTM-Zone | 0 | 19.406 |
+| — B ohne jede Zeile in der 3×3-Nachbarschaft des Rivalen-Pixels, Rivale andere Zone | 3.372 | 9.109 |
+| — B ohne Nachbarzeile, Rivale gleiche Zone | 0 | 0 |
+
+Deutung: Nur der zonenübergreifende Teil kann auf `assign_utm_zone` zurückgehen (dort existiert
+der Zonenfilter; er weist jeden POI genau einer Kachel zu). Belastbar als „Orte, die durch die
+Zonenzuweisung ganz verschwinden" sind die **B-Fälle mit anderer Zone und ohne Nachbarzeile:
+TESSERA 9.109, AlphaEarth 3.372** (Obergrenze ohne Nachbarprüfung: 10.914 bzw. 4.197). Die
+19.406 TESSERA-Fälle mit Rivalen in der GLEICHEN Zone (dort gibt es keinen Zonenfilter) haben
+ausnahmslos eine Zeile in der 3×3-Nachbarschaft des Rivalen-Pixels: das ist ein Effekt der nicht
+phasengleichen 10-m-Gitter (das POI-Polygon deckt das Pixel der einen Kachel ab, das
+nächstliegende Pixel der anderen aber nicht), keine Zonenzuweisung — der Ort ist dort in der
+Nachbarschaft weiterhin durch eine Zeile vertreten. Die Nachbarprüfung ist eine Näherung (die
+Nachbarzeile muss nicht denselben POI-Ort meinen). Restgröße: `check_location_absent_in_dedup_result`
+(kein Rivalen-Pixel im Dedup-Ergebnis) TESSERA 33.521, AE 4.259 — inkl. 3.201 bzw. 61 A-Fälle, deren
+Rivalen-Zeile selbst ebenfalls entfernt wurde. Größenordnung insgesamt klein
+(≤ 0,4 % der Original-Pixel), verändert die Aussage „0 verbleibende Dopplungen" nicht.
 
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
