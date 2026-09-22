@@ -1,0 +1,52 @@
+Mittelwertsvorhersage (seed-unabhaengig, unveraendert): KL=0.0696 (CI Zelle (0.06077441796660423, 0.07876063846051692))
+
+=== tessera/a: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  tessera/a: kl=0.03375 CI=(0.028038508910685777, 0.04043984469026327), l1_sum=0.18726 CI=(0.17394379302859306, 0.20078883171081544), l1_mean=0.02081 CI=(0.01932708816602826, 0.022309869760647416), chebyshev=0.05708 CI=(0.051764221768826245, 0.06228760182857514)
+
+=== tessera/b: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  tessera/b: kl=0.04026 CI=(0.03345891609787941, 0.04749239487573504), l1_sum=0.20684 CI=(0.19177214987576008, 0.22243425883352758), l1_mean=0.02298 CI=(0.021308015240356325, 0.024714916432276367), chebyshev=0.06286 CI=(0.05684242248535156, 0.06946478635072709)
+
+=== tessera/c: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  tessera/c: kl=0.03419 CI=(0.02866401933133602, 0.040396698657423256), l1_sum=0.19025 CI=(0.17726552598178386, 0.2029025934636593), l1_mean=0.02114 CI=(0.019696167949587107, 0.022544731246307494), chebyshev=0.05776 CI=(0.05244151800870896, 0.06311983726918698)
+
+=== tessera: gepaarter Zell-Bootstrap C-A (Seed-Mittel) ===
+  kl: Punktdiff (C-A)=+0.00044  95%-CI=[-0.00180, +0.00265]  signifikant=False
+  l1_sum: Punktdiff (C-A)=+0.00298  95%-CI=[-0.00267, +0.00917]  signifikant=False
+  l1_mean: Punktdiff (C-A)=+0.00033  95%-CI=[-0.00030, +0.00102]  signifikant=False
+  chebyshev: Punktdiff (C-A)=+0.00068  95%-CI=[-0.00112, +0.00273]  signifikant=False
+
+=== ae/a: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  ae/a: kl=0.05028 CI=(0.042996303737163545, 0.05829370282590389), l1_sum=0.23661 CI=(0.22102966979146005, 0.2526238441467285), l1_mean=0.02629 CI=(0.02455885112285614, 0.028069316409528255), chebyshev=0.07105 CI=(0.06494120433926583, 0.07721883673220872)
+
+=== ae/b: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  ae/b: kl=0.05443 CI=(0.04731228519231081, 0.06222109766677022), l1_sum=0.24797 CI=(0.23277802616357804, 0.26395695358514787), l1_mean=0.02755 CI=(0.025864225532859563, 0.02932855151593685), chebyshev=0.07482 CI=(0.06886451728641987, 0.08092823401093482)
+
+=== ae/c: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  ae/c: kl=0.04261 CI=(0.03630606457591057, 0.04995337147265672), l1_sum=0.21545 CI=(0.2010061126202345, 0.23076070845127106), l1_mean=0.02394 CI=(0.022334013134241104, 0.02564007914625108), chebyshev=0.06434 CI=(0.058670551795512435, 0.07022452112287283)
+
+=== ae: gepaarter Zell-Bootstrap C-A (Seed-Mittel) ===
+  kl: Punktdiff (C-A)=-0.00766  95%-CI=[-0.01071, -0.00498]  signifikant=True
+  l1_sum: Punktdiff (C-A)=-0.02116  95%-CI=[-0.02868, -0.01442]  signifikant=True
+  l1_mean: Punktdiff (C-A)=-0.00235  95%-CI=[-0.00319, -0.00160]  signifikant=True
+  chebyshev: Punktdiff (C-A)=-0.00671  95%-CI=[-0.00926, -0.00442]  signifikant=True
+
+=== Backbone-Differenz (TESSERA - AE), Seed-Mittel ===
+  [a/kl] TESSERA-AE = -0.01652  95%-CI=[-0.02205, -0.01135]  signifikant=True
+  [a/l1_sum] TESSERA-AE = -0.04934  95%-CI=[-0.06326, -0.03767]  signifikant=True
+  [a/l1_mean] TESSERA-AE = -0.00548  95%-CI=[-0.00703, -0.00419]  signifikant=True
+  [a/chebyshev] TESSERA-AE = -0.01397  95%-CI=[-0.01840, -0.00987]  signifikant=True
+  [b/kl] TESSERA-AE = -0.01416  95%-CI=[-0.01831, -0.01007]  signifikant=True
+  [b/l1_sum] TESSERA-AE = -0.04113  95%-CI=[-0.05218, -0.02999]  signifikant=True
+  [b/l1_mean] TESSERA-AE = -0.00457  95%-CI=[-0.00580, -0.00333]  signifikant=True
+  [b/chebyshev] TESSERA-AE = -0.01196  95%-CI=[-0.01554, -0.00833]  signifikant=True
+  [c/kl] TESSERA-AE = -0.00842  95%-CI=[-0.01163, -0.00555]  signifikant=True
+  [c/l1_sum] TESSERA-AE = -0.02520  95%-CI=[-0.03400, -0.01745]  signifikant=True
+  [c/l1_mean] TESSERA-AE = -0.00280  95%-CI=[-0.00378, -0.00194]  signifikant=True
+  [c/chebyshev] TESSERA-AE = -0.00658  95%-CI=[-0.00945, -0.00383]  signifikant=True
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase7_metrics_tessera_seedmean.csv
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase7_metrics_ae_seedmean.csv
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/diag_backbone_paired_bootstrap_sdm_seedmean.csv
