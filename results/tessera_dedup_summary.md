@@ -54,10 +54,15 @@ Zellebenen-Diff trainiert−roh).
 Quelldatei Alt: `data/processed/landuse_probe_results_tessera_dedup.csv` (Referenzdatei, MD5 in
 `results/checksums.txt`, Provenienz verifiziert: `checkpoints/tessera_v1/best.pt` Epoche 26,
 undeduplizierte `landuse_pairs_tessera.parquet`, Log
-`logs/run_landuse_probe_tessera_detached_20260905_165433.log`). **Der Alt-Lauf hat KEINEN
-Zellebenen-Bootstrap** (nur einen row-/pixelweisen Test-Bootstrap, methodisch nicht vergleichbar
-mit den Neu-CIs unten — deshalb hier nur die Punktschätzung gegenübergestellt, keine CI-Zeile
-für Alt).
+`logs/run_landuse_probe_tessera_detached_20260905_165433.log`).
+
+**KORRIGIERT 2026-09-22 (Jakob):** Die vorherige Aussage „Der Alt-Lauf hat KEINEN
+Zellebenen-Bootstrap" war falsch. Ein Alt-Zellebenen-Bootstrap existiert
+(`run_landuse_cell_bootstrap.py`, 14.9., 5000×, derselbe alte Checkpoint/dieselben undeduplizierten
+Daten wie oben — Punktschätzungen stimmen exakt mit der Alt-Spalte unten überein, verifiziert),
+Quelldateien `data/processed/landuse_probe_bootstrap_comparison.csv` und
+`landuse_probe_paired_diff_cell_bootstrap.csv` (MD5 in `results/checksums.txt`, ergänzt im Zuge
+der AlphaEarth-Dedup-Aufgabe). Die Alt-Zeile unten ist damit nachträglich um ein CI ergänzt.
 
 **Punktschätzung (bestes val_macro_f1 je Konfiguration):**
 
@@ -74,20 +79,23 @@ Projektion hat keinen gelernten Zusammenhang mit der Zielgröße, daher ist die 
 empfindlicher gegenüber Rauschen im jeweiligen Val-Split als bei "roh"/"trainiert" (beide Male
 C=10,0 in Alt UND Neu).
 
-**Zellebenen-Bootstrap (NEU, 1000× über 167 Test-Zellen; kein Alt-Äquivalent, siehe oben):**
+**Zellebenen-Bootstrap, Alt (5000×, 14.9., korrigiert s.o.) vs. Neu (1000×, 167 Test-Zellen):**
 
-| Konfiguration | test_oa (Mittel) | 95%-CI | test_macro_f1 (Mittel) | 95%-CI |
-|---|---|---|---|---|
-| roh | 0,6035 | [0,5803; 0,6287] | 0,2479 | [0,2226; 0,2723] |
-| zufällig projiziert | 0,5986 | [0,5749; 0,6249] | 0,2371 | [0,2157; 0,2607] |
-| trainiert projiziert | 0,6151 | [0,5921; 0,6402] | 0,2501 | [0,2294; 0,2681] |
+| Konfiguration | Alt test_oa | Alt 95%-CI | Neu test_oa | Neu 95%-CI | Alt macro_f1 | Alt 95%-CI | Neu macro_f1 | Neu 95%-CI |
+|---|---|---|---|---|---|---|---|---|
+| roh | 0,6020 | [0,5744; 0,6278] | 0,6035 | [0,5803; 0,6287] | 0,2452 | [0,2195; 0,2654] | 0,2479 | [0,2226; 0,2723] |
+| zufällig projiziert | 0,5972 | [0,5692; 0,6233] | 0,5986 | [0,5749; 0,6249] | 0,2357 | [0,2117; 0,2559] | 0,2371 | [0,2157; 0,2607] |
+| trainiert projiziert | 0,6116 | [0,5846; 0,6369] | 0,6151 | [0,5921; 0,6402] | 0,2484 | [0,2258; 0,2710] | 0,2501 | [0,2294; 0,2681] |
 
-**Gepaarter Zellebenen-Bootstrap (trainiert − roh, NEU):**
+**Gepaarter Zellebenen-Bootstrap (trainiert − roh), Alt vs. Neu:**
 
-| Metrik | Diff | 95%-CI | signifikant |
-|---|---|---|---|
-| oa | +0,0116 | [0,0087; 0,0145] | **ja** |
-| macro_f1 | +0,0023 | [−0,0105; +0,0121] | nein |
+| Metrik | Alt Diff | Alt 95%-CI | Alt signifikant | Neu Diff | Neu 95%-CI | Neu signifikant |
+|---|---|---|---|---|---|---|
+| oa | +0,0096 | [0,0070; 0,0122] | **ja** | +0,0116 | [0,0087; 0,0145] | **ja** |
+| macro_f1 | +0,0033 | [−0,0039; +0,0151] | nein | +0,0023 | [−0,0105; +0,0121] | nein |
+
+Beide Zellebenen-Bootstraps (Alt und Neu) zeigen dasselbe Muster: overall accuracy verbessert
+sich signifikant von roh zu trainiert projiziert, macro-F1 nicht signifikant.
 
 ---
 

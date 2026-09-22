@@ -1,0 +1,20 @@
+  tessera_dedup: 4359468 -> 4358064 Zeilen (-1404: 1136 Klasse 12400, 268 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+Fitte tessera_dedup/roh (C=10.0, dim=128)...
+  test_oa=0.6042 test_macro_f1=0.2511
+Fitte tessera_dedup/trainiert_projiziert (C=10.0, dim=256)...
+  test_oa=0.6158 test_macro_f1=0.2532
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+Fitte ae_dedup/roh (C=1.0, dim=64)...
+  test_oa=0.6352 test_macro_f1=0.2811
+Fitte ae_dedup/trainiert_projiziert (C=1.0, dim=256)...
+  test_oa=0.6433 test_macro_f1=0.2831
+
+Gemeinsame Test-Zellen: 167 (TESSERA 167, AE 167)
+  [roh/oa] TESSERA-AE = -0.0310  95%-CI=[-0.0392, -0.0227]  signifikant=True
+  [roh/macro_f1] TESSERA-AE = -0.0301  95%-CI=[-0.0510, -0.0166]  signifikant=True
+  [trainiert_projiziert/oa] TESSERA-AE = -0.0275  95%-CI=[-0.0351, -0.0192]  signifikant=True
+  [trainiert_projiziert/macro_f1] TESSERA-AE = -0.0299  95%-CI=[-0.0478, -0.0117]  signifikant=True
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/diag_backbone_paired_bootstrap_landuse.csv

@@ -86,7 +86,8 @@ Backbones (Zufall der Ziehung, nicht Bug) — Konfusionsmatrizen sind deshalb 23
 | Datei | Erzeugendes Skript | Direkte Inputs | Erzeugungsdatum | Generation |
 |---|---|---|---|---|
 | `data/processed/retrieval_baselines_ae_v1.csv` | `run_retrieval_baselines.py` | `checkpoints/ae_v1/best.pt`, `pixels_ae.parquet`, `pixel_text_embeddings.parquet` (alle aktuell) | 3.9. 21:28 | aktuell (von der Landuse-Split-Frage nicht betroffen — reine Retrieval-Auswertung auf `pixels_ae.parquet`) |
-| `data/processed/landuse_probe_results_ae.csv` + zugehörige `landuse_probe_*_ae.csv` (Konfusionsmatrizen, Per-Klassen-F1, Häufigkeitsniveau, Test-Bootstrap, gepaarter Diff) | `run_landuse_probe.py --backbones ae --skip-train-bootstrap` | `landuse_pairs_ae.parquet` (**neu, verifiziert konsistent**), `checkpoints/ae_v1/best.pt` | **4.9., Rerun nach Leakage-Fix** | **aktuell — Endergebnis (Test): roh test_macro_f1=0.2559, zufällig=0.2140, trainiert=0.2631, Häufigkeitsniveau=0.0270; gepaart trainiert−roh macro_f1=+0.00735 [0.00242,0.01236]. Ersetzt den 3.9.-Lauf unten.** |
+| `data/processed/landuse_probe_results_ae.csv` + zugehörige `landuse_probe_*_ae.csv` (Konfusionsmatrizen, Per-Klassen-F1, Häufigkeitsniveau, Test-Bootstrap, gepaarter Diff) | `run_landuse_probe.py --backbones ae --skip-train-bootstrap` | `landuse_pairs_ae.parquet` (**neu, verifiziert konsistent**), `checkpoints/ae_v1/best.pt` | **4.9., Rerun nach Leakage-Fix** | **KORRIGIERT 2026-09-22 (Jakob) — die hier bis dahin dokumentierten Zahlen (roh test_macro_f1=0.2559 usw.) waren STALE: die Datei wurde nach dem 4.9.-Lauf mindestens einmal überschrieben (mtime jetzt 5.9. 00:50, nicht 4.9.), ohne dass diese Zeile nachgezogen wurde. Aktueller Dateiinhalt (verifiziert 2026-09-22): roh test_oa=0.6336/test_macro_f1=0.2792, zufällig test_oa=0.6286/test_macro_f1=0.2324, trainiert test_oa=0.6420/test_macro_f1=0.2775 (C-Werte 1,0/10,0/1,0). Für Schritt-3-Vergleiche der AlphaEarth-Dedup-Aufgabe (2026-09-21/22) ist ohnehin NICHT diese Datei, sondern `landuse_probe_results_ae_dedup.csv` (5.9. 11:15, s.u.) die korrekte Alt-Referenz — siehe `results/backbone_comparison_dedup.md`.** |
+| `data/processed/landuse_probe_results_ae_dedup.csv` (Polygon-Dedup-Runde, s.o. Namenshinweis) | wie oben, Coverage-Dedup-Variante | wie oben | 5.9. 11:15 | **aktuell — Alt-Referenz für die AlphaEarth-Vollständige-Dedup-Aufgabe (2026-09-21/22): roh test_oa=0.6348/test_macro_f1=0.2749, zufällig test_oa=0.6329/test_macro_f1=0.2672, trainiert test_oa=0.6423/test_macro_f1=0.2785 (C-Werte 10,0/1,0/10,0). Exakt reproduziert durch den unabhängigen 14.9.-Lauf (`run_landuse_cell_bootstrap.py`/`logs/run_landuse_cell_bootstrap_20260913_230137.log`), MD5 in `results/checksums.txt`.** |
 | `data/processed/landuse_probe_results.csv` + `landuse_probe_{train,test}_bootstrap*.csv`, `landuse_probe_paired_diff.csv` (ohne `_ae`-Suffix) | `run_landuse_probe.py` (alter Lauf, beide Backbones) | `landuse_pairs_ae.parquet`+`landuse_pairs_tessera.parquet` **(beide waren zu diesem Zeitpunkt STALE)** | 1.–2.9. | **veraltet, ersetzt durch die `_ae`-Zeile oben. Noch nicht archiviert (nicht explizit im Archivierungsauftrag), nur gemeldet.** |
 | `data/processed/landuse_probe_results_ae.csv`-Vorläufer vom 3.9. 22:07–22:53 (überschrieben) | `run_landuse_probe.py --backbones ae` | `landuse_pairs_ae.parquet` (damals noch STALE) | 3.9. | **durch den 4.9.-Rerun überschrieben — falls eine Kopie des alten Standes noch irgendwo referenziert wird, ist sie ungültig (Leakage).** |
 
@@ -521,14 +522,15 @@ aber keine ganze Zelle — die Zellmenge (und damit die Seed-0-Permutation) blei
 Dateien). Zusätzlich manuell `verify_pair()` gegen die neuen `_dedup`-Dateien aufgerufen:
 konsistent (1.916.851 gemeinsame Pixel).
 
-**[Stand 2026-09-21: AlphaEarth-Dedup-Daten existieren inzwischen, Training/Auswertung stehen noch aus — siehe Abschnitt "AlphaEarth-Vollständige-Dedup" weiter unten; dieser Absatz beschreibt den Stand 2026-09-18/19.]** AlphaEarth ist von diesem gesamten Schritt 1 (und auch Schritt 2/3) NICHT betroffen — es
-bleibt bei den bisherigen, undeduplizierten `pixels_ae`/`pairs_ae_full`/`landuse_pairs_ae`.
-AlphaEarths eigene Kachel-Überlappung (≈5.940 km² Bounding-Box-Overlap, aber nur ≈0,1% echter
-Dual-valid-Data-Overlap, siehe frühere Diagnose) wurde in dieser Aufgabe **nicht** bearbeitet.
-**Alle TESSERA-vs-AlphaEarth-Backbone-Vergleiche in Schritt 3 (Retrieval, Land-Use, SDM) sind
-deshalb weiterhin nicht direkt vergleichbar** — TESSERA-Zahlen beruhen auf deduplizierten,
-AlphaEarth-Zahlen auf undeduplizierten Daten. Ein direkter Backbone-Vergleich TESSERA-dedup vs.
-AlphaEarth ist erst nach einer analogen AlphaEarth-Dedup-Runde methodisch sauber möglich.
+**[Historischer Absatz, Stand 2026-09-18/19 — durch die Abschnitte "AlphaEarth-Vollständige-Dedup"
+weiter unten ÜBERHOLT, hier nur noch als Herkunftsnachweis der damaligen Aussage stehen gelassen.]**
+Zum Zeitpunkt der TESSERA-Dedup-Aufgabe (Schritt 1-3, 2026-09-18/19) war AlphaEarth von alldem
+NICHT betroffen — es blieb bei den bisherigen, undeduplizierten `pixels_ae`/`pairs_ae_full`/
+`landuse_pairs_ae`, und alle TESSERA-vs-AlphaEarth-Backbone-Vergleiche waren deshalb nicht direkt
+vergleichbar. **Das gilt seit der AlphaEarth-Dedup-Aufgabe (2026-09-21/22, siehe unten) nicht mehr**
+— AlphaEarth wurde nach derselben Prozedur wie TESSERA dedupliziert, neu trainiert (`ae_v1_dedup`)
+und ausgewertet; ein Backbone-Vergleich TESSERA-dedup vs. AlphaEarth-dedup ist jetzt möglich, siehe
+`results/backbone_comparison_dedup.md`.
 
 ## TESSERA-Vollständige-Dedup: Auswertungen mit neuem Checkpoint (Schritt 3, Hauptaufgabe 2026-09-19)
 
@@ -728,6 +730,76 @@ Nachbarzeile muss nicht denselben POI-Ort meinen). Restgröße: `check_location_
 (kein Rivalen-Pixel im Dedup-Ergebnis) TESSERA 33.521, AE 4.259 — inkl. 3.201 bzw. 61 A-Fälle, deren
 Rivalen-Zeile selbst ebenfalls entfernt wurde. Größenordnung insgesamt klein
 (≤ 0,4 % der Original-Pixel), verändert die Aussage „0 verbleibende Dopplungen" nicht.
+
+## AlphaEarth-Vollständige-Dedup: Training (Schritt 2, Hauptaufgabe 2026-09-21)
+
+Analog TESSERA-Schritt-2: Kontrolllauf `ae_v1_predup_control` (identische Config/`torch.manual_seed(0)`
+wie `ae_v1_dedup`, aber auf der **unveränderten, undeduplizierten** `pixels_ae.parquet`) vs.
+Dedup-Lauf `ae_v1_dedup` (`pixels_ae_dedup.parquet`). Beide unterscheiden sich dadurch
+**ausschließlich** in der Deduplizierung. Anders als bei TESSERA war hier keine Zeilenzahl-Klärung
+nötig — der alte AE-Checkpoint-Log (`logs/train_ae_v1_20260903_184155.log`) meldet exakt die
+Zeilenzahl der heutigen `pixels_ae.parquet` (6.095.537 Train-/791.022 Val-Zeilen).
+
+| | Alter Checkpoint (`ae_v1`) | Kontrolllauf (`ae_v1_predup_control`) | Dedup-Lauf (`ae_v1_dedup`) |
+|---|---|---|---|
+| Daten | `pixels_ae` | `pixels_ae` (undedupliziert) | `pixels_ae_dedup` |
+| Trainingszeilen | 6.095.537 | 6.095.537 | 5.797.540 |
+| Val-Zeilen | 791.022 | 791.022 | 742.550 |
+| Beste Epoche | 22 | 19 | 32 |
+| recall@10_diag (Val, beste Epoche) | 0,5020 | 0,5008 | **0,5059** |
+| Early Stopping nach Epoche | 32 | 29 | 42 |
+| Seed | keiner | `torch.manual_seed(0)` | `torch.manual_seed(0)` |
+
+**Gültiger Dedup-Effekt (Kontrolllauf → Dedup-Lauf, gleicher Seed, gleiche Config):**
+recall@10_diag (Val, beste Epoche) 0,5008 → 0,5059 (**+0,0051**). Rein deskriptiv, ein Einzellauf
+je Konfiguration, kein Seed-Sweep. Zum Vergleich TESSERA: +0,0110 — bei AE ist der Effekt etwa
+halb so groß, plausibel, weil Dedup bei AE fast nur AOI-Pixel entfernt (siehe Schritt 1) und kaum
+echte Dopplungen.
+
+**Seed-Status:** wie bei TESSERA setzt `train.py::train()` im echten Trainingspfad KEINEN Seed —
+`train_ae_v1_predup_control.py`/`train_ae_v1_dedup.py` setzen `torch.manual_seed(0)` vor dem
+Aufruf, `checkpoints/ae_v1/best.pt` (alt) ist unseeded.
+
+**Der für die Arbeit geltende Vergleich ist Kontrolllauf vs. Dedup-Lauf, NICHT alter Checkpoint
+vs. Dedup-Lauf** (dieselbe Einordnung wie bei TESSERA). Der Kontrolllauf reproduziert den alten,
+unseeded Checkpoint bis auf 0,0012 im recall@10_diag — ein grobes Maß für die Lauf-zu-Lauf-Streuung
+bei AE, in derselben Größenordnung wie der Dedup-Effekt selbst.
+
+## AlphaEarth-Vollständige-Dedup: Auswertungen mit neuem Checkpoint (Schritt 3, Hauptaufgabe 2026-09-21/22)
+
+Vollständige Zahlen (Retrieval, Land-Use-Probe inkl. Zellebenen-Bootstrap + Stabilitäts-
+Nebendiagnose, Class-Retrieval inkl. Duplikat-Befund, SDM alle drei Arme neu inkl. gepaartem
+Bootstrap C−A), jeweils mit Baseline, Konfidenzintervall und Quelldatei:
+**`results/backbone_comparison_dedup.md`** (TESSERA-dedup und AE-dedup nebeneinander; nicht hier
+dupliziert). Zugrundeliegende Skripte: `run_retrieval_baselines_ae_v1dedup.py`,
+`build_landuse_pixel_cells_ae_dedup.py`, `run_landuse_probe_ae_v1dedup.py`,
+`check_class_retrieval_duplicates_ae.py`, `run_class_retrieval_ae_v1dedup.py`,
+`run_landuse_majority_baseline_ae_v1dedup.py`, `build_sdm_ae_v1dedup.py` (alle drei Arme, mit
+Bit-Identitätsprüfung gegen die 17.9.-Dateien), `build_sdm_phase7_metrics_ae_v1dedup.py` (alle
+committet). Nutzt denselben Zellebenen-Bootstrap-Fix (`run_landuse_probe.py::
+test_bootstrap_by_cell()`) und dieselbe Stoppregel für den Zweit-Seed-Stabilitätscheck
+(`run_landuse_cell_bootstrap.py::check_stability()`, > 1 % → stoppen statt eskalieren; Ergebnis
+AE: max. 0,68 %, keine Eskalation nötig) wie TESSERA.
+
+**Geltung des Alt-Neu-Vergleichs bei Retrieval/Land-Use/Class-Retrieval:** vermengt wie bei
+TESSERA immer zwei Effekte (Checkpoint-Wechsel UND Dedup der Auswertedaten). Für den GÜLTIGEN
+Dedup-Effekt (ein Faktor isoliert) gilt Kontrolllauf → Dedup-Lauf aus Schritt 2 (Training) bzw.
+bei SDM der dreistufige Vergleich (s.u.). **Der Class-Retrieval-Rückgang mit dem neuen Checkpoint
+ist NICHT als Dedup-Effekt zu lesen** — siehe Diagnose unten.
+
+**Diagnose Class-Retrieval (2026-09-21/22, nicht Teil der Ergebnisdateien):**
+`diag_class_retrieval_ae_control.py` zerlegt den Makro-AP-Rückgang (`ae_v1`/alt → `ae_v1_dedup`/neu:
+−0,0048) in Galerie-Effekt (−0,0002 bis −0,0003), Checkpoint-Lauf-zu-Lauf-Effekt (`ae_v1` →
+`predup_control`, gleiche Daten: **−0,0041**, ~9 % der AP) und reinen Dedup-Effekt
+(`predup_control`/alt → `ae_v1_dedup`/neu, gleicher Seed: −0,0006, ~1,5 %). Der Rückgang kommt
+also fast vollständig aus der Lauf-zu-Lauf-Streuung, nicht aus Checkpoint-Wechsel oder
+Deduplizierung. Klassen-Rangfolge über Läufe stabil (Spearman ρ=0,954 zwischen AP(`ae_v1`) und
+AP(`predup_control`), 185 Klassen). Ergebnisse: `data/processed/diag_class_retrieval_ae_control_
+{summary,per_query,gallery_relevance}.csv`, Kopien in `results/`.
+
+**SDM: alle drei Arme neu gerechnet** (anders als bei TESSERA, wo nur Arm C neu gerechnet wurde —
+explizite Nutzervorgabe). Arm A bit-identisch zur 17.9.-Datei (Reproduzierbarkeitscheck bestanden),
+Arm B numerisch nicht ganz identisch (siehe Einschränkungs-Abschnitt unten), Arm C neuer Checkpoint.
 
 ### AlphaEarth Schritt 3: bekannte Einschränkungen (2026-09-21)
 

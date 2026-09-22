@@ -91,3 +91,73 @@ results/diag_sdm_reversed_cosine_tessera_pure.csv  <- Original: data/processed/d
 results/sdm_phase6_head_results_reversed.csv  <- Original: data/processed/sdm_phase6_head_results_reversed.csv (md5 0f8e8d073d0c10053a21ac20d26fabea)
 results/sdm_phase7_metrics_reversed.csv  <- Original: data/processed/sdm_phase7_metrics_reversed.csv (md5 02abe220c1c098e57130cb49d49531c8)
 results/diag_sdm_seed_variance_arm_a_c.csv  <- Original: data/processed/diag_sdm_seed_variance_arm_a_c.csv (md5 0ac789482f294899112fc2621016e124)
+
+=== Nachtrag (Ergaenzung 2026-09-21/22 17:30): AlphaEarth-Vollstaendige-Dedup, Schritt 1-3 ===
+# Analog zur TESSERA-Dedup oben, aber fuer AlphaEarth (Hauptaufgabe 2026-09-21/22). Schritt 1
+# (pairs_ae_full_dedup/pixels_ae_dedup/landuse_pairs_ae_dedup) siehe MANIFEST.md, Abschnitt
+# "AlphaEarth-Vollstaendige-Dedup: Datenbasis & Split-Entscheidung". Schritt 2: Kontrolllauf
+# ae_v1_predup_control (Seed 0, undedupliziert) vs. Dedup-Lauf ae_v1_dedup (Seed 0, dedupliziert).
+# Schritt 3: Retrieval/Land-Use/Class-Retrieval/SDM (A/B/C) mit ae_v1_dedup.
+c536dca0165636663fddb0aca30f4d3d  data/processed/pairs_ae_full_dedup.parquet
+268ab3eb516b6452296f525a295c4eaf  data/processed/pixels_ae_dedup.parquet
+c9f348506ee305ffbae6e889e3cf2ee4  data/processed/landuse_pairs_ae_dedup.parquet
+e7bb6d9edd28c7b873ab9c2daff3b898  data/processed/landuse_pixel_cells_ae_dedup.parquet
+7ada9f2794100e23a6ed6c0a28586b18  checkpoints/ae_v1_dedup/best.pt
+315c0743629b478c964851373e91ce1f  checkpoints/ae_v1_dedup/last.pt
+ced89afa742ced31a69e64170ccb21fb  checkpoints/ae_v1_predup_control/best.pt
+8d9b7048f2d16370bd5ca736d872005c  checkpoints/ae_v1_predup_control/last.pt
+12ed6c0fdf3bba2708afa8fdddc5111e  data/processed/retrieval_baselines_ae_v1_dedup.csv
+f94f1d5afbb12fb35a7a03b0aeac9dcc  data/processed/landuse_probe_results_ae_dedup_ckpt.csv
+e2259cf2a2905759a3db269d71bbe5c7  data/processed/landuse_probe_cell_bootstrap_ae_dedup_ckpt.csv
+822ea75bf381f43a9e576303b0bce574  data/processed/landuse_probe_cell_bootstrap_stability_ae_dedup_ckpt.csv
+be718dd4ab07e55e047c78ab181bb3df  data/processed/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv
+93a8a69124929507567721b64e673a5d  data/processed/landuse_probe_majority_baseline_ae_dedup_ckpt.csv
+3a97b3dc3fed75f3406dac4817cccffe  data/processed/class_retrieval_ae_v1_dedup.csv
+5aa523bbfeb16fc7f6f3d308347ec24b  data/processed/sdm_pooled_ae_arma_v1dedup_ckpt.parquet
+742fab89b8ff91f14bb8becce02bf97d  data/processed/sdm_pooled_ae_armb_v1dedup_ckpt.parquet
+a4a279d88e86676b15ea79186a06abb0  data/processed/sdm_pooled_ae_armc_v1dedup_ckpt.parquet
+6294ca815902c971eed20720f5891c65  data/processed/sdm_phase7_metrics_ae_v1dedup.csv
+a5b8308a17ef443b54df47ff7f555b85  data/processed/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv
+# Diagnose (freigegeben, keine Ergebnisdatei ueberschrieben): Checkpoint- vs. Galerie-Effekt im
+# Class-Retrieval (ae_v1 / ae_v1_predup_control / ae_v1_dedup x alte/neue Galerie).
+86ee33f7ac55bd7e7f91134172e8f3db  data/processed/diag_class_retrieval_ae_control_gallery_relevance.csv
+cc42047cb147d4070f008a94a4478d4b  data/processed/diag_class_retrieval_ae_control_per_query.csv
+4ab7c42d8f0b3c0f0ec349d85bf89b67  data/processed/diag_class_retrieval_ae_control_summary.csv
+
+=== Referenzdateien (Alt-Seite der AE-Vergleiche, nicht Teil dieser Aufgabe, aus frueheren Sitzungen) ===
+# WICHTIG: landuse_probe_results_ae_dedup.csv (5.9. 11:15) ist die korrekte Alt-Referenz fuer den
+# Land-Use-Vergleich (reproduziert exakt durch den unabhaengigen 14.9.-Lauf/landuse_probe_
+# bootstrap_comparison.csv) - NICHT landuse_probe_results_ae.csv (5.9. 00:50, aelterer
+# Zwischenstand; die im MANIFEST bis 2026-09-22 dokumentierten Werte fuer diese Datei waren
+# stale, siehe dortige Korrektur).
+b3a0bf924b5d8f90e09923afc7d30903  checkpoints/ae_v1/best.pt
+b5521f75a639aaebcab9301a7aa6b09d  data/processed/pixels_ae.parquet
+3af888b1819689253dbabf3bc8c2215b  data/processed/retrieval_baselines_ae_v1.csv
+075e947f7244bef388feac3f4b2c3134  data/processed/class_retrieval_ae.csv
+f26d282a32fa53090cea8207ec996f01  data/processed/landuse_probe_results_ae_dedup.csv
+85ee1047944e78e4e071e6526293c09d  data/processed/landuse_probe_bootstrap_comparison.csv
+f623bfcd1853f23470a2d959b1148463  data/processed/landuse_probe_paired_diff_cell_bootstrap.csv
+5aa523bbfeb16fc7f6f3d308347ec24b  data/processed/sdm_pooled_ae_arma_dedup.parquet
+5b7fffe89a723ad6322651755398607c  data/processed/sdm_pooled_ae_armb_dedup.parquet
+5d03e85c6e6dcfae5a55a234868caf42  data/processed/sdm_pooled_ae_armc_dedup.parquet
+# sdm_pooled_ae_arma_v1dedup_ckpt.parquet und sdm_pooled_ae_arma_dedup.parquet haben denselben
+# MD5 (5aa523bb...) - bestaetigt bit-identisch (Arm A haengt nicht vom Checkpoint ab, siehe
+# MANIFEST/Bericht Schritt 3).
+
+=== Nachtrag (Ergaenzung 2026-09-22): Kopien nach results/ (Original bleibt in data/processed/, nur dort per .gitignore ausgeschlossen) ===
+# Alle Kopien vor dem Schreiben dieser Zeilen per `cmp` byte-identisch zum Original verifiziert.
+results/retrieval_baselines_ae_v1_dedup.csv  <- Original: data/processed/retrieval_baselines_ae_v1_dedup.csv (md5 12ed6c0fdf3bba2708afa8fdddc5111e)
+results/landuse_probe_results_ae_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_results_ae_dedup_ckpt.csv (md5 f94f1d5afbb12fb35a7a03b0aeac9dcc)
+results/landuse_probe_cell_bootstrap_ae_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_cell_bootstrap_ae_dedup_ckpt.csv (md5 e2259cf2a2905759a3db269d71bbe5c7)
+results/landuse_probe_cell_bootstrap_stability_ae_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_cell_bootstrap_stability_ae_dedup_ckpt.csv (md5 822ea75bf381f43a9e576303b0bce574)
+results/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv (md5 be718dd4ab07e55e047c78ab181bb3df)
+results/landuse_probe_majority_baseline_ae_dedup_ckpt.csv  <- Original: data/processed/landuse_probe_majority_baseline_ae_dedup_ckpt.csv (md5 93a8a69124929507567721b64e673a5d)
+results/class_retrieval_ae_v1_dedup.csv  <- Original: data/processed/class_retrieval_ae_v1_dedup.csv (md5 3a97b3dc3fed75f3406dac4817cccffe)
+results/sdm_phase7_metrics_ae_v1dedup.csv  <- Original: data/processed/sdm_phase7_metrics_ae_v1dedup.csv (md5 6294ca815902c971eed20720f5891c65)
+results/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv (md5 a5b8308a17ef443b54df47ff7f555b85)
+results/diag_class_retrieval_ae_control_gallery_relevance.csv  <- Original: data/processed/diag_class_retrieval_ae_control_gallery_relevance.csv (md5 86ee33f7ac55bd7e7f91134172e8f3db)
+results/diag_class_retrieval_ae_control_per_query.csv  <- Original: data/processed/diag_class_retrieval_ae_control_per_query.csv (md5 cc42047cb147d4070f008a94a4478d4b)
+results/diag_class_retrieval_ae_control_summary.csv  <- Original: data/processed/diag_class_retrieval_ae_control_summary.csv (md5 4ab7c42d8f0b3c0f0ec349d85bf89b67)
+results/diag_uniqueness_loss_ae.csv  <- Original: data/processed/diag_uniqueness_loss_ae.csv (Kopie 2026-09-21, md5 166464adeecfa559adc3cb916708c48e, nachtraeglich checksummt)
+results/diag_uniqueness_loss_tessera.csv  <- Original: data/processed/diag_uniqueness_loss_tessera.csv (Kopie 2026-09-21, md5 9c4f1df0b6e7d69cec5afa0c3d83d0ef, nachtraeglich checksummt)
+results/diag_splits_rebuild_dedup_ae_comparison.csv  <- Original: data/processed/diag_splits_rebuild_dedup_ae_comparison.csv (Kopie 2026-09-21, md5 bbe8679a14210ff82f03dc810d0b1c9f, nachtraeglich checksummt)

@@ -1,0 +1,2 @@
+config,majority_class,val_oa,val_macro_f1,test_oa,test_macro_f1
+ae_dedup_haeufigkeitsniveau,11210,0.4739953835235874,0.026797651970393837,0.4564805850834396,0.027253342287446344
