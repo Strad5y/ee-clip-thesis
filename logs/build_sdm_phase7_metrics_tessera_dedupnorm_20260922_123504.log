@@ -1,0 +1,15 @@
+Mittelwertsvorhersage: KL=0.0696 (CI Zelle (0.06077441796660423, 0.07876063846051692))
+tessera/a: KL=0.0338+-0.0004 (CI Zelle (0.028573041409254075, 0.04088454032316804))
+tessera/b: KL=0.0403+-0.0004 (CI Zelle (0.03373918030411005, 0.048222452588379386))
+tessera/c: KL=0.0342+-0.0001 (CI Zelle (0.028607111796736716, 0.040317500755190847))
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase7_metrics_tessera_dedupnorm.csv
+
+=== Gepaarter Zell-Bootstrap C (Arm C) minus A (Arm A, Dedup-Statistik) ===
+  Gemeinsame Test-LSOAs: 417 (A: 417, C: 417)
+  kl: Punktdiff (C-A)=-0.00020  95%-CI=[-0.00315, +0.00271]  Anteil Resamples>0=0.448  signifikant=False
+  l1_sum: Punktdiff (C-A)=+0.00214  95%-CI=[-0.00440, +0.00953]  Anteil Resamples>0=0.731  signifikant=False
+  l1_mean: Punktdiff (C-A)=+0.00024  95%-CI=[-0.00049, +0.00106]  Anteil Resamples>0=0.731  signifikant=False
+  chebyshev: Punktdiff (C-A)=-0.00009  95%-CI=[-0.00228, +0.00222]  Anteil Resamples>0=0.445  signifikant=False
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv

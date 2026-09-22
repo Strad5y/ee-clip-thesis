@@ -1,0 +1,81 @@
+=== Arm B, TESSERA, Dedup-Statistik (/home/minorai/PycharmProjects/ee-clip-thesis/configs/tessera_v1_dedup.yaml): Reprojektion ===
+
+=== tessera / Arm B ===
+  Normalisierung: zscore (data/processed/norm_stats_tessera_pixels_dedup.json)
+  50 Rohkacheln (London)
+    grid_-0.05_51.25_2025.tiff: 182x742 (135044/135044 gueltig), 1.6s, min=-0.3185 max=0.3168
+    grid_-0.05_51.35_2025.tiff: 1140x741 (844740/844740 gueltig), 8.7s, min=-0.3219 max=0.3655
+    grid_-0.05_51.45_2025.tiff: 1140x739 (842460/842460 gueltig), 8.4s, min=-0.3264 max=0.3314
+    grid_-0.05_51.55_2025.tiff: 1140x738 (841320/841320 gueltig), 8.4s, min=-0.3290 max=0.3375
+    grid_-0.05_51.65_2025.tiff: 1020x737 (751740/751740 gueltig), 7.5s, min=-0.3159 max=0.3404
+    grid_-0.15_51.25_2025.tiff: 154x741 (114114/114114 gueltig), 1.4s, min=-0.2877 max=0.3308
+    grid_-0.15_51.35_2025.tiff: 1139x739 (841721/841721 gueltig), 8.4s, min=-0.3287 max=0.3458
+    grid_-0.15_51.45_2025.tiff: 1139x738 (840582/840582 gueltig), 8.5s, min=-0.3128 max=0.3388
+    grid_-0.15_51.55_2025.tiff: 1139x737 (839443/839443 gueltig), 8.3s, min=-0.3191 max=0.3388
+    grid_-0.15_51.65_2025.tiff: 1047x735 (769545/769545 gueltig), 7.8s, min=-0.3304 max=0.3345
+    grid_-0.25_51.25_2025.tiff: 127x739 (93853/93853 gueltig), 1.2s, min=-0.3134 max=0.3077
+    grid_-0.25_51.35_2025.tiff: 1138x738 (839844/839844 gueltig), 8.1s, min=-0.3434 max=0.3446
+    grid_-0.25_51.45_2025.tiff: 1138x736 (837568/837568 gueltig), 8.3s, min=-0.3111 max=0.3573
+    grid_-0.25_51.55_2025.tiff: 1138x735 (836430/836430 gueltig), 8.0s, min=-0.3416 max=0.3346
+    grid_-0.25_51.65_2025.tiff: 1073x734 (787582/787582 gueltig), 7.9s, min=-0.3133 max=0.3438
+    grid_-0.35_51.25_2025.tiff: 101x738 (74538/74538 gueltig), 1.1s, min=-0.2844 max=0.3206
+    grid_-0.35_51.35_2025.tiff: 1137x736 (836832/836832 gueltig), 8.2s, min=-0.3117 max=0.3340
+    grid_-0.35_51.45_2025.tiff: 1137x735 (835695/835695 gueltig), 8.1s, min=-0.3201 max=0.3431
+    grid_-0.35_51.55_2025.tiff: 1137x734 (834558/834558 gueltig), 8.2s, min=-0.3268 max=0.3368
+    grid_-0.35_51.65_2025.tiff: 1098x732 (803736/803736 gueltig), 8.0s, min=-0.3177 max=0.3459
+    grid_-0.45_51.25_2025.tiff: 75x736 (55200/55200 gueltig), 1.0s, min=-0.3008 max=0.3191
+    grid_-0.45_51.35_2025.tiff: 1136x735 (834960/834960 gueltig), 8.2s, min=-0.3278 max=0.3483
+    grid_-0.45_51.45_2025.tiff: 1136x733 (832688/832688 gueltig), 8.1s, min=-0.3286 max=0.3333
+    grid_-0.45_51.55_2025.tiff: 1136x732 (831552/831552 gueltig), 8.2s, min=-0.3242 max=0.3493
+    grid_-0.45_51.65_2025.tiff: 1122x715 (802230/802230 gueltig), 8.0s, min=-0.3204 max=0.3593
+    grid_-0.55_51.25_2025.tiff: 51x174 (8874/8874 gueltig), 0.3s, min=-0.2802 max=0.3169
+    grid_-0.55_51.35_2025.tiff: 1135x135 (153225/153225 gueltig), 2.0s, min=-0.3204 max=0.3341
+    grid_-0.55_51.45_2025.tiff: 1135x98 (111230/111230 gueltig), 1.8s, min=-0.3203 max=0.2910
+    grid_-0.55_51.55_2025.tiff: 1135x59 (66965/66965 gueltig), 1.5s, min=-0.3185 max=0.2912
+    grid_-0.55_51.65_2025.tiff: 1135x22 (24970/24970 gueltig), 1.3s, min=-0.2993 max=0.2777
+    grid_0.05_51.25_2025.tiff: 135x742 (100170/100170 gueltig), 1.2s, min=-0.3327 max=0.3203
+    grid_0.05_51.35_2025.tiff: 1140x741 (844740/844740 gueltig), 8.2s, min=-0.3138 max=0.3474
+    grid_0.05_51.45_2025.tiff: 1140x739 (842460/842460 gueltig), 8.3s, min=-0.3260 max=0.3517
+    grid_0.05_51.55_2025.tiff: 1140x738 (841320/841320 gueltig), 8.3s, min=-0.3457 max=0.3446
+    grid_0.05_51.65_2025.tiff: 1081x737 (796697/796697 gueltig), 8.0s, min=-0.3135 max=0.3396
+    grid_0.15_51.25_2025.tiff: 107x741 (79287/79287 gueltig), 1.2s, min=-0.2967 max=0.3339
+    grid_0.15_51.35_2025.tiff: 1139x739 (841721/841721 gueltig), 8.2s, min=-0.3333 max=0.3419
+    grid_0.15_51.45_2025.tiff: 1139x738 (840582/840582 gueltig), 8.2s, min=-0.3086 max=0.3403
+    grid_0.15_51.55_2025.tiff: 1139x737 (839443/839443 gueltig), 8.2s, min=-0.3094 max=0.3620
+    grid_0.15_51.65_2025.tiff: 1108x735 (814380/814380 gueltig), 8.0s, min=-0.3011 max=0.3485
+    grid_0.25_51.25_2025.tiff: 80x739 (59120/59120 gueltig), 1.0s, min=-0.2915 max=0.3365
+    grid_0.25_51.35_2025.tiff: 1138x738 (839844/839844 gueltig), 8.2s, min=-0.3083 max=0.3526
+    grid_0.25_51.45_2025.tiff: 1138x736 (837568/837568 gueltig), 8.2s, min=-0.2999 max=0.3473
+    grid_0.25_51.55_2025.tiff: 1138x735 (836430/836430 gueltig), 8.2s, min=-0.3085 max=0.3573
+    grid_0.25_51.65_2025.tiff: 1134x734 (832356/832356 gueltig), 8.1s, min=-0.3011 max=0.3552
+    grid_0.35_51.25_2025.tiff: 54x375 (20250/20250 gueltig), 0.6s, min=-0.2771 max=0.2934
+    grid_0.35_51.35_2025.tiff: 1137x334 (379758/379758 gueltig), 4.5s, min=-0.2983 max=0.3309
+    grid_0.35_51.45_2025.tiff: 1137x294 (334278/334278 gueltig), 4.2s, min=-0.3097 max=0.3293
+    grid_0.35_51.55_2025.tiff: 1137x253 (287661/287661 gueltig), 2.7s, min=-0.2896 max=0.3388
+    grid_0.35_51.65_2025.tiff: 1137x211 (239907/239907 gueltig), 2.5s, min=-0.2978 max=0.3419
+  Fertig: 50 Kacheln geschrieben nach /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/sdm_projected_tessera_dedupnorm/tessera_armb, 28,831,211 gueltige Pixel gesamt, 293.0s (98,411 Pixel/s)
+50 Kacheln projiziert nach /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/sdm_projected_tessera_dedupnorm/tessera_armb
+
+=== Arm A, TESSERA, Dedup-Statistik: Poolung (mit Dedup-Maske) ===
+LSOA-Datei (national): 35672 Features, CRS=EPSG:27700
+Nach Intersects-Filter gegen AOI 'Greater London': 5113 LSOAs
+    [tessera/a] Kachel 10/50 verarbeitet (442.3s)
+    [tessera/a] Kachel 20/50 verarbeitet (753.0s)
+    [tessera/a] Kachel 30/50 verarbeitet (965.5s)
+    [tessera/a] Kachel 40/50 verarbeitet (1463.1s)
+  [tessera/a] Maskierung: 1431302/18140541 exact_extract-Treffer ausgeschlossen (7.89%)
+  [tessera/a] fertig: 4994 LSOAs erreicht in 1635.4s
+  LSOAs erreicht: 4994/4994, 0-Pixel (alle): 0, (rein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_tessera_arma_dedupnorm.parquet
+
+=== Arm B, TESSERA, Dedup-Statistik: Poolung (mit Dedup-Maske) ===
+LSOA-Datei (national): 35672 Features, CRS=EPSG:27700
+Nach Intersects-Filter gegen AOI 'Greater London': 5113 LSOAs
+    [tessera/b] Kachel 10/50 verarbeitet (237.9s)
+    [tessera/b] Kachel 20/50 verarbeitet (385.9s)
+    [tessera/b] Kachel 30/50 verarbeitet (418.2s)
+    [tessera/b] Kachel 40/50 verarbeitet (545.4s)
+  [tessera/b] Maskierung: 1428860/18138099 exact_extract-Treffer ausgeschlossen (7.88%)
+  [tessera/b] fertig: 4994 LSOAs erreicht in 566.8s
+  LSOAs erreicht: 4994/4994, 0-Pixel (alle): 0, (rein): 0
+  Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_pooled_tessera_armb_dedupnorm.parquet
