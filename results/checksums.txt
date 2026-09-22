@@ -189,3 +189,22 @@ results/diag_backbone_paired_bootstrap_sdm.csv  <- Original: data/processed/diag
 # sdm_pooled_tessera_arm{a,b}_dedupnorm.parquet NICHT nach results/ kopiert (Konvention: gepoolte
 # SDM-Parquets bleiben in data/processed/, nur die MD5 wird hier gefuehrt - wie zuvor bei
 # sdm_pooled_tessera_armc_v1dedup_ckpt.parquet und den AE-Pendants gehandhabt).
+
+=== Nachtrag (Ergaenzung 2026-09-22): SDM-Seedmittel-Bootstrap - Seed-Inkonsistenz behoben ===
+# Punktwert UND CI jetzt aus denselben 5 Probe-Seeds (statt CI nur Seed 0). Kanonische Basis fuer
+# alle SDM-Zahlen ab jetzt - siehe MANIFEST.md "SDM-Seedmittel-Bootstrap: Seed-Inkonsistenz
+# behoben". Alte Einzelseed-Dateien (_dedupnorm/_v1dedup/diag_backbone_paired_bootstrap_sdm.csv
+# ohne Suffix) bleiben unveraendert, nur noch Dokumentation.
+9ceee59f3a931003d3d6b8978fc24be9  data/processed/sdm_phase7_metrics_tessera_seedmean.csv
+a5de5a78a102e50af1425d27858044cd  data/processed/sdm_phase7_metrics_ae_seedmean.csv
+56ea4d3f7c00b4e519755f639dd9a22a  data/processed/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv
+2ad7fba64fc173c191280c03db3cf90d  data/processed/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv
+17027564c09968f24ccf1d3dc64c3ce2  data/processed/diag_backbone_paired_bootstrap_sdm_seedmean.csv
+
+=== Nachtrag (Ergaenzung 2026-09-22): Kopien nach results/ ===
+# Alle Kopien vor dem Schreiben dieser Zeilen per `cmp` byte-identisch zum Original verifiziert.
+results/sdm_phase7_metrics_tessera_seedmean.csv  <- Original: data/processed/sdm_phase7_metrics_tessera_seedmean.csv (md5 9ceee59f3a931003d3d6b8978fc24be9)
+results/sdm_phase7_metrics_ae_seedmean.csv  <- Original: data/processed/sdm_phase7_metrics_ae_seedmean.csv (md5 a5de5a78a102e50af1425d27858044cd)
+results/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv (md5 56ea4d3f7c00b4e519755f639dd9a22a)
+results/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv (md5 2ad7fba64fc173c191280c03db3cf90d)
+results/diag_backbone_paired_bootstrap_sdm_seedmean.csv  <- Original: data/processed/diag_backbone_paired_bootstrap_sdm_seedmean.csv (md5 17027564c09968f24ccf1d3dc64c3ce2)

@@ -884,6 +884,55 @@ Seed-0-Wert (nicht der 5-Seed-Mittelwert der Haupttabelle) ist 0,0424 — korrig
 `build_sdm_phase7_metrics_tessera_dedupnorm.py`, `diag_backbone_paired_bootstrap_sdm.py`
 (aktualisiert). MD5 aller neuen/aktualisierten Dateien in `results/checksums.txt`.
 
+## SDM-Seedmittel-Bootstrap: Seed-Inkonsistenz behoben (2026-09-22, Jakob)
+
+**Befund:** Bei der Dokumentation der TESSERA-Normalisierungs-Nachziehung (Abschnitt oben) fiel
+auf, dass `build_sdm_phase7_metrics.py::evaluate_config()` als Punktwert das Mittel über die 5
+Probe-Seeds berichtet (`point_mean`), das zugehörige 95%-CI aber ausschließlich aus Seed 0
+berechnet (`bootstrap_seed_idx=0`, `cluster_bootstrap()` auf nur einem Seed) — Punktwert und CI
+beschrieben nicht dieselbe Größe. Die gepaarten C−A- und Backbone-Differenz-Diagnosen
+(`per_seed_metrics_and_ref()`/`diag_backbone_paired_bootstrap_sdm.py`) fitteten zwar ebenfalls
+alle 5 Seeds, verwarfen aber 4 davon und verwendeten für Punktwert UND CI nur Seed 0 — dadurch
+wichen ihre Punktwerte von der 5-Seed-Haupttabelle ab (Beispiel TESSERA/A KL: 0,0338 im
+5-Seed-Mittel vs. 0,0344 bei Seed 0 allein).
+
+**Fix** (`build_sdm_phase7_metrics_seedmean.py`): der Zellebenen-Bootstrap zieht pro Resample
+dieselbe Zellmenge wie bisher (1000 Ziehungen, Startseed 2000, identische Zufallsfolge — ein
+`rng.choice()`-Aufruf je Resample, gleiche Größe), berechnet die Metrik aber für JEDEN der 5
+Probe-Seeds auf den gezogenen Zellen und mittelt danach über die Seeds. Punktwert (5-Seed-Mittel
+über alle Testzellen) und CI (5-Seed-Mittel je Resample) beschreiben jetzt dieselbe Größe.
+Gepaarte Differenzen (C−A je Backbone, Backbone-Differenz je Arm) analog: Differenz pro Resample
+aus den 5-Seed-Mitteln beider Seiten. **Kein Refit im Sinne einer neuen Trainingsprozedur** —
+`bsp6.fit_mlp()` ist bei gegebenem Seed deterministisch, ein erneuter Aufruf reproduziert exakt
+dieselben Vorhersagen; es werden lediglich alle 5 (statt nur 1) der ohnehin gefitteten Seeds
+behalten statt 4 davon zu verwerfen.
+
+**Neue Dateien** (Suffix `_seedmean`, alte Dateien unverändert, nur noch Dokumentation):
+`sdm_phase7_metrics_{tessera,ae}_seedmean.csv`, `sdm_paired_bootstrap_{tessera,ae}_seedmean_c_
+minus_a.csv`, `diag_backbone_paired_bootstrap_sdm_seedmean.csv`. Rechnet beide Backbones, alle
+drei Arme, alle vier Metriken neu (TESSERA Arm A/B weiterhin mit der Dedup-Statistik, s.o.).
+
+**Vergleich alt (Seed 0) vs. neu (5-Seed-Mittel):** Haupttabellen-Punktwerte unverändert (waren
+immer 5-Seed-Mittel), nur CI-Grenzen verschieben sich geringfügig (vergleichbare Breite). Bei den
+gepaarten Differenzen verschieben sich Punktwerte leicht (Backbone-Differenz Arm A KL: −0,0153 →
+−0,0165) — **keine Signifikanzaussage kippt**: AE C−A bleibt bei allen vier Metriken signifikant,
+die Backbone-Differenz (TESSERA schlägt AE) bleibt bei allen drei Armen/vier Metriken signifikant.
+**Einzige qualitative Änderung: das Vorzeichen des TESSERA-C−A-Punktdiffs dreht sich** bei allen
+vier Metriken (vorher leicht negativ, jetzt leicht positiv) — bleibt in beiden Fassungen klar
+nicht signifikant (CI schließt 0 durchgehend ein). Unterstreicht, dass der TESSERA-Alignment-
+Effekt bei SDM nicht von 0 unterscheidbar ist, ändert aber keine berichtete Signifikanzaussage.
+
+**`results/backbone_comparison_dedup.md` vollständig auf `_seedmean` umgestellt** (Abschnitt 4
+Haupttabelle/C−A/Backbone-Differenz, Abschnitt 5 AE-Neu-Checkpoint-Spalte, Abschnitt 6
+Alignment-Zusammenfassung, Abschnitt 7 Zahlenbasis-Tabelle + Historie). Abschnitt 5s
+"Alter Checkpoint"-Spalte bleibt Einzelseed (eigene, ältere Diagnose
+`diag_sdm_paired_bootstrap_arm_diff.csv`, nicht umgestellt — dient nur der Dokumentation). Land-Use
+ist von diesem Fix nicht betroffen (kein Seed-Konzept, s. Abschnitt "TESSERA-Normalisierung
+nachgezogen" oben).
+
+**Committetes Skript/Log:** `build_sdm_phase7_metrics_seedmean.py`. MD5 aller neuen Dateien in
+`results/checksums.txt`.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

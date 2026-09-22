@@ -1,8 +1,11 @@
 # Backbone-Vergleich TESSERA-dedup vs. AlphaEarth-dedup (Schritt 4)
 
-Stand: 2026-09-22 (Abschnitt 4/SDM aktualisiert nach der TESSERA-Normalisierungs-Nachziehung —
-TESSERA Arm A/B nutzen jetzt dieselbe z-score-Statistik wie Arm C, Arm B neu ergänzt; siehe
-Änderungsvermerke im Abschnitt selbst). Checkpoints: `checkpoints/tessera_v1_dedup/best.pt` (Epoche 48) und
+Stand: 2026-09-22 (Abschnitt 4/SDM zweifach aktualisiert: erst TESSERA-Normalisierungs-Nachziehung
+— TESSERA Arm A/B nutzen dieselbe z-score-Statistik wie Arm C, Arm B neu ergänzt —, dann Umstellung
+aller SDM-Tabellen auf die `_seedmean`-Dateien, kanonische Basis seit 2026-09-22: Punktwert und
+CI aus denselben 5 Probe-Seeds statt CI nur aus Seed 0; siehe Abschnitt 7 "Zahlenbasis" für Details
+und den einzigen dadurch veränderten Befund, den Vorzeichenwechsel bei TESSERA C−A). Checkpoints:
+`checkpoints/tessera_v1_dedup/best.pt` (Epoche 48) und
 `checkpoints/ae_v1_dedup/best.pt` (Epoche 32), jeweils trainiert auf der deduplizierten
 Datenbasis des jeweiligen Backbones (Eindeutigkeits- + AOI-Polygon-Maske, siehe `MANIFEST.md`).
 Beide Backbones sind jetzt nach derselben Prozedur dedupliziert — dies ist der erste direkte
@@ -163,83 +166,95 @@ Klasse dominieren die Makro-AP), nicht spezifisch für AE.
 
 ## 4. SDM
 
-Quellen: `results/sdm_phase7_metrics_tessera_dedupnorm.csv` (**aktualisiert 2026-09-22** — TESSERA
-Arm A/B jetzt mit derselben z-score-Statistik wie Arm C, siehe MANIFEST.md/
-`build_sdm_arm_ab_tessera_dedupnorm.py`; alte Datei `sdm_phase7_metrics_tessera_v1dedup.csv`
-unverändert erhalten, hatte nur Arm A/C mit unterschiedlichen Statistiken), `results/
-sdm_phase7_metrics_ae_v1dedup.csv` (Hauptlauf 9cat/A/pure, KL/L1/Chebyshev, Zellebenen-
-Bootstrap-CI aus Seed 0), `results/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv`,
-`results/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv` (gepaarter Zell-Bootstrap C−A je
-Backbone). Die frühere Asymmetrie (TESSERA/B fehlte, weil in der TESSERA-Dedup-Aufgabe nur
-Arm C neu gerechnet wurde) ist mit der TESSERA-Normalisierungs-Nachziehung behoben — jetzt
-haben beide Backbones alle drei Arme unter konsistenter Normalisierung.
+**Kanonische Quelle seit 2026-09-22: die `_seedmean`-Dateien.** Punktwert UND 95%-CI beschreiben
+jetzt durchgängig dieselbe Größe — das 5-Seed-Mittel über die Probe-Seeds
+(`bsp7.SEEDS=[0,1,2,3,4]`), pro Zellebenen-Resample aus den 5 Seeds gemittelt
+(`build_sdm_phase7_metrics_seedmean.py`). Vorher berichtete die Haupttabelle einen 5-Seed-Mittel-
+Punktwert mit einem CI, das nur aus Seed 0 stammte (siehe Abschnitt 7 "Zahlenbasis" für die
+Korrektur-Historie) — die alten `_dedupnorm`/`_v1dedup`-Dateien (Einzelseed-CI) bleiben als
+Dokumentation erhalten, sind aber nicht mehr die Referenz für Zahlen in der Arbeit.
+
+Quellen: `results/sdm_phase7_metrics_tessera_seedmean.csv`,
+`results/sdm_phase7_metrics_ae_seedmean.csv` (Hauptlauf 9cat/A/pure, KL/L1/Chebyshev),
+`results/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv`,
+`results/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv` (gepaarter Zell-Bootstrap C−A je
+Backbone). TESSERA Arm A/B weiterhin mit der Dedup-Statistik gepoolt (`sdm_pooled_tessera_arm
+{a,b}_dedupnorm.parquet`, s. Abschnitt zur Normalisierungs-Nachziehung), AE alle drei Arme wie in
+Schritt 3.
 
 | Modell | KL | 95%-CI (Zelle) | L1 (Summe) | 95%-CI | L1 (Mittel) | Chebyshev | 95%-CI |
 |---|---|---|---|---|---|---|---|
 | Mittelwertsvorhersage | 0,0696 | [0,0608; 0,0788] | 0,2852 | [0,2689; 0,3024] | 0,0317 | 0,0864 | [0,0793; 0,0932] |
-| TESSERA/A (roh) | 0,0338 | [0,0286; 0,0409] | 0,1873 | [0,1744; 0,2016] | 0,0208 | 0,0571 | [0,0524; 0,0631] |
-| TESSERA/B (zufällig) | 0,0403 | [0,0337; 0,0482] | 0,2068 | [0,1929; 0,2238] | 0,0230 | 0,0629 | [0,0570; 0,0699] |
-| TESSERA/C (trainiert, dedup-Ckpt) | 0,0342 | [0,0286; 0,0403] | 0,1902 | [0,1772; 0,2029] | 0,0211 | 0,0578 | [0,0524; 0,0631] |
-| AE/A (roh) | 0,0503 | [0,0425; 0,0577] | 0,2366 | [0,2201; 0,2511] | 0,0263 | 0,0710 | [0,0646; 0,0768] |
-| AE/B (zufällig) | 0,0544 | [0,0468; 0,0618] | 0,2480 | [0,2318; 0,2633] | 0,0276 | 0,0748 | [0,0684; 0,0806] |
-| AE/C (trainiert, dedup-Ckpt) | 0,0426 | [0,0362; 0,0494] | 0,2154 | [0,2011; 0,2301] | 0,0239 | 0,0643 | [0,0586; 0,0702] |
+| TESSERA/A (roh) | 0,0338 | [0,0280; 0,0404] | 0,1873 | [0,1739; 0,2008] | 0,0208 | 0,0571 | [0,0518; 0,0623] |
+| TESSERA/B (zufällig) | 0,0403 | [0,0335; 0,0475] | 0,2068 | [0,1918; 0,2224] | 0,0230 | 0,0629 | [0,0568; 0,0695] |
+| TESSERA/C (trainiert, dedup-Ckpt) | 0,0342 | [0,0287; 0,0404] | 0,1902 | [0,1773; 0,2029] | 0,0211 | 0,0578 | [0,0524; 0,0631] |
+| AE/A (roh) | 0,0503 | [0,0430; 0,0583] | 0,2366 | [0,2210; 0,2526] | 0,0263 | 0,0710 | [0,0649; 0,0772] |
+| AE/B (zufällig) | 0,0544 | [0,0473; 0,0622] | 0,2480 | [0,2328; 0,2640] | 0,0276 | 0,0748 | [0,0689; 0,0809] |
+| AE/C (trainiert, dedup-Ckpt) | 0,0426 | [0,0363; 0,0500] | 0,2154 | [0,2010; 0,2308] | 0,0239 | 0,0643 | [0,0587; 0,0702] |
 
-Die Normalisierungs-Korrektur ändert die TESSERA-Werte nur minimal (Δ KL Arm A: +0,000005,
-Arm B war vorher unter der Dedup-Statistik gar nicht berechnet; gegen die dedup-maskierte,
-aber alt-normierte Referenz `sdm_phase7_metrics_dedup.csv` — Arm A KL 0,033749→0,033754, Arm B
-KL 0,040406→0,040264 — Delta jeweils zwei bis drei Größenordnungen kleiner als die CI-Breite).
+Alle Punktwerte sind identisch zur vorherigen `_dedupnorm`/`_v1dedup`-Fassung (der Punktwert war
+schon vorher 5-Seed-Mittel) — nur die CI-Grenzen verschieben sich leicht (Breiten bleiben
+vergleichbar). Die Normalisierungs-Korrektur (TESSERA Arm A/B, s. u.) bleibt unabhängig davon
+gültig: gegen die dedup-maskierte, aber alt-normierte Referenz `sdm_phase7_metrics_dedup.csv` —
+Arm A KL 0,033749→0,033754, Arm B KL 0,040406→0,040264 — Delta jeweils zwei bis drei
+Größenordnungen kleiner als die CI-Breite.
 
 **Gepaarter Zell-Bootstrap C − A je Backbone:**
 
 | Backbone | Metrik | Diff (C−A) | 95%-CI | signifikant |
 |---|---|---|---|---|
-| TESSERA | kl | −0,00020 | [−0,00315; +0,00271] | nein |
-| TESSERA | l1_sum | +0,00214 | [−0,00440; +0,00953] | nein |
-| TESSERA | l1_mean | +0,00024 | [−0,00049; +0,00106] | nein |
-| TESSERA | chebyshev | −0,00009 | [−0,00228; +0,00222] | nein |
-| AE | kl | −0,00726 | [−0,01019; −0,00459] | **ja** |
-| AE | l1_sum | −0,02012 | [−0,02740; −0,01370] | **ja** |
-| AE | l1_mean | −0,00224 | [−0,00304; −0,00152] | **ja** |
-| AE | chebyshev | −0,00635 | [−0,00882; −0,00412] | **ja** |
+| TESSERA | kl | +0,0004 | [−0,0018; +0,0026] | nein |
+| TESSERA | l1_sum | +0,0030 | [−0,0027; +0,0092] | nein |
+| TESSERA | l1_mean | +0,0003 | [−0,0003; +0,0010] | nein |
+| TESSERA | chebyshev | +0,0007 | [−0,0011; +0,0027] | nein |
+| AE | kl | −0,0077 | [−0,0107; −0,0050] | **ja** |
+| AE | l1_sum | −0,0212 | [−0,0287; −0,0144] | **ja** |
+| AE | l1_mean | −0,0024 | [−0,0032; −0,0016] | **ja** |
+| AE | chebyshev | −0,0067 | [−0,0093; −0,0044] | **ja** |
+
+**Hinweis (2026-09-22): das Vorzeichen des TESSERA-Punktdiffs hat sich gegenüber der
+Einzelseed-Fassung gedreht** (vorher leicht negativ, jetzt leicht positiv, in allen vier
+Metriken) — bei beiden Fassungen bleibt der Unterschied klar nicht signifikant (CI schließt 0
+immer ein). Kein Bruch mit einer vorherigen Aussage, aber ein Beleg dafür, dass der TESSERA-
+C−A-Punktwert nahe genug an 0 liegt, dass schon die Aggregationsmethode das Vorzeichen kippt —
+zusätzliches Argument, diese Zahl nicht überzuinterpretieren. Details: Abschnitt 7.
 
 Bei TESSERA verbessert der trainierte Kopf die SDM-Vorhersage gegenüber dem rohen Backbone
-**nicht** signifikant (alle vier Metriken, unverändert gegenüber der alten Normalisierung — die
-CIs überlappen praktisch vollständig mit den vorherigen). Bei AE verbessert der trainierte Kopf
-signifikant, in derselben Richtung, für alle vier Metriken.
+**nicht** signifikant (alle vier Metriken). Bei AE verbessert der trainierte Kopf signifikant,
+in derselben Richtung, für alle vier Metriken.
 
 ### Gepaarter Bootstrap auf Zellebene für die Backbone-Differenz (TESSERA − AE)
 
-Datei: `diag_backbone_paired_bootstrap_sdm.py` → `results/diag_backbone_paired_bootstrap_sdm.csv`
-(Diagnose, **aktualisiert 2026-09-22**: TESSERA/A zeigt jetzt auf die dedupnorm-Poolung, TESSERA/B
-neu ergänzt — beide Backbones haben jetzt Arm A/B/C im Vergleich). Beide Backbones haben **exakt
-dieselben 417 Test-LSOAs** (symmetrische Differenz 0, in allen drei Armen geprüft). Zellzuordnung
-über `bsp7.LSOA_TO_CELL` (Mehrheitsregel, wie im bestehenden Arm-A-vs-C-Vergleich), 1000
-Resamples, dieselbe gezogene Zellmenge für beide Backbones je Resample, Seed 0 (Referenz-Seed,
-wie überall sonst in Phase 7 — Punktwerte hier sind deshalb Einzelseed-Werte, nicht der
-5-Seed-Mittelwert aus der Tabelle oben, wie schon in der vorherigen Fassung dieses Abschnitts).
+Datei: `diag_backbone_paired_bootstrap_sdm_seedmean.py` → `results/
+diag_backbone_paired_bootstrap_sdm_seedmean.csv` (Diagnose, **kanonisch seit 2026-09-22** — die
+Punktwerte TESSERA/AE je Arm sind jetzt exakt dieselben wie in der Haupttabelle oben, weil beide
+dasselbe 5-Seed-Mittel verwenden; vorher waren es Einzelseed-Werte, die von der Haupttabelle
+abwichen). Beide Backbones haben **exakt dieselben 417 Test-LSOAs** (symmetrische Differenz 0, in
+allen drei Armen geprüft). Zellzuordnung über `bsp7.LSOA_TO_CELL` (Mehrheitsregel), 1000
+Resamples, dieselbe gezogene Zellmenge für beide Backbones je Resample, Startseed 2000 — je
+Resample wird die Metrik für jeden der 5 Seeds berechnet und gemittelt (nicht mehr nur Seed 0).
 
 | Arm | Metrik | TESSERA | AE | Diff (TESSERA − AE) | 95%-CI | signifikant |
 |---|---|---|---|---|---|---|
-| A (roh) | kl | 0,0344 | 0,0497 | −0,01532 | [−0,02057; −0,01021] | **ja** |
-| A (roh) | l1_sum | 0,1880 | 0,2353 | −0,04726 | [−0,05994; −0,03492] | **ja** |
-| A (roh) | l1_mean | 0,0209 | 0,0261 | −0,00525 | [−0,00666; −0,00388] | **ja** |
-| A (roh) | chebyshev | 0,0578 | 0,0707 | −0,01292 | [−0,01719; −0,00856] | **ja** |
-| B (zufällig) | kl | 0,0407 | 0,0539 | −0,01326 | [−0,01731; −0,00925] | **ja** |
-| B (zufällig) | l1_sum | 0,2079 | 0,2470 | −0,03904 | [−0,04981; −0,02777] | **ja** |
-| B (zufällig) | l1_mean | 0,0231 | 0,0274 | −0,00434 | [−0,00553; −0,00309] | **ja** |
-| B (zufällig) | chebyshev | 0,0631 | 0,0744 | −0,01126 | [−0,01459; −0,00768] | **ja** |
-| C (trainiert) | kl | 0,0342 | 0,0424 | −0,00826 | [−0,01131; −0,00525] | **ja** |
-| C (trainiert) | l1_sum | 0,1901 | 0,2151 | −0,02500 | [−0,03319; −0,01688] | **ja** |
-| C (trainiert) | l1_mean | 0,0211 | 0,0239 | −0,00278 | [−0,00369; −0,00188] | **ja** |
-| C (trainiert) | chebyshev | 0,0577 | 0,0643 | −0,00666 | [−0,00957; −0,00372] | **ja** |
+| A (roh) | kl | 0,0338 | 0,0503 | −0,0165 | [−0,0221; −0,0113] | **ja** |
+| A (roh) | l1_sum | 0,1873 | 0,2366 | −0,0493 | [−0,0633; −0,0377] | **ja** |
+| A (roh) | l1_mean | 0,0208 | 0,0263 | −0,0055 | [−0,0070; −0,0042] | **ja** |
+| A (roh) | chebyshev | 0,0571 | 0,0710 | −0,0140 | [−0,0184; −0,0099] | **ja** |
+| B (zufällig) | kl | 0,0403 | 0,0544 | −0,0142 | [−0,0183; −0,0101] | **ja** |
+| B (zufällig) | l1_sum | 0,2068 | 0,2480 | −0,0411 | [−0,0522; −0,0300] | **ja** |
+| B (zufällig) | l1_mean | 0,0230 | 0,0276 | −0,0046 | [−0,0058; −0,0033] | **ja** |
+| B (zufällig) | chebyshev | 0,0629 | 0,0748 | −0,0120 | [−0,0155; −0,0083] | **ja** |
+| C (trainiert) | kl | 0,0342 | 0,0426 | −0,0084 | [−0,0116; −0,0055] | **ja** |
+| C (trainiert) | l1_sum | 0,1902 | 0,2154 | −0,0252 | [−0,0340; −0,0174] | **ja** |
+| C (trainiert) | l1_mean | 0,0211 | 0,0239 | −0,0028 | [−0,0038; −0,0019] | **ja** |
+| C (trainiert) | chebyshev | 0,0578 | 0,0643 | −0,0066 | [−0,0095; −0,0038] | **ja** |
 
 **TESSERA schlägt AE bei der SDM-Aufgabe signifikant** (niedrigeres KL/L1/Chebyshev = näher an
-der wahren NS-SeC-Verteilung), jetzt in **allen drei** Armen und allen vier Metriken (Arm B war
-vor der Normalisierungs-Nachziehung noch nicht Teil dieses Vergleichs). **Das ist das Gegenteil
-der Land-Use-Richtung** (dort schlägt AE TESSERA) — die beiden EE-Backbones sind für die beiden
-Downstream-Aufgaben unterschiedlich gut geeignet, kein Backbone dominiert durchgehend. Die
-Normalisierungs-Korrektur ändert an dieser Aussage nichts (Arm A vorher −0,01519, jetzt −0,01532
-KL-Differenz, praktisch identisch).
+der wahren NS-SeC-Verteilung), in **allen drei** Armen und allen vier Metriken — unverändert
+gegenüber der Einzelseed-Fassung (Beträge etwas größer, z. B. Arm A KL vorher −0,0153, jetzt
+−0,0165, aber dieselbe Richtung und durchgehend signifikant). **Das ist das Gegenteil der
+Land-Use-Richtung** (dort schlägt AE TESSERA, s. Abschnitt 2) — die beiden EE-Backbones sind für
+die beiden Downstream-Aufgaben unterschiedlich gut geeignet, kein Backbone dominiert durchgehend.
 
 ---
 
@@ -252,17 +267,23 @@ nicht, welche Aussage die Arbeit über AlphaEarth trifft, nur die Punktschätzun
 
 | Vergleich | Metrik | Alter Checkpoint (`ae_v1`) | 95%-CI | Neuer Checkpoint (`ae_v1_dedup`) | 95%-CI |
 |---|---|---|---|---|---|
-| SDM C−A | kl | −0,00641 | [−0,00983; −0,00361] | −0,00726 | [−0,01019; −0,00459] |
-| SDM C−A | l1_sum | −0,01859 | [−0,02666; −0,01182] | −0,02012 | [−0,02740; −0,01370] |
-| SDM C−A | l1_mean | −0,00207 | [−0,00296; −0,00131] | −0,00224 | [−0,00304; −0,00152] |
-| SDM C−A | chebyshev | −0,00578 | [−0,00843; −0,00348] | −0,00635 | [−0,00882; −0,00412] |
+| SDM C−A | kl | −0,00641 | [−0,00983; −0,00361] | −0,0077 | [−0,0107; −0,0050] |
+| SDM C−A | l1_sum | −0,01859 | [−0,02666; −0,01182] | −0,0212 | [−0,0287; −0,0144] |
+| SDM C−A | l1_mean | −0,00207 | [−0,00296; −0,00131] | −0,0024 | [−0,0032; −0,0016] |
+| SDM C−A | chebyshev | −0,00578 | [−0,00843; −0,00348] | −0,0067 | [−0,0093; −0,0044] |
 | Land-Use trainiert−roh | oa | +0,0075 | [0,0041; 0,0110] | +0,0080 | [0,0039; 0,0120] |
 | Land-Use trainiert−roh | macro_f1 | −0,0025 | [−0,0268; +0,0171] | −0,0006 | [−0,0216; +0,0169] |
 
+**Asymmetrie (2026-09-22 unverändert):** Die Spalte "Alter Checkpoint" (`ae_v1`,
+`diag_sdm_paired_bootstrap_arm_diff.csv`) ist ein Einzelseed-Wert (Seed 0) aus einer eigenen,
+älteren Diagnose, die NICHT auf die `_seedmean`-Methodik umgestellt wurde — der alte Checkpoint
+dient nur der Dokumentation (s. Geltungshinweis oben), eine Nachrechnung war nicht Teil der
+Seedmean-Korrektur. Die Spalte "Neuer Checkpoint" nutzt jetzt die kanonische `_seedmean`-Datei.
 Beide Male: SDM C−A signifikant negativ (Verbesserung, niedrigeres KL ist besser) in allen vier
-Metriken; Land-Use oa signifikant positiv, macro_f1 nicht signifikant. Quellen: SDM alt
+Metriken; Land-Use oa signifikant positiv, macro_f1 nicht signifikant — die Umstellung auf
+Seed-Mittel ändert an diesem Vergleich nichts Qualitatives. Quellen: SDM alt
 `results/diag_sdm_paired_bootstrap_arm_diff.csv` (Zeile `backbone=ae`), SDM neu `results/
-sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv`; Land-Use alt `data/processed/landuse_probe_
+sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv`; Land-Use alt `data/processed/landuse_probe_
 paired_diff_cell_bootstrap.csv` (Zeile `backbone=ae`, 14.9., 5000×, MD5 in `results/checksums.txt`),
 Land-Use neu `results/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv`.
 
@@ -276,20 +297,21 @@ Zahlen aus den Abschnitten 2 und 4 oben, nichts neu gerechnet.
 
 | Aufgabe | Metrik | TESSERA Diff | TESSERA 95%-CI | TESSERA sig. | AE Diff | AE 95%-CI | AE sig. |
 |---|---|---|---|---|---|---|---|
-| SDM (C−A) | kl | −0,00020 | [−0,00315; +0,00271] | nein | −0,00726 | [−0,01019; −0,00459] | **ja** |
-| SDM (C−A) | l1_sum | +0,00214 | [−0,00440; +0,00953] | nein | −0,02012 | [−0,02740; −0,01370] | **ja** |
-| SDM (C−A) | l1_mean | +0,00024 | [−0,00049; +0,00106] | nein | −0,00224 | [−0,00304; −0,00152] | **ja** |
-| SDM (C−A) | chebyshev | −0,00009 | [−0,00228; +0,00222] | nein | −0,00635 | [−0,00882; −0,00412] | **ja** |
+| SDM (C−A) | kl | +0,0004 | [−0,0018; +0,0026] | nein | −0,0077 | [−0,0107; −0,0050] | **ja** |
+| SDM (C−A) | l1_sum | +0,0030 | [−0,0027; +0,0092] | nein | −0,0212 | [−0,0287; −0,0144] | **ja** |
+| SDM (C−A) | l1_mean | +0,0003 | [−0,0003; +0,0010] | nein | −0,0024 | [−0,0032; −0,0016] | **ja** |
+| SDM (C−A) | chebyshev | +0,0007 | [−0,0011; +0,0027] | nein | −0,0067 | [−0,0093; −0,0044] | **ja** |
 | Land-Use (trainiert−roh) | oa | +0,0116 | [0,0087; 0,0145] | **ja** | +0,0080 | [0,0039; 0,0120] | **ja** |
 | Land-Use (trainiert−roh) | macro_f1 | +0,0023 | [−0,0105; +0,0121] | nein | −0,0006 | [−0,0216; +0,0169] | nein |
 
 Muster über beide Backbones: Land-Use-oa verbessert sich bei beiden Backbones signifikant durch
 den trainierten Kopf, Land-Use-macro_f1 bei keinem. Bei SDM verbessert der trainierte Kopf nur
-bei AE signifikant, bei TESSERA nicht (alle vier Metriken, CI schließt 0 ein) — das ist der
-einzige Punkt, an dem sich TESSERA und AE beim Alignment-Effekt selbst (nicht beim
+bei AE signifikant, bei TESSERA nicht (alle vier Metriken, CI schließt 0 ein — der TESSERA-Punkt-
+diff ist jetzt sogar leicht positiv statt negativ, s. Abschnitt 4/7, bleibt aber nicht signifikant)
+— das ist der einzige Punkt, an dem sich TESSERA und AE beim Alignment-Effekt selbst (nicht beim
 Backbone-Niveau, siehe Abschnitte 2/4) qualitativ unterscheiden. Quellen: SDM
-`results/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv` /
-`results/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv`; Land-Use
+`results/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv` /
+`results/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv`; Land-Use
 `results/landuse_probe_paired_diff_cell_tessera_dedup_ckpt.csv` /
 `results/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv`.
 
@@ -301,7 +323,9 @@ SDM nutzt fünf Probe-Seeds (`bsp7.SEEDS = [0,1,2,3,4]`, je ein frisches MLP-Tra
 hat kein Seed-Konzept (`LogisticRegression` ist deterministisch bei gegebenem `C`, der trainierte
 Projektionskopf kommt aus dem fest geladenen Checkpoint, der Random-Kopf nutzt den festen
 `RANDOM_HEAD_SEED=0`). Die Tabellen dieses Dokuments mischen beide Konventionen — hier explizit
-je Tabelle:
+je Tabelle. **Stand 2026-09-22: die SDM-Seed-Inkonsistenz (s. u.) ist behoben — alle SDM-Tabellen
+in diesem Dokument sind jetzt durchgängig 5-Seed-Mittel, Punktwert und CI beschreiben dieselbe
+Größe.**
 
 | Tabelle | Grundlage |
 |---|---|
@@ -311,26 +335,34 @@ je Tabelle:
 | Abschnitt 2, Land-Use gepaarter Diff je Backbone | derselbe Einzelfit, gepaartes Resampling |
 | Abschnitt 2, Backbone-Differenz (TESSERA−AE) | Refit bei bereits gewähltem bestem `C` je Backbone (Einzelfit), gepaartes Resampling über Backbones |
 | Abschnitt 3, Class-Retrieval | Punktschätzung des jeweiligen Checkpoints, kein Seed-Konzept |
-| Abschnitt 4, SDM-Haupttabelle (KL/L1/Chebyshev je Arm) | **Punktwert = Mittel über 5 Seeds** (`point_mean`); **95%-CI = Zellebenen-Bootstrap NUR auf Seed 0** (`bootstrap_seed_idx=0`, nicht über die 5 Seeds gemittelt — `build_sdm_phase7_metrics.py::evaluate_config()`) |
-| Abschnitt 4, SDM gepaarter C−A je Backbone | **Einzelseed (Seed 0)** — der Code fittet zwar alle 5 Seeds (`per_seed_metrics_and_ref()`), verwendet für Punktdiff/CI aber nur das Seed-0-Ergebnis, die übrigen 4 Fits werden verworfen |
-| Abschnitt 4, Backbone-Differenz (TESSERA−AE) | **Einzelseed (Seed 0)**, `bsp7.SEEDS[0]` |
-| Abschnitt 5, Alignment alt/neu Checkpoint | wie Abschnitt 4 (SDM C−A) und Abschnitt 2 (Land-Use), s.o. |
-| Abschnitt 6, Alignment-Effekt je Backbone | Zusammenstellung aus Abschnitt 2/4, dieselbe Basis |
+| Abschnitt 4, SDM-Haupttabelle (KL/L1/Chebyshev je Arm) | **5-Seed-Mittel für Punktwert UND CI** (`build_sdm_phase7_metrics_seedmean.py`, `_seedmean`-Dateien) — je Zellebenen-Resample die Metrik für jeden der 5 Seeds berechnet, dann gemittelt |
+| Abschnitt 4, SDM gepaarter C−A je Backbone | **5-Seed-Mittel** (`_seedmean`-Dateien) — Differenz pro Resample aus den 5-Seed-Mitteln von C und A |
+| Abschnitt 4, Backbone-Differenz (TESSERA−AE) | **5-Seed-Mittel** (`_seedmean`-Dateien) — Differenz pro Resample aus den 5-Seed-Mitteln beider Backbones |
+| Abschnitt 5, Alignment alt/neu Checkpoint | AE-Spalte "Neuer Checkpoint" (SDM): 5-Seed-Mittel (`_seedmean`); AE-Spalte "Alter Checkpoint" (SDM): weiterhin **Einzelseed (Seed 0)** — eigene, ältere Diagnose (`diag_sdm_paired_bootstrap_arm_diff.csv`), nicht auf `_seedmean` umgestellt (alter Checkpoint dient nur der Dokumentation). Land-Use: wie Abschnitt 2 (kein Seed-Konzept), unverändert |
+| Abschnitt 6, Alignment-Effekt je Backbone | Zusammenstellung aus Abschnitt 2/4, dieselbe Basis (SDM jetzt 5-Seed-Mittel) |
 
-**Wichtige Inkonsistenz innerhalb von Abschnitt 4:** die SDM-Haupttabelle mittelt den Punktwert
-über 5 Seeds, ihr CI stammt aber nur aus Seed 0 — die gepaarten C−A- und Backbone-Differenz-
-Tabellen verwenden für Punktwert UND CI nur Seed 0. Die Punktwerte zwischen Haupttabelle und
-Backbone-Differenz-Tabelle sind deshalb NICHT identisch (Beispiel TESSERA/A KL: 0,0338 im
-5-Seed-Mittel der Haupttabelle vs. 0,0344 bei Seed 0 allein in der Backbone-Differenz-Tabelle) —
-beide sind korrekt, nur unterschiedlich aggregiert.
+**Historie (behobene Inkonsistenz, bis 2026-09-22):** Die SDM-Haupttabelle mittelte den Punktwert
+schon immer über 5 Seeds, ihr CI stammte aber nur aus Seed 0 (`bootstrap_seed_idx=0` in
+`build_sdm_phase7_metrics.py::evaluate_config()`) — Punktwert und CI beschrieben nicht dieselbe
+Größe. Die gepaarten C−A- und Backbone-Differenz-Tabellen verwendeten für Punktwert UND CI
+durchgängig nur Seed 0 (der Code fittete zwar alle 5 Seeds, verwarf aber 4 davon), wodurch ihre
+Punktwerte von der 5-Seed-Haupttabelle abwichen (Beispiel TESSERA/A KL: 0,0338 im 5-Seed-Mittel
+vs. 0,0344 bei Seed 0 allein). Behoben durch `build_sdm_phase7_metrics_seedmean.py`
+(`_seedmean`-Dateien, kein Refit im Sinne einer neuen Trainingsprozedur — `fit_mlp()` ist bei
+gegebenem Seed deterministisch, es werden lediglich alle 5 statt nur 1 der ohnehin gefitteten
+Seeds behalten). Gleiche Ziehungszahl (1000) und Startseed (2000) wie zuvor. Die alten
+Einzelseed-Dateien (`_dedupnorm`/`_v1dedup`/`diag_backbone_paired_bootstrap_sdm.csv`, ohne
+`_seedmean`-Suffix) bleiben als Dokumentation erhalten, sind aber **nicht mehr kanonisch**.
 
-**Empfehlung für die Arbeit:** Haupttabellen (Abschnitt 1–4, Kernergebnisse) mit 5-Seed-
-Mittelwerten berichten, wo diese existieren (aktuell nur SDM-Haupttabelle betroffen — Land-Use/
-Retrieval/Class-Retrieval haben ohnehin keine Seed-Mittelung); die Backbone-Differenz-
-Diagnosen (Abschnitt 2/4, "Gepaarter Bootstrap auf Zellebene für die Backbone-Differenz") explizit
-als Einzelseed-Diagnose kennzeichnen, nicht als gleichrangige Haupttabellen-Zahl zitieren. Eine
-5-Seed-gemittelte Fassung der Backbone-Differenz-Bootstraps wurde in dieser Aufgabe nicht
-gerechnet (würde 5× den Rechenaufwand bedeuten, war nicht angefordert).
+**Effekt der Umstellung auf 5-Seed-Mittel:** Haupttabellen-Punktwerte unverändert (waren immer
+schon 5-Seed-Mittel), nur CI-Grenzen verschieben sich geringfügig. Bei den gepaarten Differenzen
+ändern sich Punktwerte leicht (z. B. Backbone-Differenz Arm A KL: −0,0153 → −0,0165) — **keine
+einzige Signifikanzaussage kippt** (AE C−A bleibt bei allen vier Metriken signifikant, die
+Backbone-Differenz bleibt bei allen drei Armen/vier Metriken signifikant). Einzige qualitative
+Änderung: **das Vorzeichen des TESSERA-C−A-Punktdiffs dreht sich** bei allen vier Metriken (vorher
+leicht negativ, jetzt leicht positiv) — bleibt aber in beiden Fassungen klar nicht signifikant
+(CI schließt 0 durchgehend ein). Das unterstreicht, dass der TESSERA-Alignment-Effekt bei SDM
+nicht von 0 unterscheidbar ist, ändert aber keine der berichteten Signifikanzaussagen.
 
 ---
 
