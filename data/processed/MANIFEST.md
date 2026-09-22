@@ -826,6 +826,64 @@ identisch), nicht in der Poolung; Float32-Rundung, Ursache nicht geklärt. **KL-
 (Arm B, Hauptlauf: 0,05440 → 0,05443, weit unter der Seed-Streuung ±0,0006). Arm A ist bit-identisch
 (130 Spalten, 0 Abweichungen). Arm C weicht erwartungsgemäß ab (anderer Checkpoint).
 
+## TESSERA-Normalisierung nachgezogen (2026-09-22, Jakob)
+
+**Ausgangsbefund:** Der SDM-Vergleich TESSERA-dedup vs. AE-dedup (`results/backbone_comparison_
+dedup.md`) fiel auf, dass TESSERA-Arm A/B (roh, zufällig projiziert) über
+`resolve_normalization(yaml_cfg, f"configs/{backbone}_v1.yaml")` bis dahin mit der ALTEN
+z-score-Statistik (`configs/tessera_v1.yaml` → `norm_stats_tessera_pixels.json`, gefittet auf dem
+undeduplizierten Train-Split) normalisiert wurden, während Arm C (der Dedup-Checkpoint) bereits
+die neue, auf dem deduplizierten Train-Split gefittete Statistik nutzt
+(`norm_stats_tessera_pixels_dedup.json`, via `configs/tessera_v1_dedup.yaml`). Größenordnung des
+Unterschieds zwischen beiden Statistiken (bereits vorher dokumentiert, Abschnitt
+"AlphaEarth-Vollständige-Dedup..." oben referenziert diesen Fund nicht direkt — hier der genaue
+Ort): maximale Kanalmittel-Verschiebung 0,048 Std, Median 0,016 Std über die 128 TESSERA-Kanäle.
+
+**Umsetzung** (`build_sdm_arm_ab_tessera_dedupnorm.py`): Arm A/B für TESSERA neu gerechnet, mit
+`load_backbone_yaml_config` in `build_sdm_projected_field.py` (Arm B) bzw.
+`build_sdm_pooled_embeddings_dedup.py` (Arm A) per Monkeypatch so umgeleitet, dass für
+`backbone='tessera'` `configs/tessera_v1_dedup.yaml` gelesen wird — identisches Schema, zeigt
+aber auf die Dedup-Statistik. Kein neues Statistik-Fitting. Arm B brauchte eine neue Reprojektion
+(`data/interim/sdm_projected_tessera_dedupnorm/tessera_armb/`, 293 s, 28.831.211 gültige Pixel —
+deckungsgleich mit der ursprünglichen Phase-4-Zahl), Arm A nur eine neue Poolung (direkt auf dem
+Rohraster). Beide erreichen alle 4.994 LSOAs, 0 leer. Neue Dateien:
+`sdm_pooled_tessera_arma_dedupnorm.parquet`, `sdm_pooled_tessera_armb_dedupnorm.parquet` — alte
+Dateien (`sdm_pooled_tessera_arm{a,b}_dedup.parquet`) unverändert erhalten, nicht überschrieben.
+
+**Land-Use ist von diesem Fund NICHT betroffen** — `run_landuse_probe_tessera_v1dedup.py` hat für
+TESSERA-dedup von Anfang an `configs/tessera_v1_dedup.yaml` (die Dedup-Statistik) als
+Normalisierungsquelle für "roh"/"zufällig projiziert" verwendet (eigenes `YAML_CFG_PATH`, nicht
+die generische `configs/{backbone}_v1.yaml`-Logik wie die SDM-Poolung). Nichts geändert, nichts
+neu gerechnet.
+
+**Effekt: vernachlässigbar.** Vergleich derselben Dedup-Maske, nur unterschiedliche Statistik
+(`sdm_pooled_tessera_arm{a,b}_dedup.parquet`, alte Statistik, vs. `..._dedupnorm.parquet`, neue
+Statistik), Auswertung über `build_sdm_phase7_metrics_tessera_dedupnorm.py`:
+
+| Modell | KL alt | KL neu | Δ KL | L1-Summe alt | L1-Summe neu | Δ L1 | Chebyshev alt | Chebyshev neu | Δ Chebyshev |
+|---|---|---|---|---|---|---|---|---|---|
+| tessera/a | 0,033749 | 0,033754 | +0,000005 | 0,187831 | 0,187263 | −0,000568 | 0,057125 | 0,057082 | −0,000043 |
+| tessera/b | 0,040406 | 0,040264 | −0,000142 | 0,207353 | 0,206836 | −0,000517 | 0,062998 | 0,062859 | −0,000138 |
+
+Alle Deltas zwei bis drei Größenordnungen kleiner als die jeweilige CI-Breite (≈0,01–0,015 bei
+KL). Der gepaarte Zellebenen-Bootstrap C−A (`sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.
+csv`, 417 Test-LSOAs) bleibt für alle vier Metriken nicht signifikant, wie vorher
+(`sdm_paired_bootstrap_tessera_v1dedup_c_minus_a.csv`) — die Kernaussage der Arbeit zu TESSERA/
+SDM ("trainierter Kopf verbessert gegenüber roh nicht signifikant") ändert sich nicht.
+
+**Backbone-Differenz-Bootstrap (`diag_backbone_paired_bootstrap_sdm.py`) aktualisiert:**
+TESSERA/A jetzt mit der Dedup-Statistik, TESSERA/B neu ergänzt (vorher fehlte TESSERA/B im
+Backbone-Vergleich komplett, weil es unter der Dedup-Statistik noch nicht existierte). TESSERA
+schlägt AE jetzt in **allen drei** Armen signifikant (vorher nur A/C) — Details, Zahlen und die
+"Alignment-Effekt je Backbone"-Zusammenfassung: `results/backbone_comparison_dedup.md`, Abschnitte
+4 und 6. Dabei eine Rundungskorrektur gegenüber der vorherigen Dokument-Fassung gefunden: der
+AE/Arm-C-Wert in der Backbone-Differenz-Tabelle war dort als 0,0426 notiert, tatsächlicher
+Seed-0-Wert (nicht der 5-Seed-Mittelwert der Haupttabelle) ist 0,0424 — korrigiert.
+
+**Committete Skripte/Logs:** `build_sdm_arm_ab_tessera_dedupnorm.py`,
+`build_sdm_phase7_metrics_tessera_dedupnorm.py`, `diag_backbone_paired_bootstrap_sdm.py`
+(aktualisiert). MD5 aller neuen/aktualisierten Dateien in `results/checksums.txt`.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

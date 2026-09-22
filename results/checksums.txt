@@ -161,3 +161,31 @@ results/diag_class_retrieval_ae_control_summary.csv  <- Original: data/processed
 results/diag_uniqueness_loss_ae.csv  <- Original: data/processed/diag_uniqueness_loss_ae.csv (Kopie 2026-09-21, md5 166464adeecfa559adc3cb916708c48e, nachtraeglich checksummt)
 results/diag_uniqueness_loss_tessera.csv  <- Original: data/processed/diag_uniqueness_loss_tessera.csv (Kopie 2026-09-21, md5 9c4f1df0b6e7d69cec5afa0c3d83d0ef, nachtraeglich checksummt)
 results/diag_splits_rebuild_dedup_ae_comparison.csv  <- Original: data/processed/diag_splits_rebuild_dedup_ae_comparison.csv (Kopie 2026-09-21, md5 bbe8679a14210ff82f03dc810d0b1c9f, nachtraeglich checksummt)
+
+=== Nachtrag (Ergaenzung 2026-09-22): TESSERA-Normalisierung nachgezogen (SDM Arm A/B mit Dedup-Statistik) ===
+# Arm A/B fuer TESSERA neu gepoolt mit derselben z-score-Statistik wie Arm C
+# (norm_stats_tessera_pixels_dedup.json, via configs/tessera_v1_dedup.yaml) - vorher nutzten sie
+# die aeltere norm_stats_tessera_pixels.json. Alte Dateien (sdm_pooled_tessera_arm{a,b}_dedup.
+# parquet, sdm_phase7_metrics_tessera_v1dedup.csv, sdm_paired_bootstrap_tessera_v1dedup_c_minus_
+# a.csv) unveraendert, nicht ueberschrieben. Siehe MANIFEST.md fuer den vollen Bericht.
+620041eca6a0e3e651ff11c1c9ec3e4c  data/processed/sdm_pooled_tessera_arma_dedupnorm.parquet
+778f2d37e164ebdba540e7639900d703  data/processed/sdm_pooled_tessera_armb_dedupnorm.parquet
+64cba831ca03f5b1549186e647bf024e  data/processed/sdm_phase7_metrics_tessera_dedupnorm.csv
+b83b9b44d93c32ab46b381486382c980  data/processed/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv
+# diag_backbone_paired_bootstrap_sdm.csv wurde in dieser Aufgabe AKTUALISIERT (TESSERA-Arm-A auf
+# dedupnorm umgestellt, Arm B fuer beide Backbones ergaenzt) - die Zeile unten ersetzt den fruehe-
+# ren Checksum-Eintrag (siehe "Nachtrag ... AlphaEarth-Vollstaendige-Dedup" oben; die alte MD5
+# stand dort nicht separat, nur die results/-Kopie, die jetzt ebenfalls aktualisiert ist).
+f78a898cfdf51965b82cb636f4000203  data/processed/diag_backbone_paired_bootstrap_sdm.csv
+# Alt-Referenz fuer den Vorher/Nachher-Vergleich (dedup-maskiert, aber ALTE Statistik) - vorher
+# nicht separat checksummt, obwohl schon am 17.9. erzeugt:
+ed655780c368c8e0ea5a3d9874bfcf8c  data/processed/sdm_pooled_tessera_armb_dedup.parquet
+
+=== Nachtrag (Ergaenzung 2026-09-22): Kopien nach results/ ===
+# Alle Kopien vor dem Schreiben dieser Zeilen per `cmp` byte-identisch zum Original verifiziert.
+results/sdm_phase7_metrics_tessera_dedupnorm.csv  <- Original: data/processed/sdm_phase7_metrics_tessera_dedupnorm.csv (md5 64cba831ca03f5b1549186e647bf024e)
+results/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv (md5 b83b9b44d93c32ab46b381486382c980)
+results/diag_backbone_paired_bootstrap_sdm.csv  <- Original: data/processed/diag_backbone_paired_bootstrap_sdm.csv (md5 f78a898cfdf51965b82cb636f4000203, AKTUALISIERT - ersetzt eine fruehere Kopie desselben Pfads)
+# sdm_pooled_tessera_arm{a,b}_dedupnorm.parquet NICHT nach results/ kopiert (Konvention: gepoolte
+# SDM-Parquets bleiben in data/processed/, nur die MD5 wird hier gefuehrt - wie zuvor bei
+# sdm_pooled_tessera_armc_v1dedup_ckpt.parquet und den AE-Pendants gehandhabt).

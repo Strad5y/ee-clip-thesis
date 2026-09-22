@@ -268,6 +268,72 @@ Land-Use neu `results/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv`.
 
 ---
 
+## 6. Alignment-Effekt je Backbone (Zusammenfassung)
+
+Fasst den "trainierter Kopf verbessert gegenüber roh"-Effekt (SDM: C−A, Land-Use: trainiert−roh)
+für beide Backbones in einer Tabelle zusammen — reine Zusammenstellung bereits vorhandener
+Zahlen aus den Abschnitten 2 und 4 oben, nichts neu gerechnet.
+
+| Aufgabe | Metrik | TESSERA Diff | TESSERA 95%-CI | TESSERA sig. | AE Diff | AE 95%-CI | AE sig. |
+|---|---|---|---|---|---|---|---|
+| SDM (C−A) | kl | −0,00020 | [−0,00315; +0,00271] | nein | −0,00726 | [−0,01019; −0,00459] | **ja** |
+| SDM (C−A) | l1_sum | +0,00214 | [−0,00440; +0,00953] | nein | −0,02012 | [−0,02740; −0,01370] | **ja** |
+| SDM (C−A) | l1_mean | +0,00024 | [−0,00049; +0,00106] | nein | −0,00224 | [−0,00304; −0,00152] | **ja** |
+| SDM (C−A) | chebyshev | −0,00009 | [−0,00228; +0,00222] | nein | −0,00635 | [−0,00882; −0,00412] | **ja** |
+| Land-Use (trainiert−roh) | oa | +0,0116 | [0,0087; 0,0145] | **ja** | +0,0080 | [0,0039; 0,0120] | **ja** |
+| Land-Use (trainiert−roh) | macro_f1 | +0,0023 | [−0,0105; +0,0121] | nein | −0,0006 | [−0,0216; +0,0169] | nein |
+
+Muster über beide Backbones: Land-Use-oa verbessert sich bei beiden Backbones signifikant durch
+den trainierten Kopf, Land-Use-macro_f1 bei keinem. Bei SDM verbessert der trainierte Kopf nur
+bei AE signifikant, bei TESSERA nicht (alle vier Metriken, CI schließt 0 ein) — das ist der
+einzige Punkt, an dem sich TESSERA und AE beim Alignment-Effekt selbst (nicht beim
+Backbone-Niveau, siehe Abschnitte 2/4) qualitativ unterscheiden. Quellen: SDM
+`results/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv` /
+`results/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv`; Land-Use
+`results/landuse_probe_paired_diff_cell_tessera_dedup_ckpt.csv` /
+`results/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv`.
+
+---
+
+## 7. Zahlenbasis (5-Seed-Mittelwert vs. Einzelseed-Diagnose)
+
+SDM nutzt fünf Probe-Seeds (`bsp7.SEEDS = [0,1,2,3,4]`, je ein frisches MLP-Training); Land-Use
+hat kein Seed-Konzept (`LogisticRegression` ist deterministisch bei gegebenem `C`, der trainierte
+Projektionskopf kommt aus dem fest geladenen Checkpoint, der Random-Kopf nutzt den festen
+`RANDOM_HEAD_SEED=0`). Die Tabellen dieses Dokuments mischen beide Konventionen — hier explizit
+je Tabelle:
+
+| Tabelle | Grundlage |
+|---|---|
+| Abschnitt 1, Retrieval | Punktschätzung des jeweiligen Checkpoints, kein Seed-Konzept (deterministische Eval) |
+| Abschnitt 2, Land-Use Punktschätzung | Einzelfit (LogisticRegression bei bestem `C`, deterministisch) |
+| Abschnitt 2, Land-Use Zellebenen-Bootstrap | Resampling der Vorhersagen desselben Einzelfits |
+| Abschnitt 2, Land-Use gepaarter Diff je Backbone | derselbe Einzelfit, gepaartes Resampling |
+| Abschnitt 2, Backbone-Differenz (TESSERA−AE) | Refit bei bereits gewähltem bestem `C` je Backbone (Einzelfit), gepaartes Resampling über Backbones |
+| Abschnitt 3, Class-Retrieval | Punktschätzung des jeweiligen Checkpoints, kein Seed-Konzept |
+| Abschnitt 4, SDM-Haupttabelle (KL/L1/Chebyshev je Arm) | **Punktwert = Mittel über 5 Seeds** (`point_mean`); **95%-CI = Zellebenen-Bootstrap NUR auf Seed 0** (`bootstrap_seed_idx=0`, nicht über die 5 Seeds gemittelt — `build_sdm_phase7_metrics.py::evaluate_config()`) |
+| Abschnitt 4, SDM gepaarter C−A je Backbone | **Einzelseed (Seed 0)** — der Code fittet zwar alle 5 Seeds (`per_seed_metrics_and_ref()`), verwendet für Punktdiff/CI aber nur das Seed-0-Ergebnis, die übrigen 4 Fits werden verworfen |
+| Abschnitt 4, Backbone-Differenz (TESSERA−AE) | **Einzelseed (Seed 0)**, `bsp7.SEEDS[0]` |
+| Abschnitt 5, Alignment alt/neu Checkpoint | wie Abschnitt 4 (SDM C−A) und Abschnitt 2 (Land-Use), s.o. |
+| Abschnitt 6, Alignment-Effekt je Backbone | Zusammenstellung aus Abschnitt 2/4, dieselbe Basis |
+
+**Wichtige Inkonsistenz innerhalb von Abschnitt 4:** die SDM-Haupttabelle mittelt den Punktwert
+über 5 Seeds, ihr CI stammt aber nur aus Seed 0 — die gepaarten C−A- und Backbone-Differenz-
+Tabellen verwenden für Punktwert UND CI nur Seed 0. Die Punktwerte zwischen Haupttabelle und
+Backbone-Differenz-Tabelle sind deshalb NICHT identisch (Beispiel TESSERA/A KL: 0,0338 im
+5-Seed-Mittel der Haupttabelle vs. 0,0344 bei Seed 0 allein in der Backbone-Differenz-Tabelle) —
+beide sind korrekt, nur unterschiedlich aggregiert.
+
+**Empfehlung für die Arbeit:** Haupttabellen (Abschnitt 1–4, Kernergebnisse) mit 5-Seed-
+Mittelwerten berichten, wo diese existieren (aktuell nur SDM-Haupttabelle betroffen — Land-Use/
+Retrieval/Class-Retrieval haben ohnehin keine Seed-Mittelung); die Backbone-Differenz-
+Diagnosen (Abschnitt 2/4, "Gepaarter Bootstrap auf Zellebene für die Backbone-Differenz") explizit
+als Einzelseed-Diagnose kennzeichnen, nicht als gleichrangige Haupttabellen-Zahl zitieren. Eine
+5-Seed-gemittelte Fassung der Backbone-Differenz-Bootstraps wurde in dieser Aufgabe nicht
+gerechnet (würde 5× den Rechenaufwand bedeuten, war nicht angefordert).
+
+---
+
 ## Offene Punkte
 
 - **main.tex:** auf dieser Maschine nicht vorhanden (bereits im Schritt-4-Bericht der
