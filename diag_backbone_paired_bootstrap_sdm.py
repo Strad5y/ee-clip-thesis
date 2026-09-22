@@ -2,10 +2,16 @@
 diag_backbone_paired_bootstrap_sdm.py  (2026-09-22, Jakob) - NUR DIAGNOSE
 
 Gepaarter Zellebenen-Bootstrap fuer die BACKBONE-DIFFERENZ (TESSERA-dedup minus AE-dedup), SDM,
-Arm A (roh) und Arm C (trainiert, jeweils v1dedup-Checkpoint). Beide Backbones haben exakt
-dieselben 417 Test-LSOAs (verifiziert unten) - in jedem Resample wird DIESELBE gezogene 1-km-
-Zellmenge (LSOA -> Zelle ueber bsp7.LSOA_TO_CELL, Mehrheitsregel wie ueberall sonst in Phase 7)
-auf beide Backbones angewendet.
+Arm A (roh), Arm B (zufaellig projiziert) und Arm C (trainiert, jeweils v1dedup-Checkpoint).
+Beide Backbones haben exakt dieselben 417 Test-LSOAs (verifiziert unten) - in jedem Resample
+wird DIESELBE gezogene 1-km-Zellmenge (LSOA -> Zelle ueber bsp7.LSOA_TO_CELL, Mehrheitsregel wie
+ueberall sonst in Phase 7) auf beide Backbones angewendet.
+
+AKTUALISIERT 2026-09-22 (Jakob, TESSERA-Normalisierung nachgezogen): TESSERA/A zeigt jetzt auf
+`sdm_pooled_tessera_arma_dedupnorm.parquet` (Dedup-Statistik, dieselbe wie Arm C nutzt - statt
+der alten `_dedup`-Datei mit der frueheren Statistik, siehe MANIFEST.md/`build_sdm_arm_ab_
+tessera_dedupnorm.py`). NEU: Arm B fuer beide Backbones ergaenzt (vorher nur A/C, weil TESSERA/B
+bis zu diesem Nachtrag nicht mit der Dedup-Statistik existierte).
 
 Wiederverwendet bsp6.fit_mlp()/bsp7.per_lsoa_metrics() UNVERAENDERT, Seed 0 (derselbe
 Referenz-Seed wie im bestehenden Arm-A-vs-C-Vergleich pro Backbone). Schreibt NUR eine
@@ -19,12 +25,14 @@ import build_sdm_phase6_predict as bsp6
 import build_sdm_phase7_metrics as bsp7
 
 POOLED = {
-    ("tessera", "a"): cfg.DATA / "processed" / "sdm_pooled_tessera_arma_dedup.parquet",
+    ("tessera", "a"): cfg.DATA / "processed" / "sdm_pooled_tessera_arma_dedupnorm.parquet",
+    ("tessera", "b"): cfg.DATA / "processed" / "sdm_pooled_tessera_armb_dedupnorm.parquet",
     ("tessera", "c"): cfg.DATA / "processed" / "sdm_pooled_tessera_armc_v1dedup_ckpt.parquet",
     ("ae", "a"): cfg.DATA / "processed" / "sdm_pooled_ae_arma_v1dedup_ckpt.parquet",
+    ("ae", "b"): cfg.DATA / "processed" / "sdm_pooled_ae_armb_v1dedup_ckpt.parquet",
     ("ae", "c"): cfg.DATA / "processed" / "sdm_pooled_ae_armc_v1dedup_ckpt.parquet",
 }
-ARMS = ["a", "c"]
+ARMS = ["a", "b", "c"]
 METRICS = ["kl", "l1_sum", "l1_mean", "chebyshev"]
 N_BOOTSTRAP = 1000
 SEED = 4000

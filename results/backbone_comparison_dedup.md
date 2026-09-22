@@ -1,6 +1,8 @@
 # Backbone-Vergleich TESSERA-dedup vs. AlphaEarth-dedup (Schritt 4)
 
-Stand: 2026-09-22. Checkpoints: `checkpoints/tessera_v1_dedup/best.pt` (Epoche 48) und
+Stand: 2026-09-22 (Abschnitt 4/SDM aktualisiert nach der TESSERA-Normalisierungs-Nachziehung —
+TESSERA Arm A/B nutzen jetzt dieselbe z-score-Statistik wie Arm C, Arm B neu ergänzt; siehe
+Änderungsvermerke im Abschnitt selbst). Checkpoints: `checkpoints/tessera_v1_dedup/best.pt` (Epoche 48) und
 `checkpoints/ae_v1_dedup/best.pt` (Epoche 32), jeweils trainiert auf der deduplizierten
 Datenbasis des jeweiligen Backbones (Eindeutigkeits- + AOI-Polygon-Maske, siehe `MANIFEST.md`).
 Beide Backbones sind jetzt nach derselben Prozedur dedupliziert — dies ist der erste direkte
@@ -91,6 +93,15 @@ für AE auf explizite Nutzeranfrage in dieser Aufgabe).
 Beide Backbones zeigen dasselbe Muster: der trainierte Kopf verbessert overall accuracy
 signifikant gegenüber roh, macro-F1 nicht.
 
+**Hinweis (2026-09-22, TESSERA-Normalisierungs-Nachziehung): dieser Abschnitt ist von der
+Normalisierungs-Korrektur NICHT betroffen und wurde nicht neu gerechnet.** Der Land-Use-Wrapper
+`run_landuse_probe_tessera_v1dedup.py` hat für TESSERA-dedup von Anfang an `configs/
+tessera_v1_dedup.yaml` (die Dedup-Statistik) als Normalisierungsquelle für "roh"/"zufällig
+projiziert" verwendet (`YAML_CFG_PATH`, siehe Skript) — anders als die SDM-Arm-A/B-Poolung, die
+über `resolve_normalization(yaml_cfg, f"configs/{backbone}_v1.yaml")` bis zu diesem Nachtrag
+die alte, undeduplizierte Statistik (`configs/tessera_v1.yaml` → `norm_stats_tessera_pixels.json`)
+gelesen hat. Land-Use war also nie auf dem "alten Statistik"-Pfad — nichts zu korrigieren.
+
 ### Gepaarter Bootstrap auf Zellebene für die Backbone-Differenz (TESSERA − AE)
 
 Datei: `diag_backbone_paired_bootstrap_landuse.py` → `results/diag_backbone_paired_bootstrap_landuse.csv`
@@ -152,63 +163,83 @@ Klasse dominieren die Makro-AP), nicht spezifisch für AE.
 
 ## 4. SDM
 
-Quellen: `results/sdm_phase7_metrics_tessera_v1dedup.csv`, `results/sdm_phase7_metrics_ae_v1dedup.csv`
-(Hauptlauf 9cat/A/pure, KL/L1/Chebyshev, Zellebenen-Bootstrap-CI aus Seed 0), `results/
-sdm_paired_bootstrap_{tessera,ae}_v1dedup_c_minus_a.csv` (gepaarter Zell-Bootstrap C−A je
-Backbone). **Asymmetrie:** für TESSERA wurde in Schritt 3 der TESSERA-Dedup-Aufgabe (2026-09-19)
-nur Arm C neu gerechnet (Arm A/B unverändert seit Schritt 1, Arm B dort nicht Teil des Auftrags)
-— TESSERA/B fehlt deshalb hier. Für AE wurden auf explizite Nutzeranfrage dieser Aufgabe alle
-drei Arme neu gerechnet.
+Quellen: `results/sdm_phase7_metrics_tessera_dedupnorm.csv` (**aktualisiert 2026-09-22** — TESSERA
+Arm A/B jetzt mit derselben z-score-Statistik wie Arm C, siehe MANIFEST.md/
+`build_sdm_arm_ab_tessera_dedupnorm.py`; alte Datei `sdm_phase7_metrics_tessera_v1dedup.csv`
+unverändert erhalten, hatte nur Arm A/C mit unterschiedlichen Statistiken), `results/
+sdm_phase7_metrics_ae_v1dedup.csv` (Hauptlauf 9cat/A/pure, KL/L1/Chebyshev, Zellebenen-
+Bootstrap-CI aus Seed 0), `results/sdm_paired_bootstrap_tessera_dedupnorm_c_minus_a.csv`,
+`results/sdm_paired_bootstrap_ae_v1dedup_c_minus_a.csv` (gepaarter Zell-Bootstrap C−A je
+Backbone). Die frühere Asymmetrie (TESSERA/B fehlte, weil in der TESSERA-Dedup-Aufgabe nur
+Arm C neu gerechnet wurde) ist mit der TESSERA-Normalisierungs-Nachziehung behoben — jetzt
+haben beide Backbones alle drei Arme unter konsistenter Normalisierung.
 
 | Modell | KL | 95%-CI (Zelle) | L1 (Summe) | 95%-CI | L1 (Mittel) | Chebyshev | 95%-CI |
 |---|---|---|---|---|---|---|---|
 | Mittelwertsvorhersage | 0,0696 | [0,0608; 0,0788] | 0,2852 | [0,2689; 0,3024] | 0,0317 | 0,0864 | [0,0793; 0,0932] |
-| TESSERA/A (roh) | 0,0337 | [0,0287; 0,0409] | 0,1878 | [0,1761; 0,2034] | 0,0209 | 0,0571 | [0,0522; 0,0629] |
+| TESSERA/A (roh) | 0,0338 | [0,0286; 0,0409] | 0,1873 | [0,1744; 0,2016] | 0,0208 | 0,0571 | [0,0524; 0,0631] |
+| TESSERA/B (zufällig) | 0,0403 | [0,0337; 0,0482] | 0,2068 | [0,1929; 0,2238] | 0,0230 | 0,0629 | [0,0570; 0,0699] |
 | TESSERA/C (trainiert, dedup-Ckpt) | 0,0342 | [0,0286; 0,0403] | 0,1902 | [0,1772; 0,2029] | 0,0211 | 0,0578 | [0,0524; 0,0631] |
 | AE/A (roh) | 0,0503 | [0,0425; 0,0577] | 0,2366 | [0,2201; 0,2511] | 0,0263 | 0,0710 | [0,0646; 0,0768] |
 | AE/B (zufällig) | 0,0544 | [0,0468; 0,0618] | 0,2480 | [0,2318; 0,2633] | 0,0276 | 0,0748 | [0,0684; 0,0806] |
 | AE/C (trainiert, dedup-Ckpt) | 0,0426 | [0,0362; 0,0494] | 0,2154 | [0,2011; 0,2301] | 0,0239 | 0,0643 | [0,0586; 0,0702] |
 
+Die Normalisierungs-Korrektur ändert die TESSERA-Werte nur minimal (Δ KL Arm A: +0,000005,
+Arm B war vorher unter der Dedup-Statistik gar nicht berechnet; gegen die dedup-maskierte,
+aber alt-normierte Referenz `sdm_phase7_metrics_dedup.csv` — Arm A KL 0,033749→0,033754, Arm B
+KL 0,040406→0,040264 — Delta jeweils zwei bis drei Größenordnungen kleiner als die CI-Breite).
+
 **Gepaarter Zell-Bootstrap C − A je Backbone:**
 
 | Backbone | Metrik | Diff (C−A) | 95%-CI | signifikant |
 |---|---|---|---|---|
-| TESSERA | kl | −0,00033 | [−0,00274; +0,00217] | nein |
-| TESSERA | l1_sum | +0,00062 | [−0,00537; +0,00725] | nein |
-| TESSERA | l1_mean | +0,00007 | [−0,00060; +0,00081] | nein |
-| TESSERA | chebyshev | −0,00002 | [−0,00195; +0,00214] | nein |
+| TESSERA | kl | −0,00020 | [−0,00315; +0,00271] | nein |
+| TESSERA | l1_sum | +0,00214 | [−0,00440; +0,00953] | nein |
+| TESSERA | l1_mean | +0,00024 | [−0,00049; +0,00106] | nein |
+| TESSERA | chebyshev | −0,00009 | [−0,00228; +0,00222] | nein |
 | AE | kl | −0,00726 | [−0,01019; −0,00459] | **ja** |
 | AE | l1_sum | −0,02012 | [−0,02740; −0,01370] | **ja** |
 | AE | l1_mean | −0,00224 | [−0,00304; −0,00152] | **ja** |
 | AE | chebyshev | −0,00635 | [−0,00882; −0,00412] | **ja** |
 
 Bei TESSERA verbessert der trainierte Kopf die SDM-Vorhersage gegenüber dem rohen Backbone
-**nicht** signifikant (alle vier Metriken). Bei AE verbessert der trainierte Kopf signifikant,
-in derselben Richtung, für alle vier Metriken.
+**nicht** signifikant (alle vier Metriken, unverändert gegenüber der alten Normalisierung — die
+CIs überlappen praktisch vollständig mit den vorherigen). Bei AE verbessert der trainierte Kopf
+signifikant, in derselben Richtung, für alle vier Metriken.
 
 ### Gepaarter Bootstrap auf Zellebene für die Backbone-Differenz (TESSERA − AE)
 
 Datei: `diag_backbone_paired_bootstrap_sdm.py` → `results/diag_backbone_paired_bootstrap_sdm.csv`
-(Diagnose). Beide Backbones haben **exakt dieselben 417 Test-LSOAs** (symmetrische Differenz 0).
-Zellzuordnung über `bsp7.LSOA_TO_CELL` (Mehrheitsregel, wie im bestehenden Arm-A-vs-C-Vergleich),
-1000 Resamples, dieselbe gezogene Zellmenge für beide Backbones je Resample, Seed 0
-(Referenz-Seed, wie überall sonst in Phase 7).
+(Diagnose, **aktualisiert 2026-09-22**: TESSERA/A zeigt jetzt auf die dedupnorm-Poolung, TESSERA/B
+neu ergänzt — beide Backbones haben jetzt Arm A/B/C im Vergleich). Beide Backbones haben **exakt
+dieselben 417 Test-LSOAs** (symmetrische Differenz 0, in allen drei Armen geprüft). Zellzuordnung
+über `bsp7.LSOA_TO_CELL` (Mehrheitsregel, wie im bestehenden Arm-A-vs-C-Vergleich), 1000
+Resamples, dieselbe gezogene Zellmenge für beide Backbones je Resample, Seed 0 (Referenz-Seed,
+wie überall sonst in Phase 7 — Punktwerte hier sind deshalb Einzelseed-Werte, nicht der
+5-Seed-Mittelwert aus der Tabelle oben, wie schon in der vorherigen Fassung dieses Abschnitts).
 
 | Arm | Metrik | TESSERA | AE | Diff (TESSERA − AE) | 95%-CI | signifikant |
 |---|---|---|---|---|---|---|
-| A (roh) | kl | 0,0337 | 0,0503 | −0,01519 | [−0,02024; −0,01031] | **ja** |
-| A (roh) | l1_sum | 0,1878 | 0,2366 | −0,04574 | [−0,05797; −0,03429] | **ja** |
-| A (roh) | l1_mean | 0,0209 | 0,0263 | −0,00508 | [−0,00644; −0,00381] | **ja** |
-| A (roh) | chebyshev | 0,0571 | 0,0710 | −0,01300 | [−0,01699; −0,00880] | **ja** |
-| C (trainiert) | kl | 0,0342 | 0,0426 | −0,00826 | [−0,01131; −0,00525] | **ja** |
-| C (trainiert) | l1_sum | 0,1902 | 0,2154 | −0,02500 | [−0,03319; −0,01688] | **ja** |
+| A (roh) | kl | 0,0344 | 0,0497 | −0,01532 | [−0,02057; −0,01021] | **ja** |
+| A (roh) | l1_sum | 0,1880 | 0,2353 | −0,04726 | [−0,05994; −0,03492] | **ja** |
+| A (roh) | l1_mean | 0,0209 | 0,0261 | −0,00525 | [−0,00666; −0,00388] | **ja** |
+| A (roh) | chebyshev | 0,0578 | 0,0707 | −0,01292 | [−0,01719; −0,00856] | **ja** |
+| B (zufällig) | kl | 0,0407 | 0,0539 | −0,01326 | [−0,01731; −0,00925] | **ja** |
+| B (zufällig) | l1_sum | 0,2079 | 0,2470 | −0,03904 | [−0,04981; −0,02777] | **ja** |
+| B (zufällig) | l1_mean | 0,0231 | 0,0274 | −0,00434 | [−0,00553; −0,00309] | **ja** |
+| B (zufällig) | chebyshev | 0,0631 | 0,0744 | −0,01126 | [−0,01459; −0,00768] | **ja** |
+| C (trainiert) | kl | 0,0342 | 0,0424 | −0,00826 | [−0,01131; −0,00525] | **ja** |
+| C (trainiert) | l1_sum | 0,1901 | 0,2151 | −0,02500 | [−0,03319; −0,01688] | **ja** |
 | C (trainiert) | l1_mean | 0,0211 | 0,0239 | −0,00278 | [−0,00369; −0,00188] | **ja** |
-| C (trainiert) | chebyshev | 0,0578 | 0,0643 | −0,00666 | [−0,00957; −0,00372] | **ja** |
+| C (trainiert) | chebyshev | 0,0577 | 0,0643 | −0,00666 | [−0,00957; −0,00372] | **ja** |
 
 **TESSERA schlägt AE bei der SDM-Aufgabe signifikant** (niedrigeres KL/L1/Chebyshev = näher an
-der wahren NS-SeC-Verteilung), in beiden Armen und allen vier Metriken. **Das ist das Gegenteil
+der wahren NS-SeC-Verteilung), jetzt in **allen drei** Armen und allen vier Metriken (Arm B war
+vor der Normalisierungs-Nachziehung noch nicht Teil dieses Vergleichs). **Das ist das Gegenteil
 der Land-Use-Richtung** (dort schlägt AE TESSERA) — die beiden EE-Backbones sind für die beiden
-Downstream-Aufgaben unterschiedlich gut geeignet, kein Backbone dominiert durchgehend.
+Downstream-Aufgaben unterschiedlich gut geeignet, kein Backbone dominiert durchgehend. Die
+Normalisierungs-Korrektur ändert an dieser Aussage nichts (Arm A vorher −0,01519, jetzt −0,01532
+KL-Differenz, praktisch identisch).
 
 ---
 
@@ -245,7 +276,9 @@ Land-Use neu `results/landuse_probe_paired_diff_cell_ae_dedup_ckpt.csv`.
 - **Retrieval/Class-Retrieval ohne CI:** für einen statistisch abgesicherten Backbone-Vergleich
   bei diesen beiden Aufgaben müsste erst eine Bootstrap-Prozedur für sie implementiert werden
   (nicht Teil dieser Aufgabe).
-- **TESSERA/Arm B fehlt im SDM-Vergleich** (s.o., Asymmetrie aus der TESSERA-Dedup-Aufgabe,
-  nicht in dieser Aufgabe nachgeholt).
-- **TESSERA-Normalisierung (Arm A/B mit alten Statistiken):** noch nicht nachgezogen, folgt als
-  eigener Schritt nach dieser Aufgabe (siehe `MANIFEST.md`).
+- ~~TESSERA/Arm B fehlt im SDM-Vergleich~~ **erledigt 2026-09-22** — Arm B mit der Dedup-Statistik
+  neu gerechnet und in den Vergleich aufgenommen (s.o.).
+- ~~TESSERA-Normalisierung (Arm A/B mit alten Statistiken)~~ **erledigt 2026-09-22** — Arm A/B
+  neu gepoolt mit derselben Statistik wie Arm C (`sdm_pooled_tessera_arm{a,b}_dedupnorm.parquet`,
+  `build_sdm_arm_ab_tessera_dedupnorm.py`). Effekt auf alle SDM-Zahlen und die Backbone-Differenz
+  vernachlässigbar (s.o.) — die Kernaussagen der Arbeit ändern sich dadurch nicht.
