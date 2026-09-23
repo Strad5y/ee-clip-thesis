@@ -933,6 +933,105 @@ nachgezogen" oben).
 **Committetes Skript/Log:** `build_sdm_phase7_metrics_seedmean.py`. MD5 aller neuen Dateien in
 `results/checksums.txt`.
 
+## Phase-0-Retrieval-Evaluation: Referenzen für den AETHER-Vergleich (2026-09-22/23, Jakob)
+
+Vorarbeit für die kommende Retrieval-Evaluation (`INSTRUCTIONS_text_query.md`, Phase 5/6) — hier
+NUR Referenzdaten geprüft/aufbereitet, KEINE Retrieval-Metriken berechnet.
+
+### Green Cover 2024
+
+Quelle: `data/raw/greencover/Green_Cover_2024.zip` (identisch zu `~/Downloads/Green_Cover_2024.zip`,
+MD5 `886b849222b5a4c305b642df194cc95d`, 302.921.014 Bytes). 467 Shapefile-Kacheln (`GreenCover24_
+<tile_num>.{shp,dbf,prj,shx,cpg}`), zusammen 519 Polygon-Features, CRS `EPSG:27700` (British
+National Grid), Encoding UTF-8. **Keine Lizenzangabe im Archiv** (nur die fünf Standard-
+Shapefile-Endungen, kein README/Lizenztext). Gesamt-Bounding-Box deckt sich fast exakt mit der
+offiziellen Greater-London-Grenze.
+
+**Befund: 509 von 519 Features (98,1 %) sind topologisch ungültig** (selbstüberschneidend) —
+verifiziert mit `geopandas`/`shapely.is_valid`. Das führte zu einem reproduzierbaren **Segfault
+in `exactextract`** beim ersten Rasterisierungsversuch (mit `faulthandler` als C-Crash in der
+Extension verifiziert, nicht als Python-Exception). **Fix:** `shapely.make_valid()` auf alle
+519 Geometrien angewendet, danach 0 ungültig. Airport-Geometrien (s. u.) waren alle bereits gültig.
+
+**Reparierte Referenz gespeichert** (damit die Reparatur nicht bei jedem Lauf neu läuft):
+`data/interim/greencover_2024_valid.parquet` (519 Zeilen, Spalten `ref_id, tile_num, geometry`,
+CRS EPSG:27700, MD5 in `results/checksums.txt`) — `build_greencover_valid.py`, committet.
+
+**Positiv-Anteil, zwei Regeln, auf dem Arm-C-Grid (Eindeutigkeits+AOI-Masken aus der
+Text-Query-Aufgabe, `data/interim/text_query_masks/{ae,tessera}/`):**
+
+| Backbone | gültige Pixel | Pixelmittelpunkt (`all_touched=False`) | **>50 % Flächenanteil** (`exactextract`, analytisch exakt) |
+|---|---|---|---|
+| TESSERA | 15.954.158 | 50,264 % (8.019.239 Pixel) | **49,051 %** (7.825.648 Pixel) |
+| AlphaEarth | 15.954.033 | 50,249 % (8.016.819 Pixel) | **49,039 %** (7.823.743 Pixel) |
+
+Methode Flächenanteil: `exactextract` liefert je Referenz-Polygon die analytisch berechnete
+Coverage-Fraction jedes überlappten Pixels (kein 1-m-Sampling nötig); je Pixel werden die
+Coverage-Werte aller Green-Cover-Polygone aufsummiert (auf 1,0 gekappt) und mit 0,5 verglichen —
+NICHT über den Pixelmittelpunkt. Reprojektion der Referenz wird pro CRS gecacht (nur
+EPSG:32630/32631 insgesamt), nicht pro Kachel neu gerechnet (Performance).
+
+### Flughäfen (`aeroway=aerodrome`)
+
+Quelle: `data/raw/osm/greater_london-latest.osm.pbf` (referenziert von `config.py::PBF_LONDON`,
+Download 8.8.2026). **Hinweis:** die ursprünglich genannte Datei `greater-london-260101.osm.pbf`
+existiert auf dieser Maschine nicht — Entscheidung (Jakob, 2026-09-22): diese Datei verwenden,
+da identisch zur Trainingsdatei. **OSM-Snapshot-Datum aus dem PBF-Header** (`osmium` war nicht
+installiert, Header manuell per Protobuf-Varint-Parsing + zlib-Dekompression ausgelesen, kein
+neues Paket installiert): `osmosis_replication_timestamp` = 1786047681 = **2026-08-06T20:21:21Z**,
+Sequenznummer 4868, `osmosis_replication_base_url = https://download.geofabrik.de/europe/united-
+kingdom/england/greater-london-updates` (bestätigt Geofabrik-Diff-Herkunft).
+
+**7 `aeroway=aerodrome`-Flächen** (alle Ways+Relations, `pyrosm.get_data_by_custom_criteria`):
+London City Airport, **RAF Northolt** (`military=airfield`, `landuse=military`), Gerpins Farm,
+Damyns Hall Aerodrome, London Biggin Hill Airport, **Kenley Airfield** (ebenfalls
+`military=airfield`, `landuse=military`), London Heathrow Airport (Relation/Multipolygon).
+Referenz nutzt **alle 7 inkl. beider Militärflächen** (Entscheidung Jakob, 2026-09-22).
+
+**Positiv-Anteil (gleiche zwei Regeln/dasselbe Grid wie Green Cover):**
+
+| Backbone | Pixelmittelpunkt (`all_touched=False`) | >50 % Flächenanteil |
+|---|---|---|
+| TESSERA | 0,903 % (144.035 Pixel) | 0,903 % (144.030 Pixel) |
+| AlphaEarth | 0,903 % (144.019 Pixel) | 0,903 % (144.023 Pixel) |
+
+Bei den kompakten Flughafenflächen praktisch kein Unterschied zwischen Pixelmittelpunkt- und
+Flächenregel (anders als bei Green Cover, wo Randpixel-Effekte stärker ins Gewicht fallen).
+
+### Arm-C-Feld-Provenienz (Nachtrag 2026-09-22)
+
+Die bereits vorhandenen `data/interim/sdm_projected/{ae,tessera}_armc/*.tif` (aus der ersten
+SDM-Phase-4, 8.9.2026) sind **NICHT** mit `ae_v1_dedup`/`tessera_v1_dedup` erzeugt — mtime-Kette
+(Dateien existieren seit vor der Existenz der Dedup-Checkpoints) UND empirisch verifiziert:
+Kosinus-Ähnlichkeit von Stichprobenpixeln gegen frisch mit dem ALTEN Checkpoint (`ae_v1` Epoche
+22, `tessera_v1` Epoche 26 + `norm_stats_tessera_pixels.json`) projizierte Vektoren = **1,000000**
+exakt; gegen die neuen Dedup-Checkpoints ≈ 0 (Rauschniveau). **Für die Retrieval-Evaluation
+gültige Arm-C-Felder mit den kanonischen Dedup-Checkpoints existieren bereits** (aus der
+TESSERA-/AE-Dedup-Aufgabe, keine Neuberechnung nötig):
+- `data/interim/sdm_projected_tessera_v1dedup/tessera_armc/` (50 Kacheln, `tessera_v1_dedup`
+  Epoche 48, 19.9.2026)
+- `data/interim/sdm_projected_ae_v1dedup/ae_armc/` (2 Kacheln, `ae_v1_dedup` Epoche 32, 21.9.2026)
+
+Empirisch bestätigt (2026-09-23, 12 Stichprobenpixel über beide Backbones, Weltkoordinaten-
+Umrechnung Arm-C-Grid→Rohkachel wie in der Provenienz-Prüfung oben): Kosinus gegen die
+gespeicherten Werte = **1,000000** an allen 12 Pixeln gegen die jeweiligen Dedup-Checkpoints.
+Kein neues Arm-B-Feld gebaut (Entscheidung Jakob: Karten laufen nur mit dem trainierten Kopf/
+Arm C, Arm B über ganz London nicht benötigt).
+
+### Klassen-Retrieval-Query-Liste
+
+Klassen mit ≥50 relevanten Testpixeln in ≥3 Testzellen (1-km-Raster, Relevanz mengenwertig wie
+in `run_class_retrieval.py`, `extract_all_classes`): TESSERA-dedup 210, AE-dedup 215,
+**Schnittmenge beider Backbones 209** (1 nur TESSERA, 6 nur AE). Als feste Datei abgelegt, damit
+beide Backbones nachweislich dieselben Queries bekommen: `queries/class_retrieval_
+intersection_dedup.csv` (209 Zeilen, Spalten `key, value, key_frame, n_relevant_test_
+{tessera,ae}_dedup, n_cells_test_{tessera,ae}_dedup`), `build_class_intersection.py`, beide
+committet.
+
+**Committete Dateien:** `build_greencover_valid.py`, `build_class_intersection.py`,
+`queries/class_retrieval_intersection_dedup.csv`. MD5 von `data/interim/greencover_2024_valid.
+parquet` (gitignored, nicht committet — zu groß) in `results/checksums.txt`.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

@@ -208,3 +208,11 @@ results/sdm_phase7_metrics_ae_seedmean.csv  <- Original: data/processed/sdm_phas
 results/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv (md5 56ea4d3f7c00b4e519755f639dd9a22a)
 results/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv  <- Original: data/processed/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv (md5 2ad7fba64fc173c191280c03db3cf90d)
 results/diag_backbone_paired_bootstrap_sdm_seedmean.csv  <- Original: data/processed/diag_backbone_paired_bootstrap_sdm_seedmean.csv (md5 17027564c09968f24ccf1d3dc64c3ce2)
+
+=== Nachtrag (Ergaenzung 2026-09-23): Phase-0-Retrieval-Evaluation Referenzen ===
+# Green-Cover-2024-Referenz, repariert (509/519 Polygone topologisch ungueltig, mit
+# shapely.make_valid() behoben, siehe MANIFEST.md) - gitignored (data/interim/*), nur MD5 hier.
+ce97867499f20a37d37006dcfb053ac6  data/interim/greencover_2024_valid.parquet
+# Klassen-Retrieval-Query-Liste (Schnittmenge TESSERA-dedup/AE-dedup, 209 Klassen) - committet
+# unter queries/, MD5 hier zusaetzlich zur Nachpruefbarkeit.
+c7b1aa8125c69c4f00796d37654d5284  queries/class_retrieval_intersection_dedup.csv

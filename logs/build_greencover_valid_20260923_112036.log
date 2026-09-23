@@ -1,0 +1,11 @@
+467 Shapefile-Kacheln im Archiv
+519 Features geladen, 509 davon topologisch ungueltig (98.1%)
+Nach make_valid(): 0 ungueltig.
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/interim/greencover_2024_valid.parquet (519 Zeilen)
+Traceback (most recent call last):
+  File "/tmp/claude-1002/-home-minorai-PycharmProjects-ee-clip-thesis/aef4dd39-1735-45a0-b11c-3d3fd1d6cba4/scratchpad/build_greencover_valid.py", line 55, in <module>
+    main()
+  File "/tmp/claude-1002/-home-minorai-PycharmProjects-ee-clip-thesis/aef4dd39-1735-45a0-b11c-3d3fd1d6cba4/scratchpad/build_greencover_valid.py", line 50, in main
+    assert str(check.crs) == "EPSG:27700"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
