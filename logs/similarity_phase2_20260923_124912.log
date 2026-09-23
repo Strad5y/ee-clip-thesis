@@ -1,0 +1,73 @@
+Queries: {'green': 'Green Park and Natural Reserve.', 'airport': 'Airport and Transportation Hub.', 'control': 'desert'}
+
+=== tessera: Similarity-Felder ===
+  50 Kachel-Paare (Roh/Arm-C-dedup/Maske)
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  mask_chunk = msrc.read(1, window=win).astype(bool)
+  Kachel 1/50 (grid_-0.05_51.25_2025.tiff) fertig (0.4s, gesamt 0s)
+  Kachel 2/50 (grid_-0.05_51.35_2025.tiff) fertig (2.9s, gesamt 3s)
+  Kachel 3/50 (grid_-0.05_51.45_2025.tiff) fertig (2.8s, gesamt 6s)
+  Kachel 4/50 (grid_-0.05_51.55_2025.tiff) fertig (2.7s, gesamt 9s)
+  Kachel 5/50 (grid_-0.05_51.65_2025.tiff) fertig (2.4s, gesamt 11s)
+  Kachel 6/50 (grid_-0.15_51.25_2025.tiff) fertig (0.3s, gesamt 12s)
+  Kachel 7/50 (grid_-0.15_51.35_2025.tiff) fertig (2.8s, gesamt 14s)
+  Kachel 8/50 (grid_-0.15_51.45_2025.tiff) fertig (2.8s, gesamt 17s)
+  Kachel 9/50 (grid_-0.15_51.55_2025.tiff) fertig (2.8s, gesamt 20s)
+  Kachel 10/50 (grid_-0.15_51.65_2025.tiff) fertig (2.7s, gesamt 23s)
+  Kachel 11/50 (grid_-0.25_51.25_2025.tiff) fertig (0.2s, gesamt 23s)
+  Kachel 12/50 (grid_-0.25_51.35_2025.tiff) fertig (3.1s, gesamt 26s)
+  Kachel 13/50 (grid_-0.25_51.45_2025.tiff) fertig (3.1s, gesamt 29s)
+  Kachel 14/50 (grid_-0.25_51.55_2025.tiff) fertig (3.1s, gesamt 32s)
+  Kachel 15/50 (grid_-0.25_51.65_2025.tiff) fertig (2.9s, gesamt 35s)
+  Kachel 16/50 (grid_-0.35_51.25_2025.tiff) fertig (0.2s, gesamt 35s)
+  Kachel 17/50 (grid_-0.35_51.35_2025.tiff) fertig (3.2s, gesamt 38s)
+  Kachel 18/50 (grid_-0.35_51.45_2025.tiff) fertig (3.1s, gesamt 42s)
+  Kachel 19/50 (grid_-0.35_51.55_2025.tiff) fertig (3.2s, gesamt 45s)
+  Kachel 20/50 (grid_-0.35_51.65_2025.tiff) fertig (2.9s, gesamt 48s)
+  Kachel 21/50 (grid_-0.45_51.25_2025.tiff) fertig (0.2s, gesamt 48s)
+  Kachel 22/50 (grid_-0.45_51.35_2025.tiff) fertig (2.9s, gesamt 51s)
+  Kachel 23/50 (grid_-0.45_51.45_2025.tiff) fertig (2.8s, gesamt 53s)
+  Kachel 24/50 (grid_-0.45_51.55_2025.tiff) fertig (2.8s, gesamt 56s)
+  Kachel 25/50 (grid_-0.45_51.65_2025.tiff) fertig (2.6s, gesamt 59s)
+  Kachel 26/50 (grid_-0.55_51.25_2025.tiff) fertig (0.0s, gesamt 59s)
+  Kachel 27/50 (grid_-0.55_51.35_2025.tiff) fertig (0.9s, gesamt 60s)
+  Kachel 28/50 (grid_-0.55_51.45_2025.tiff) fertig (0.9s, gesamt 61s)
+  Kachel 29/50 (grid_-0.55_51.55_2025.tiff) fertig (0.7s, gesamt 61s)
+  Kachel 30/50 (grid_-0.55_51.65_2025.tiff) fertig (0.5s, gesamt 62s)
+  Kachel 31/50 (grid_0.05_51.25_2025.tiff) fertig (0.3s, gesamt 62s)
+  Kachel 32/50 (grid_0.05_51.35_2025.tiff) fertig (2.9s, gesamt 65s)
+  Kachel 33/50 (grid_0.05_51.45_2025.tiff) fertig (2.8s, gesamt 68s)
+  Kachel 34/50 (grid_0.05_51.55_2025.tiff) fertig (2.7s, gesamt 71s)
+  Kachel 35/50 (grid_0.05_51.65_2025.tiff) fertig (2.7s, gesamt 73s)
+  Kachel 36/50 (grid_0.15_51.25_2025.tiff) fertig (0.2s, gesamt 73s)
+  Kachel 37/50 (grid_0.15_51.35_2025.tiff) fertig (2.7s, gesamt 76s)
+  Kachel 38/50 (grid_0.15_51.45_2025.tiff) fertig (2.8s, gesamt 79s)
+  Kachel 39/50 (grid_0.15_51.55_2025.tiff) fertig (2.8s, gesamt 82s)
+  Kachel 40/50 (grid_0.15_51.65_2025.tiff) fertig (2.6s, gesamt 84s)
+  Kachel 41/50 (grid_0.25_51.25_2025.tiff) fertig (0.3s, gesamt 85s)
+  Kachel 42/50 (grid_0.25_51.35_2025.tiff) fertig (2.8s, gesamt 87s)
+  Kachel 43/50 (grid_0.25_51.45_2025.tiff) fertig (2.7s, gesamt 90s)
+  Kachel 44/50 (grid_0.25_51.55_2025.tiff) fertig (2.7s, gesamt 93s)
+  Kachel 45/50 (grid_0.25_51.65_2025.tiff) fertig (2.7s, gesamt 95s)
+  Kachel 46/50 (grid_0.35_51.25_2025.tiff) fertig (0.1s, gesamt 96s)
+  Kachel 47/50 (grid_0.35_51.35_2025.tiff) fertig (1.5s, gesamt 97s)
+  Kachel 48/50 (grid_0.35_51.45_2025.tiff) fertig (1.4s, gesamt 98s)
+  Kachel 49/50 (grid_0.35_51.55_2025.tiff) fertig (1.1s, gesamt 100s)
+  Kachel 50/50 (grid_0.35_51.65_2025.tiff) fertig (0.9s, gesamt 101s)
+  [tessera/green] min=-0.4280 max=0.2384 mean=-0.0864 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/airport] min=-0.3837 max=0.3125 mean=-0.0121 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/control] min=-0.4752 max=0.2953 mean=0.0180 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  Rechenzeit tessera (alle 3 Queries, 50 Kacheln): 100.6s
+
+=== ae: Similarity-Felder ===
+  2 Kachel-Paare (Roh/Arm-C-dedup/Maske)
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  mask_chunk = msrc.read(1, window=win).astype(bool)
+  Kachel 1/2 (xv3kz2lbcvqtied12-0000008192-0000000000.tiff) fertig (51.0s, gesamt 51s)
+  Kachel 2/2 (xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff) fertig (50.9s, gesamt 102s)
+  [ae/green] min=-0.4846 max=0.3163 mean=-0.1044 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/airport] min=-0.4408 max=0.3406 mean=-0.0797 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/control] min=-0.3768 max=0.4156 mean=0.0612 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  Rechenzeit ae (alle 3 Queries, 2 Kacheln): 101.9s

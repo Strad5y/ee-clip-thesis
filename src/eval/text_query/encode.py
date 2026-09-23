@@ -57,7 +57,7 @@ def load_query_encoder():
 
 
 def encode_queries(texts: list[str], backbone: str, text_model=None,
-                    device: str = "cpu") -> np.ndarray:
+                    device: str | None = None) -> np.ndarray:
     """Kodiert `texts` mit dem eingefrorenen Sentence-Transformer (MRL-Truncation 2560->1024,
     L2-normiert), projiziert dann durch model.text_head des kanonischen Dedup-Checkpoints fuer
     `backbone` (ebenfalls L2-normiert). Gibt (n, latent_dim) zurueck.
@@ -69,6 +69,11 @@ def encode_queries(texts: list[str], backbone: str, text_model=None,
     model, cfg = load_model(ckpt_path)
     _check_text_dim(backbone, cfg)
     model.eval()
+    # load_model() (run_retrieval_baselines.py) verschiebt das Modell bereits auf
+    # run_retrieval_baselines.DEVICE (cuda falls verfuegbar) - Eingabetensor muss auf
+    # DASSELBE Geraet, sonst RuntimeError (mat1 on cpu, andere Tensoren auf cuda).
+    if device is None:
+        device = next(model.parameters()).device
 
     owns_text_model = text_model is None
     if owns_text_model:
