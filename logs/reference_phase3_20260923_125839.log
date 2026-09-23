@@ -1,0 +1,125 @@
+Referenzen geladen: greencover=519 Features, airports=7 Features
+
+=== tessera: 50 Masken-Kacheln ===
+  mask = src.read(1).astype(bool)
+  [Cache] greencover -> EPSG:32630 reprojiziert (28.4s)
+  [Cache] airports -> EPSG:32630 reprojiziert (0.0s)
+  Kachel 1/50 (grid_-0.05_51.25_2025) fertig, gesamt 29s
+  mask = src.read(1).astype(bool)
+  Kachel 2/50 (grid_-0.05_51.35_2025) fertig, gesamt 37s
+  mask = src.read(1).astype(bool)
+  Kachel 3/50 (grid_-0.05_51.45_2025) fertig, gesamt 54s
+  mask = src.read(1).astype(bool)
+  Kachel 4/50 (grid_-0.05_51.55_2025) fertig, gesamt 67s
+  mask = src.read(1).astype(bool)
+  Kachel 5/50 (grid_-0.05_51.65_2025) fertig, gesamt 76s
+  mask = src.read(1).astype(bool)
+  Kachel 6/50 (grid_-0.15_51.25_2025) fertig, gesamt 77s
+  mask = src.read(1).astype(bool)
+  Kachel 7/50 (grid_-0.15_51.35_2025) fertig, gesamt 86s
+  mask = src.read(1).astype(bool)
+  Kachel 8/50 (grid_-0.15_51.45_2025) fertig, gesamt 100s
+  mask = src.read(1).astype(bool)
+  Kachel 9/50 (grid_-0.15_51.55_2025) fertig, gesamt 116s
+  mask = src.read(1).astype(bool)
+  Kachel 10/50 (grid_-0.15_51.65_2025) fertig, gesamt 128s
+  mask = src.read(1).astype(bool)
+  Kachel 11/50 (grid_-0.25_51.25_2025) fertig, gesamt 128s
+  mask = src.read(1).astype(bool)
+  Kachel 12/50 (grid_-0.25_51.35_2025) fertig, gesamt 135s
+  mask = src.read(1).astype(bool)
+  Kachel 13/50 (grid_-0.25_51.45_2025) fertig, gesamt 153s
+  mask = src.read(1).astype(bool)
+  Kachel 14/50 (grid_-0.25_51.55_2025) fertig, gesamt 170s
+  mask = src.read(1).astype(bool)
+  Kachel 15/50 (grid_-0.25_51.65_2025) fertig, gesamt 176s
+  mask = src.read(1).astype(bool)
+  Kachel 16/50 (grid_-0.35_51.25_2025) fertig, gesamt 176s
+  mask = src.read(1).astype(bool)
+  Kachel 17/50 (grid_-0.35_51.35_2025) fertig, gesamt 178s
+  mask = src.read(1).astype(bool)
+  Kachel 18/50 (grid_-0.35_51.45_2025) fertig, gesamt 191s
+  mask = src.read(1).astype(bool)
+  Kachel 19/50 (grid_-0.35_51.55_2025) fertig, gesamt 209s
+  mask = src.read(1).astype(bool)
+  Kachel 20/50 (grid_-0.35_51.65_2025) fertig, gesamt 214s
+  mask = src.read(1).astype(bool)
+  Kachel 21/50 (grid_-0.45_51.25_2025) fertig, gesamt 214s
+  mask = src.read(1).astype(bool)
+  Kachel 22/50 (grid_-0.45_51.35_2025) fertig, gesamt 214s
+  mask = src.read(1).astype(bool)
+  Kachel 23/50 (grid_-0.45_51.45_2025) fertig, gesamt 219s
+  mask = src.read(1).astype(bool)
+  Kachel 24/50 (grid_-0.45_51.55_2025) fertig, gesamt 231s
+  mask = src.read(1).astype(bool)
+  Kachel 25/50 (grid_-0.45_51.65_2025) fertig, gesamt 233s
+  mask = src.read(1).astype(bool)
+  Kachel 26/50 (grid_-0.55_51.25_2025) fertig, gesamt 233s
+  mask = src.read(1).astype(bool)
+  Kachel 27/50 (grid_-0.55_51.35_2025) fertig, gesamt 233s
+  mask = src.read(1).astype(bool)
+  Kachel 28/50 (grid_-0.55_51.45_2025) fertig, gesamt 233s
+  mask = src.read(1).astype(bool)
+  Kachel 29/50 (grid_-0.55_51.55_2025) fertig, gesamt 233s
+  mask = src.read(1).astype(bool)
+  Kachel 30/50 (grid_-0.55_51.65_2025) fertig, gesamt 234s
+  mask = src.read(1).astype(bool)
+  [Cache] greencover -> EPSG:32631 reprojiziert (27.7s)
+  [Cache] airports -> EPSG:32631 reprojiziert (0.0s)
+  Kachel 31/50 (grid_0.05_51.25_2025) fertig, gesamt 262s
+  mask = src.read(1).astype(bool)
+  Kachel 32/50 (grid_0.05_51.35_2025) fertig, gesamt 271s
+  mask = src.read(1).astype(bool)
+  Kachel 33/50 (grid_0.05_51.45_2025) fertig, gesamt 285s
+  mask = src.read(1).astype(bool)
+  Kachel 34/50 (grid_0.05_51.55_2025) fertig, gesamt 299s
+  mask = src.read(1).astype(bool)
+  Kachel 35/50 (grid_0.05_51.65_2025) fertig, gesamt 303s
+  mask = src.read(1).astype(bool)
+  Kachel 36/50 (grid_0.15_51.25_2025) fertig, gesamt 303s
+  mask = src.read(1).astype(bool)
+  Kachel 37/50 (grid_0.15_51.35_2025) fertig, gesamt 307s
+  mask = src.read(1).astype(bool)
+  Kachel 38/50 (grid_0.15_51.45_2025) fertig, gesamt 316s
+  mask = src.read(1).astype(bool)
+  Kachel 39/50 (grid_0.15_51.55_2025) fertig, gesamt 328s
+  mask = src.read(1).astype(bool)
+  Kachel 40/50 (grid_0.15_51.65_2025) fertig, gesamt 329s
+  mask = src.read(1).astype(bool)
+  Kachel 41/50 (grid_0.25_51.25_2025) fertig, gesamt 329s
+  mask = src.read(1).astype(bool)
+  Kachel 42/50 (grid_0.25_51.35_2025) fertig, gesamt 329s
+  mask = src.read(1).astype(bool)
+  Kachel 43/50 (grid_0.25_51.45_2025) fertig, gesamt 331s
+  mask = src.read(1).astype(bool)
+  Kachel 44/50 (grid_0.25_51.55_2025) fertig, gesamt 341s
+  mask = src.read(1).astype(bool)
+  Kachel 45/50 (grid_0.25_51.65_2025) fertig, gesamt 342s
+  mask = src.read(1).astype(bool)
+  Kachel 46/50 (grid_0.35_51.25_2025) fertig, gesamt 342s
+  mask = src.read(1).astype(bool)
+  Kachel 47/50 (grid_0.35_51.35_2025) fertig, gesamt 342s
+  mask = src.read(1).astype(bool)
+  Kachel 48/50 (grid_0.35_51.45_2025) fertig, gesamt 342s
+  mask = src.read(1).astype(bool)
+  Kachel 49/50 (grid_0.35_51.55_2025) fertig, gesamt 342s
+  mask = src.read(1).astype(bool)
+  Kachel 50/50 (grid_0.35_51.65_2025) fertig, gesamt 342s
+  Rechenzeit tessera: 342.5s, gueltige Pixel gesamt: 15954158
+  [tessera/greencover] Positiv-Pixel: 7825648 (erwartet 7825648) OK
+  [tessera/airports] Positiv-Pixel: 144030 (erwartet 144030) OK
+
+=== ae: 2 Masken-Kacheln ===
+  mask = src.read(1).astype(bool)
+  [Cache] greencover -> EPSG:32630 reprojiziert (29.4s)
+  [Cache] airports -> EPSG:32630 reprojiziert (0.0s)
+  Kachel 1/2 (xv3kz2lbcvqtied12-0000008192-0000000000) fertig, gesamt 207s
+  mask = src.read(1).astype(bool)
+  [Cache] greencover -> EPSG:32631 reprojiziert (29.6s)
+  [Cache] airports -> EPSG:32631 reprojiziert (0.0s)
+  Kachel 2/2 (xxoxxdt2k4ayimzh1-0000008192-0000008192) fertig, gesamt 416s
+  Rechenzeit ae: 416.3s, gueltige Pixel gesamt: 15954033
+  [ae/greencover] Positiv-Pixel: 7823743 (erwartet 7823743) OK
+  [ae/airports] Positiv-Pixel: 144023 (erwartet 144023) OK
+
+Alle Positiv-Pixelzahlen stimmen exakt mit Nachtrag 1 ueberein.

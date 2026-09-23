@@ -7,6 +7,16 @@ data/interim/sdm_projected/{backbone}_armc/) pro Backbone als einheitliche Kache
 bereit - KEIN Neurechnen, KEINE Reprojektion hier. Jede Kachel bleibt in ihrem nativen
 CRS; eine gemeinsame Reprojektion fuer Karten passiert erst spaeter in maps.py (Phase 3),
 getrennt von diesem Loader.
+
+ACHTUNG (2026-09-23, Nutzervorgabe, nur Kommentar - Verhalten hier bewusst NICHT geaendert):
+PROJ_ROOT zeigt auf die ALTEN, NICHT-kanonischen Arm-C-Felder - erzeugt mit den alten,
+undeduplizierten Checkpoints checkpoints/{ae,tessera}_v1/best.pt (verifiziert per mtime-Kette
+UND empirisch per Kosinus-Reprojektion, siehe MANIFEST.md, Abschnitt "Arm-C-Feld-Provenienz").
+Die KANONISCHEN Dedup-Arm-C-Felder (checkpoints/{ae,tessera}_v1_dedup/best.pt) liegen
+stattdessen unter data/interim/sdm_projected_{backbone}_v1dedup/{backbone}_armc/ und werden
+NICHT von diesem Modul geladen. Fuer die AETHER-Vergleichskarten (INSTRUCTIONS_maps_aether.md)
+nutzt src/eval/text_query/similarity.py deshalb eine EIGENE Kachel-Zuordnungsfunktion
+(list_dedup_tile_pairs()) auf die kanonischen Verzeichnisse, NICHT list_tile_pairs() hier.
 """
 import sys
 from dataclasses import dataclass
