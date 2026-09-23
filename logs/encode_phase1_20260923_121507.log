@@ -1,0 +1,8 @@
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+[tessera] text_dim-Check OK: ckpt['cfg']['text_dim']=1024 == MRL_DIM=1024 (Qwen/Qwen3-Embedding-4B)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 7155.28it/s]
+[tessera] Cache-Verifikation: cosine=0.99982113 ok=False text='A location containing Hampton Court Palace Golf Club — a leisure or recreation p'
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+[ae] text_dim-Check OK: ckpt['cfg']['text_dim']=1024 == MRL_DIM=1024 (Qwen/Qwen3-Embedding-4B)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 8521.74it/s]
+[ae] Cache-Verifikation: cosine=0.99986976 ok=False text='A location containing A building: house. building usually intended for living in'
