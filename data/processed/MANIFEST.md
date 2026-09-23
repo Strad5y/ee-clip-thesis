@@ -1032,6 +1032,39 @@ committet.
 `queries/class_retrieval_intersection_dedup.csv`. MD5 von `data/interim/greencover_2024_valid.
 parquet` (gitignored, nicht committet — zu groß) in `results/checksums.txt`.
 
+## AETHER-Vergleichskarten, Phase 1: Reproduzierbarkeitsgrenze des Text-Encoders (2026-09-23, Jakob)
+
+**Befund:** Die Pflichtprüfung aus `INSTRUCTIONS_maps_aether.md` Phase 1 ("Trainings-Text neu
+kodieren, Kosinus zum gecachten Text-Embedding muss 1,0 sein") erreicht **nicht exakt 1,0**:
+TESSERA 0,99982113, AE 0,99986976 (`src/eval/text_query/encode.py::verify_against_cache()`).
+
+**Ursache identifiziert und unabhängig reproduziert:** Die winzige Abweichung kommt von der
+**Batch-Zusammensetzung beim Encoding**, nicht von Zufall (GPU-Nichtdeterminismus wurde
+ausgeschlossen) oder einem Text-Abgleichfehler. Beleg: derselbe Text zweimal hintereinander mit
+identischer Batch-Zusammensetzung kodiert (je ein Text allein im Batch) → Kosinus exakt
+`1,0000001` (Rundung). Derselbe Text zusammen mit einem zweiten, beliebigen Text in EINEM Batch
+kodiert → Kosinus nur `0,9997268`. `compute_pixel_text_embeddings.py::embed_unique_texts()` hat
+den Cache (`data/processed/pixel_text_embeddings.parquet`) in großen Batches (viele zehntausend
+Texte je Batch) aufgebaut — welche anderen Texte im selben Batch wie ein gegebener Text standen,
+ist aus dem heutigen Repo-Stand nicht mehr rekonstruierbar. Ein einzeln nachkodierter Text landet
+so gut wie nie in derselben Batch-Zusammensetzung wie beim ursprünglichen Cache-Lauf — bei einem
+4B-Parameter-Transformer genügt das, um die exakte Kosinus-Gleichheit zu brechen (Größenordnung
+1e-4 bis 1e-3), vermutlich durch Padding-/Kernel-Effekte in der Batch-Verarbeitung.
+
+**Entscheidung (Jakob, 2026-09-23):** Befund akzeptiert, keine Nachbildung der ursprünglichen
+Batch-Zusammensetzung (unpraktikabel, die Nachbarschaft im Original-Batch ist nicht bekannt).
+Die Abweichung ist für ein Kosinus-Ranking über Millionen Pixel bedeutungslos. Schwelle in
+`INSTRUCTIONS_maps_aether.md` von "muss 1,0 sein" auf **"muss >= 0,999 sein"** geändert, mit
+dieser Begründung und den gemessenen Werten dort festgehalten.
+
+**Reichweite dieses Befunds:** gilt für JEDE nachträgliche Einzeltext-Kodierung mit
+`load_text_encoder()` gegen den bestehenden Cache — nicht nur für die Query-Encoder-Prüfung,
+sondern grundsätzlich für jeden künftigen Vergleich "frisch kodiert vs. gecacht" mit diesem
+Encoder. Innerhalb EINES Aufrufs (mehrere Queries in einem gemeinsamen `encode()`-Batch, wie
+`src/eval/text_query/encode.py::encode_queries()` es für mehrere Queries tut) ist das Ergebnis
+weiterhin exakt deterministisch — nur der Vergleich gegen einen ANDERS batchten Referenzwert
+zeigt diese Abweichung.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)
