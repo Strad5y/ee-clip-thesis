@@ -52,6 +52,7 @@ QUERIES = {
     "green": "Green Park and Natural Reserve.",
     "airport": "Airport and Transportation Hub.",
     "control": "desert",
+    "cbd": "Central Business District",  # ergaenzt 2026-09-23 (Nutzervorgabe), keine Referenzkarte
 }
 
 

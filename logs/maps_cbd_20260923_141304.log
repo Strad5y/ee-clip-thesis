@@ -1,0 +1,7 @@
+Gemeinsames Kartengitter: 902x1166 Pixel, 50.0m, EPSG:32630, AOI-Pixel: 638213
+[cbd] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.2143 vmax=0.1769
+  [tessera/cbd] min=-0.2879 max=0.2583 mean=-0.0250 n_valid=15954158/28831211 NoData=44.66%
+  [ae/cbd] min=-0.3744 max=0.2844 mean=-0.0518 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_cbd.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_cbd.png
+CSV aktualisiert: /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/similarity_value_ranges.csv (6 -> 8 Zeilen)

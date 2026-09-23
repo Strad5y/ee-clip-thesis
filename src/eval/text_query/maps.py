@@ -46,7 +46,7 @@ FIG_SIZE = (8, 6.5)  # Zoll, gleich fuer ALLE Karten (Nutzervorgabe: gleiche Bil
 DPI = 300
 
 BACKBONES = ("tessera", "ae")
-QUERY_NAMES = ("green", "airport", "control")
+QUERY_NAMES = ("green", "airport", "control", "cbd")  # cbd ergaenzt 2026-09-23, keine Referenz
 REFERENCE_NAMES = ("greencover", "airports")
 
 

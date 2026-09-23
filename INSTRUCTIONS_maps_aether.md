@@ -17,6 +17,11 @@ Metriken (AP/Recall/Bootstrap kommen später).
 - green: "Green Park and Natural Reserve."
 - airport: "Airport and Transportation Hub."
 - control: "desert"
+- cbd: "Central Business District" (ergänzt 2026-09-23, Jakob — Phasen 1/2/4
+  für Phasen 1-3 bereits abgeschlossenen Stand nachgezogen, siehe MANIFEST.md.
+  Keine Referenzkarte und keine Pflichtprüfung/Kennzahl für diese Query — dafür
+  gibt es kein Layer. Skalengrenzen wie bei den übrigen Queries: 1./99. Perzentil
+  über die Vereinigung beider Backbone-Felder dieser Query.)
 
 ## Phase 1: Query-Encoder
 src/eval/text_query/encode.py. Query mit demselben Sentence-Transformer
@@ -74,7 +79,9 @@ outputs/text_query/maps/.
   Ausschnitt
 
 Erwartete Dateien: 6 Similarity-Karten (2 Backbones × 3 Queries) und
-4 Referenzkarten (2 Backbones × 2 Referenzen).
+4 Referenzkarten (2 Backbones × 2 Referenzen). Nach Ergänzung der
+vierten Query (cbd, 2026-09-23): 8 Similarity-Karten (2 Backbones ×
+4 Queries), weiterhin 4 Referenzkarten (cbd hat keine).
 
 ## Nicht tun
 - Keine AP, kein Recall, kein Bootstrap

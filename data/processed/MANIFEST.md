@@ -1107,6 +1107,33 @@ Kommentar-Ergänzung in `tiles.py`, `logs/{encode,similarity_phase2,reference_ph
 maps_phase4}_*.log`, `outputs/text_query/maps/*.png` (10), `outputs/text_query/
 similarity_value_ranges.csv`, `INSTRUCTIONS_maps_aether.md` (Phase-1-Schwellenkorrektur).
 
+## AETHER-Vergleichskarten: vierte Query "cbd" ergänzt (2026-09-23, Jakob)
+
+Nach Abschluss der Phasen 1-4 vierte Query ergänzt: `cbd` = "Central Business District",
+keine Referenzkarte/Kennzahl (dafür gibt es kein Layer). Nur die neue Query nachgezogen —
+bestehende Similarity-/Referenz-GeoTIFFs und die 6 bestehenden CSV-Zeilen/PNGs unverändert
+(Datei-Zeitstempel geprüft).
+
+Phase 1 (Encoding): beide Backbones, 256-d, L2-Norm = 1,0 — bestanden.
+Phase 2 (Similarity, `src/eval/text_query/similarity.py`, `QUERIES` um `cbd` ergänzt):
+TESSERA min=-0,2879 max=0,2583 mean=-0,0250, n_valid=15.954.158/28.831.211 (44,66 % NoData);
+AE min=-0,3744 max=0,2844 mean=-0,0518, n_valid=15.954.033/52.927.982 (69,86 % NoData) — exakt
+dieselbe gültige Pixelzahl wie bei den übrigen drei Queries (gleiche Maske, wie erwartet).
+Phase 4 (`src/eval/text_query/maps.py`, `QUERY_NAMES` um `cbd` ergänzt): Skalengrenzen
+(1./99. Perzentil, Vereinigung beider Backbones) `[-0,2143, 0,1769]`. 2 neue Karten
+(`similarity_{tessera,ae}_cbd.png`), Werte in `outputs/text_query/similarity_value_ranges.csv`
+ergänzt (6 → 8 Zeilen).
+
+**Befund beim Sichten (nur Beobachtung, keine Interpretation):** Bei beiden Backbones liegt
+das stärkste Signal an derselben Stelle — über der Londoner Innenstadt (City of London/West
+End, geografisches Zentrum der Karte), mit einem klar abgegrenzten, kompakten Hotspot. Ein
+zweiter, schwächerer heller Bereich liegt links unten am Kartenrand — an derselben Stelle wie
+der Heathrow-Hotspot der `airport`-Karte.
+
+**Committete Dateien:** `INSTRUCTIONS_maps_aether.md`, `src/eval/text_query/{similarity,
+maps}.py`, `outputs/text_query/maps/similarity_{tessera,ae}_cbd.png`, `outputs/text_query/
+similarity_value_ranges.csv`, `logs/{similarity_cbd,maps_cbd}_*.log`.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

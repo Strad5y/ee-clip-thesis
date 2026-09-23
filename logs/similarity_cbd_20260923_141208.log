@@ -1,0 +1,67 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+=== tessera: Similarity-Felder ===
+  50 Kachel-Paare (Roh/Arm-C-dedup/Maske)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 11173.95it/s]
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+  Kachel 1/50 (grid_-0.05_51.25_2025.tiff) fertig (0.3s, gesamt 0s)
+  Kachel 2/50 (grid_-0.05_51.35_2025.tiff) fertig (2.1s, gesamt 2s)
+  Kachel 3/50 (grid_-0.05_51.45_2025.tiff) fertig (2.0s, gesamt 4s)
+  Kachel 4/50 (grid_-0.05_51.55_2025.tiff) fertig (2.0s, gesamt 6s)
+  Kachel 5/50 (grid_-0.05_51.65_2025.tiff) fertig (1.7s, gesamt 8s)
+  Kachel 6/50 (grid_-0.15_51.25_2025.tiff) fertig (0.3s, gesamt 8s)
+  Kachel 7/50 (grid_-0.15_51.35_2025.tiff) fertig (1.9s, gesamt 10s)
+  Kachel 8/50 (grid_-0.15_51.45_2025.tiff) fertig (2.0s, gesamt 12s)
+  Kachel 9/50 (grid_-0.15_51.55_2025.tiff) fertig (2.0s, gesamt 14s)
+  Kachel 10/50 (grid_-0.15_51.65_2025.tiff) fertig (1.8s, gesamt 16s)
+  Kachel 11/50 (grid_-0.25_51.25_2025.tiff) fertig (0.2s, gesamt 16s)
+  Kachel 12/50 (grid_-0.25_51.35_2025.tiff) fertig (2.0s, gesamt 18s)
+  Kachel 13/50 (grid_-0.25_51.45_2025.tiff) fertig (2.0s, gesamt 20s)
+  Kachel 14/50 (grid_-0.25_51.55_2025.tiff) fertig (2.0s, gesamt 22s)
+  Kachel 15/50 (grid_-0.25_51.65_2025.tiff) fertig (1.9s, gesamt 24s)
+  Kachel 16/50 (grid_-0.35_51.25_2025.tiff) fertig (0.2s, gesamt 24s)
+  Kachel 17/50 (grid_-0.35_51.35_2025.tiff) fertig (2.0s, gesamt 26s)
+  Kachel 18/50 (grid_-0.35_51.45_2025.tiff) fertig (2.0s, gesamt 28s)
+  Kachel 19/50 (grid_-0.35_51.55_2025.tiff) fertig (2.0s, gesamt 30s)
+  Kachel 20/50 (grid_-0.35_51.65_2025.tiff) fertig (1.9s, gesamt 32s)
+  Kachel 21/50 (grid_-0.45_51.25_2025.tiff) fertig (0.1s, gesamt 32s)
+  Kachel 22/50 (grid_-0.45_51.35_2025.tiff) fertig (2.0s, gesamt 34s)
+  Kachel 23/50 (grid_-0.45_51.45_2025.tiff) fertig (2.0s, gesamt 36s)
+  Kachel 24/50 (grid_-0.45_51.55_2025.tiff) fertig (2.0s, gesamt 38s)
+  Kachel 25/50 (grid_-0.45_51.65_2025.tiff) fertig (1.9s, gesamt 40s)
+  Kachel 26/50 (grid_-0.55_51.25_2025.tiff) fertig (0.0s, gesamt 40s)
+  Kachel 27/50 (grid_-0.55_51.35_2025.tiff) fertig (0.4s, gesamt 40s)
+  Kachel 28/50 (grid_-0.55_51.45_2025.tiff) fertig (0.4s, gesamt 41s)
+  Kachel 29/50 (grid_-0.55_51.55_2025.tiff) fertig (0.3s, gesamt 41s)
+  Kachel 30/50 (grid_-0.55_51.65_2025.tiff) fertig (0.3s, gesamt 41s)
+  Kachel 31/50 (grid_0.05_51.25_2025.tiff) fertig (0.2s, gesamt 42s)
+  Kachel 32/50 (grid_0.05_51.35_2025.tiff) fertig (2.0s, gesamt 44s)
+  Kachel 33/50 (grid_0.05_51.45_2025.tiff) fertig (2.0s, gesamt 46s)
+  Kachel 34/50 (grid_0.05_51.55_2025.tiff) fertig (2.0s, gesamt 48s)
+  Kachel 35/50 (grid_0.05_51.65_2025.tiff) fertig (1.9s, gesamt 50s)
+  Kachel 36/50 (grid_0.15_51.25_2025.tiff) fertig (0.2s, gesamt 50s)
+  Kachel 37/50 (grid_0.15_51.35_2025.tiff) fertig (2.0s, gesamt 52s)
+  Kachel 38/50 (grid_0.15_51.45_2025.tiff) fertig (2.0s, gesamt 54s)
+  Kachel 39/50 (grid_0.15_51.55_2025.tiff) fertig (2.0s, gesamt 56s)
+  Kachel 40/50 (grid_0.15_51.65_2025.tiff) fertig (1.9s, gesamt 58s)
+  Kachel 41/50 (grid_0.25_51.25_2025.tiff) fertig (0.1s, gesamt 58s)
+  Kachel 42/50 (grid_0.25_51.35_2025.tiff) fertig (2.0s, gesamt 60s)
+  Kachel 43/50 (grid_0.25_51.45_2025.tiff) fertig (2.0s, gesamt 62s)
+  Kachel 44/50 (grid_0.25_51.55_2025.tiff) fertig (2.0s, gesamt 64s)
+  Kachel 45/50 (grid_0.25_51.65_2025.tiff) fertig (1.9s, gesamt 66s)
+  Kachel 46/50 (grid_0.35_51.25_2025.tiff) fertig (0.1s, gesamt 66s)
+  Kachel 47/50 (grid_0.35_51.35_2025.tiff) fertig (1.0s, gesamt 67s)
+  Kachel 48/50 (grid_0.35_51.45_2025.tiff) fertig (1.0s, gesamt 68s)
+  Kachel 49/50 (grid_0.35_51.55_2025.tiff) fertig (0.6s, gesamt 68s)
+  Kachel 50/50 (grid_0.35_51.65_2025.tiff) fertig (0.5s, gesamt 69s)
+  [tessera/cbd] min=-0.2879 max=0.2583 mean=-0.0250 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  Rechenzeit tessera (alle 1 Queries, 50 Kacheln): 68.9s
+
+=== ae: Similarity-Felder ===
+  2 Kachel-Paare (Roh/Arm-C-dedup/Maske)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 7790.32it/s]
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+  Kachel 1/2 (xv3kz2lbcvqtied12-0000008192-0000000000.tiff) fertig (48.8s, gesamt 49s)
+  Kachel 2/2 (xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff) fertig (44.4s, gesamt 93s)
+  [ae/cbd] min=-0.3744 max=0.2844 mean=-0.0518 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  Rechenzeit ae (alle 1 Queries, 2 Kacheln): 93.2s
