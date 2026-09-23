@@ -1065,6 +1065,48 @@ Encoder. Innerhalb EINES Aufrufs (mehrere Queries in einem gemeinsamen `encode()
 weiterhin exakt deterministisch — nur der Vergleich gegen einen ANDERS batchten Referenzwert
 zeigt diese Abweichung.
 
+## AETHER-Vergleichskarten, Phase 2–4: Similarity-Felder, Referenzkarten, Karten (2026-09-23, Jakob)
+
+**Phase 2** (`src/eval/text_query/similarity.py`): Kosinus-Similarity zwischen den drei Queries
+(`green`="Green Park and Natural Reserve.", `airport`="Airport and Transportation Hub.",
+`control`="desert") und den kanonischen Dedup-Arm-C-256d-Feldern
+(`data/interim/sdm_projected_{backbone}_v1dedup/{backbone}_armc/`), zeilenweise gechunkt
+(`ROW_CHUNK=200`, Speicherschutz für AE-Kacheln). 156 float32-GeoTIFFs (2 Backbones × 3 Queries,
+50 TESSERA- + 2 AE-Kacheln), gitignored (`*.tif`), unter `outputs/text_query/similarity/`.
+Wertebereiche (TESSERA n_valid=15.954.158/28.831.211, 44,66 % NoData; AE n_valid=15.954.033/
+52.927.982, 69,86 % NoData) siehe `outputs/text_query/similarity_value_ranges.csv`.
+
+**Phase 3** (`src/eval/text_query/reference.py`): `>50 %`-Flächenanteils-Referenzkarten (Green
+Cover 2024, Flughäfen) auf demselben Grid, uint8 (1=positiv, 0=negativ-aber-gültig, 255=nodata).
+Positiv-Pixelzahlen exakt gegen Nachtrag 1 geprüft und bestätigt: TESSERA greencover=7.825.648/
+airports=144.030, AE greencover=7.823.743/airports=144.023 — keine Abweichung. 104 GeoTIFFs,
+gitignored, unter `outputs/text_query/reference/`.
+
+**Phase 4** (`src/eval/text_query/maps.py`): PNG-Karten (300 dpi) auf einem gemeinsamen
+EPSG:32630/50m-Kartengitter (reine Darstellungskonvention aus `INSTRUCTIONS_text_query.md`
+Phase 3, hier wiederverwendet — Kennzahlen/Perzentile bleiben auf den nativen Kacheln
+berechnet, nicht auf diesem Gitter). Skalengrenzen je Query = 1./99. Perzentil über die
+Vereinigung beider Backbones (identisch für beide Backbones derselben Query):
+`green` [-0,2685, 0,0964], `airport` [-0,2595, 0,1893], `control` [-0,1944, 0,2340] — alle
+Werte in `outputs/text_query/similarity_value_ranges.csv` (Spalten `map_vmin_p1_shared`/
+`map_vmax_p99_shared`), zusammen mit den unveränderten Phase-2-Wertebereichen (Kreuzprobe:
+beim erneuten Einlesen der Kacheln in `maps.py` exakt reproduziert). 6 Similarity-Karten +
+4 Referenzkarten (grün auf weiß) unter `outputs/text_query/maps/`, committet (~20 MB, kein
+Disk-Zwischenartefakt wie die zugrundeliegenden GeoTIFFs).
+
+**Befund beim Sichten der Karten (nur Beobachtung, keine Metrik, `INSTRUCTIONS_maps_aether.md`
+Phase 4 verlangt kein AP/Recall):** `airport` zeigt bei TESSERA ein klares, plausibles Muster
+(starkes Signal über Heathrow, das mit der Flughafen-Referenzkarte übereinstimmt, sowie über
+der Londoner Innenstadt — plausibel als „Transportation Hub"). `green` zeigt dagegen ein
+unerwartetes Muster: die höchste Ähnlichkeit liegt entlang der Themse, nicht über den
+erwarteten Grünflächen am Stadtrand. Nicht weiter untersucht (außerhalb des Auftrags dieser
+Phase), hier nur dokumentiert.
+
+**Committete Dateien:** `src/eval/text_query/{encode,similarity,reference,maps}.py`,
+Kommentar-Ergänzung in `tiles.py`, `logs/{encode,similarity_phase2,reference_phase3,
+maps_phase4}_*.log`, `outputs/text_query/maps/*.png` (10), `outputs/text_query/
+similarity_value_ranges.csv`, `INSTRUCTIONS_maps_aether.md` (Phase-1-Schwellenkorrektur).
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

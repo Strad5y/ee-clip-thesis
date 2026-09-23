@@ -1,0 +1,812 @@
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:101: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  band = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+/home/minorai/PycharmProjects/ee-clip-thesis/src/eval/text_query/maps.py:75: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  src_arr = src.read(1)
+Gemeinsames Kartengitter: 902x1166 Pixel, 50.0m, EPSG:32630, AOI-Pixel: 638213
+
+[green] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.2685 vmax=0.0964
+  [tessera/green] min=-0.4280 max=0.2384 mean=-0.0864 n_valid=15954158/28831211 NoData=44.66%
+  [ae/green] min=-0.4846 max=0.3163 mean=-0.1044 n_valid=15954033/52927982 NoData=69.86%
+
+[airport] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.2595 vmax=0.1893
+  [tessera/airport] min=-0.3837 max=0.3125 mean=-0.0121 n_valid=15954158/28831211 NoData=44.66%
+  [ae/airport] min=-0.4408 max=0.3406 mean=-0.0797 n_valid=15954033/52927982 NoData=69.86%
+
+[control] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.1944 vmax=0.2340
+  [tessera/control] min=-0.4752 max=0.2953 mean=0.0180 n_valid=15954158/28831211 NoData=44.66%
+  [ae/control] min=-0.3768 max=0.4156 mean=0.0612 n_valid=15954033/52927982 NoData=69.86%
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/similarity_value_ranges.csv
+
+=== Similarity-Karten ===
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_green.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_airport.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_control.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_green.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_airport.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_control.png
+
+=== Referenzkarten ===
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/reference_tessera_greencover.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/reference_tessera_airports.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/reference_ae_greencover.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/reference_ae_airports.png
