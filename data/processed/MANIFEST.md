@@ -1134,6 +1134,50 @@ der Heathrow-Hotspot der `airport`-Karte.
 maps}.py`, `outputs/text_query/maps/similarity_{tessera,ae}_cbd.png`, `outputs/text_query/
 similarity_value_ranges.csv`, `logs/{similarity_cbd,maps_cbd}_*.log`.
 
+## Text-Query-Evaluation: 7 neue Queries aus queries/text_queries.md (2026-09-23, Jakob)
+
+Zählphase (Klassen-/Zellen-Support je Query-Klasse, `extract_all_classes`, mengenwertig,
+Phase-0-Kriterium ≥50 relevante Testpixel/≥3 Testzellen) im Chat berichtet, nicht als Datei
+committet (Nutzervorgabe: „Zählphase entfällt", direkt zu Umsetzung übergegangen). Befund dort:
+3 von 18 geprüften Klassen verfehlen das Kriterium (`amenity=kindergarten`, `tourism=viewpoint`:
+0 Testpixel; `historic=monument`: 13 Testpixel <50) — betrifft nur Einzelklassen, nicht die
+Query-Vereinigungen. Zwischenzeitlicher Matching-Fehler im Diagnoseskript (`nature_reserve` mit
+Unterstrich vs. `clean_val()`-Form „nature reserve" im Pixeltext) gefunden und korrigiert, bevor
+berichtet wurde.
+
+**Umsetzung** (`src/eval/text_query/{similarity,maps}.py`, `QUERIES`/`QUERY_NAMES` um 7 Queries
+ergänzt: `green_park`, `green_space`, `green_reserve`, `qual_tourist`, `qual_busy`, `qual_quiet`,
+`qual_learn` — keine Referenzkarten/Kennzahlen dafür, gleiche Konventionen wie bei `cbd`):
+Phase 1+2 gezielt nur für diese 7 Queries gelaufen (bestehende Felder/Karten unverändert,
+Zeitstempel geprüft). Gültige Pixelzahl je Backbone identisch zu allen bisherigen Queries
+(TESSERA 15.954.158/28.831.211, AE 15.954.033/52.927.982). 14 neue Similarity-Karten unter
+`outputs/text_query/maps/`, Wertebereiche + Skalengrenzen (1./99. Perzentil, Vereinigung beider
+Backbones) in `outputs/text_query/similarity_value_ranges.csv` ergänzt (8 → 22 Zeilen).
+
+**Spearman-Rangkorrelationen** (`outputs/text_query/similarity_correlation_matrix.csv`, alle
+55 Paare über 11 Queries [green, airport, cbd, control, plus die 7 neuen] × 2 Backbones = 110
+Zeilen, Ränge über alle 15.954.033–15.954.158 gültigen Pixel, Gültigkeitsmasken zu 100%
+deckungsgleich zwischen allen Feldern — geprüft, 0 Abweichungen).
+
+**Befund `green_reserve`** (Diagnose des Themse-Musters der AETHER-Query `green`): zeigt bei
+TESSERA das GEGENTEIL-Muster (Themse dunkel, Stadtrand hell) statt es zu reproduzieren.
+Korrelation mit `green` nur mäßig (TESSERA +0,29, AE +0,40) — der Themse-Effekt der
+zusammengesetzten AETHER-Query wird also NICHT von „nature reserve" allein getrieben.
+`green_space` korreliert am stärksten mit `green` (AE +0,40, TESSERA +0,18) unter den drei
+Varianten.
+
+**Befund `qual_busy` vs. `qual_quiet`**: in der Query-Liste als Gegenstück mit erwartetem stark
+negativem Zusammenhang angelegt. Gemessen: schwach POSITIV (TESSERA +0,105, AE +0,111) — visuell
+zeigen beide Karten ein plausibles, gegensätzliches Grobmuster (Zentrum/Themse vs. Stadtrand),
+die pixelweise Rangkorrelation über ganz London wird davon aber offenbar nicht dominiert. Wie in
+der Query-Liste vorgesehen als Befund über die Grenzen des Alignments dokumentiert, nicht
+weiter untersucht.
+
+**Committete Dateien:** `src/eval/text_query/{similarity,maps}.py`, 14 neue PNGs unter
+`outputs/text_query/maps/`, `outputs/text_query/similarity_value_ranges.csv` (aktualisiert),
+`outputs/text_query/similarity_correlation_matrix.csv` (neu), `logs/{similarity_newqueries,
+maps_newqueries,correlation_matrix}_*.log`.
+
 ## Noch nicht archiviert, aber ebenfalls Alt-/Nebenmaterial (zur Kenntnisnahme, nicht Teil des Archivierungsauftrags)
 
 - `data/interim/poi_text.parquet` (31.8., von `poi_text_full.parquet` abgelöst)

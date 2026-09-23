@@ -53,6 +53,15 @@ QUERIES = {
     "airport": "Airport and Transportation Hub.",
     "control": "desert",
     "cbd": "Central Business District",  # ergaenzt 2026-09-23 (Nutzervorgabe), keine Referenzkarte
+    # ergaenzt 2026-09-23 (queries/text_queries.md, committet vor diesem Lauf) - keine
+    # Referenzkarte/Kennzahl fuer diese 7, gleiche Konventionen wie oben.
+    "green_park": "park",
+    "green_space": "green space",
+    "green_reserve": "nature reserve",
+    "qual_tourist": "a place that is a tourist attraction",
+    "qual_busy": "a place that is busy",
+    "qual_quiet": "a place that is quiet",
+    "qual_learn": "a place to learn",
 }
 
 

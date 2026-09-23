@@ -1,0 +1,37 @@
+Gemeinsames Kartengitter: 902x1166 Pixel, 50.0m, EPSG:32630, AOI-Pixel: 638213
+[green_park] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.1340 vmax=0.2058
+  [tessera/green_park] min=-0.3476 max=0.3148 mean=0.0252 n_valid=15954158/28831211 NoData=44.66%
+  [ae/green_park] min=-0.2675 max=0.3479 mean=0.0826 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_green_park.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_green_park.png
+[green_space] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.1470 vmax=0.2695
+  [tessera/green_space] min=-0.3770 max=0.4300 mean=0.0730 n_valid=15954158/28831211 NoData=44.66%
+  [ae/green_space] min=-0.2929 max=0.4516 mean=0.0598 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_green_space.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_green_space.png
+[green_reserve] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.2186 vmax=0.2186
+  [tessera/green_reserve] min=-0.4048 max=0.3943 mean=0.0303 n_valid=15954158/28831211 NoData=44.66%
+  [ae/green_reserve] min=-0.4225 max=0.3698 mean=-0.0527 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_green_reserve.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_green_reserve.png
+[qual_tourist] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.0994 vmax=0.1883
+  [tessera/qual_tourist] min=-0.2850 max=0.2712 mean=0.0405 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_tourist] min=-0.2389 max=0.3124 mean=0.0534 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_qual_tourist.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_qual_tourist.png
+[qual_busy] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.1267 vmax=0.1770
+  [tessera/qual_busy] min=-0.2231 max=0.2500 mean=0.0302 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_busy] min=-0.2750 max=0.2531 mean=0.0347 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_qual_busy.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_qual_busy.png
+[qual_quiet] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.1282 vmax=0.2191
+  [tessera/qual_quiet] min=-0.2925 max=0.3678 mean=0.0614 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_quiet] min=-0.2985 max=0.3446 mean=0.0800 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_qual_quiet.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_qual_quiet.png
+[qual_learn] Skalengrenzen (1./99. Perzentil, Vereinigung beider Backbones, n=31908191): vmin=-0.1264 vmax=0.1581
+  [tessera/qual_learn] min=-0.2559 max=0.2703 mean=0.0457 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_learn] min=-0.2842 max=0.2948 mean=0.0474 n_valid=15954033/52927982 NoData=69.86%
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_tessera_qual_learn.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps/similarity_ae_qual_learn.png
+CSV aktualisiert: /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/similarity_value_ranges.csv (8 -> 22 Zeilen)

@@ -46,8 +46,9 @@ FIG_SIZE = (8, 6.5)  # Zoll, gleich fuer ALLE Karten (Nutzervorgabe: gleiche Bil
 DPI = 300
 
 BACKBONES = ("tessera", "ae")
-QUERY_NAMES = ("green", "airport", "control", "cbd")  # cbd ergaenzt 2026-09-23, keine Referenz
-REFERENCE_NAMES = ("greencover", "airports")
+QUERY_NAMES = ("green", "airport", "control", "cbd", "green_park", "green_space",
+               "green_reserve", "qual_tourist", "qual_busy", "qual_quiet", "qual_learn")
+REFERENCE_NAMES = ("greencover", "airports")  # nur fuer die urspruenglichen 2 AETHER-Referenzen
 
 
 def build_common_grid() -> tuple:

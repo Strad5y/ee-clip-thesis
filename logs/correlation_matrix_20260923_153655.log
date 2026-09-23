@@ -1,0 +1,62 @@
+/tmp/claude-1002/-home-minorai-PycharmProjects-ee-clip-thesis/aef4dd39-1735-45a0-b11c-3d3fd1d6cba4/scratchpad/corr_matrix.py:28: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  bands[q] = src.read(1)
+
+=== tessera ===
+  [tessera] gueltige Pixel (Schnittmenge aller 11 Felder): 15954158, Validitaets-Mismatch (Summe ueber Kacheln/Felder): 0
+  geladen (2.7s)
+  Rangbildung fertig (18.8s)
+
+=== ae ===
+  [ae] gueltige Pixel (Schnittmenge aller 11 Felder): 15954033, Validitaets-Mismatch (Summe ueber Kacheln/Felder): 0
+  geladen (3.7s)
+  Rangbildung fertig (17.9s)
+
+Gespeichert: outputs/text_query/similarity_correlation_matrix.csv (110 Zeilen = 55 Paare x 2 Backbones)
+
+=== Angeforderte Vergleiche, |Spearman| absteigend ===
+  green_space vs control       ae        spearman=+0.6927
+  green_park vs control        ae        spearman=+0.6715
+  green_reserve vs control     ae        spearman=+0.5686
+  qual_quiet vs control        ae        spearman=+0.5065
+  green_reserve vs control     tessera   spearman=+0.4678
+  airport vs control           tessera   spearman=+0.4149
+  qual_tourist vs control      tessera   spearman=+0.4141
+  green_park vs control        tessera   spearman=+0.4023
+  green_reserve vs green       ae        spearman=+0.4006
+  green_space vs green         ae        spearman=+0.3979
+  green_space vs control       tessera   spearman=+0.3620
+  qual_busy vs control         tessera   spearman=+0.3457
+  cbd vs control               ae        spearman=-0.3060
+  qual_quiet vs control        tessera   spearman=+0.2884
+  green_reserve vs green       tessera   spearman=+0.2879
+  green_park vs green          tessera   spearman=+0.2574
+  qual_learn vs control        tessera   spearman=+0.2522
+  cbd vs control               tessera   spearman=+0.2241
+  green_space vs green         tessera   spearman=+0.1817
+  green vs control             ae        spearman=+0.1784
+  airport vs control           ae        spearman=-0.1774
+  qual_tourist vs control      ae        spearman=+0.1512
+  qual_busy vs qual_quiet      ae        spearman=+0.1109
+  qual_busy vs qual_quiet      tessera   spearman=+0.1050
+  qual_busy vs control         ae        spearman=-0.0803
+  green vs control             tessera   spearman=+0.0500
+  qual_learn vs control        ae        spearman=+0.0071
+  green_park vs green          ae        spearman=-0.0063
+
+=== Volle Matrix: staerkste Paare insgesamt, |Spearman| absteigend (Top 15) ===
+  green_space    vs green_reserve  tessera   spearman=+0.8764
+  cbd            vs qual_busy      ae        spearman=+0.8357
+  airport        vs cbd            ae        spearman=+0.7709
+  green_park     vs qual_quiet     ae        spearman=+0.7473
+  airport        vs qual_tourist   tessera   spearman=+0.7440
+  qual_tourist   vs qual_busy      tessera   spearman=+0.7376
+  green_space    vs green_reserve  ae        spearman=+0.7320
+  control        vs green_space    ae        spearman=+0.6927
+  qual_tourist   vs qual_busy      ae        spearman=+0.6801
+  control        vs green_park     ae        spearman=+0.6715
+  green_space    vs qual_quiet     tessera   spearman=+0.6583
+  airport        vs qual_busy      tessera   spearman=+0.6129
+  green_reserve  vs qual_quiet     tessera   spearman=+0.6112
+  cbd            vs green_space    ae        spearman=-0.5757
+  airport        vs cbd            tessera   spearman=+0.5749

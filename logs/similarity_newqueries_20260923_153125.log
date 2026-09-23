@@ -1,0 +1,79 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+=== tessera: Similarity-Felder ===
+  50 Kachel-Paare (Roh/Arm-C-dedup/Maske)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 7237.89it/s]
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+  Kachel 1/50 (grid_-0.05_51.25_2025.tiff) fertig (0.4s, gesamt 0s)
+  Kachel 2/50 (grid_-0.05_51.35_2025.tiff) fertig (2.3s, gesamt 3s)
+  Kachel 3/50 (grid_-0.05_51.45_2025.tiff) fertig (2.2s, gesamt 5s)
+  Kachel 4/50 (grid_-0.05_51.55_2025.tiff) fertig (2.2s, gesamt 7s)
+  Kachel 5/50 (grid_-0.05_51.65_2025.tiff) fertig (1.9s, gesamt 9s)
+  Kachel 6/50 (grid_-0.15_51.25_2025.tiff) fertig (0.3s, gesamt 9s)
+  Kachel 7/50 (grid_-0.15_51.35_2025.tiff) fertig (2.2s, gesamt 11s)
+  Kachel 8/50 (grid_-0.15_51.45_2025.tiff) fertig (2.2s, gesamt 14s)
+  Kachel 9/50 (grid_-0.15_51.55_2025.tiff) fertig (2.2s, gesamt 16s)
+  Kachel 10/50 (grid_-0.15_51.65_2025.tiff) fertig (2.0s, gesamt 18s)
+  Kachel 11/50 (grid_-0.25_51.25_2025.tiff) fertig (0.2s, gesamt 18s)
+  Kachel 12/50 (grid_-0.25_51.35_2025.tiff) fertig (2.2s, gesamt 20s)
+  Kachel 13/50 (grid_-0.25_51.45_2025.tiff) fertig (2.2s, gesamt 23s)
+  Kachel 14/50 (grid_-0.25_51.55_2025.tiff) fertig (2.3s, gesamt 25s)
+  Kachel 15/50 (grid_-0.25_51.65_2025.tiff) fertig (2.1s, gesamt 27s)
+  Kachel 16/50 (grid_-0.35_51.25_2025.tiff) fertig (0.2s, gesamt 27s)
+  Kachel 17/50 (grid_-0.35_51.35_2025.tiff) fertig (2.2s, gesamt 29s)
+  Kachel 18/50 (grid_-0.35_51.45_2025.tiff) fertig (2.2s, gesamt 32s)
+  Kachel 19/50 (grid_-0.35_51.55_2025.tiff) fertig (2.2s, gesamt 34s)
+  Kachel 20/50 (grid_-0.35_51.65_2025.tiff) fertig (2.1s, gesamt 36s)
+  Kachel 21/50 (grid_-0.45_51.25_2025.tiff) fertig (0.2s, gesamt 36s)
+  Kachel 22/50 (grid_-0.45_51.35_2025.tiff) fertig (2.1s, gesamt 38s)
+  Kachel 23/50 (grid_-0.45_51.45_2025.tiff) fertig (2.1s, gesamt 40s)
+  Kachel 24/50 (grid_-0.45_51.55_2025.tiff) fertig (2.2s, gesamt 42s)
+  Kachel 25/50 (grid_-0.45_51.65_2025.tiff) fertig (2.1s, gesamt 44s)
+  Kachel 26/50 (grid_-0.55_51.25_2025.tiff) fertig (0.0s, gesamt 44s)
+  Kachel 27/50 (grid_-0.55_51.35_2025.tiff) fertig (0.5s, gesamt 45s)
+  Kachel 28/50 (grid_-0.55_51.45_2025.tiff) fertig (0.4s, gesamt 45s)
+  Kachel 29/50 (grid_-0.55_51.55_2025.tiff) fertig (0.4s, gesamt 46s)
+  Kachel 30/50 (grid_-0.55_51.65_2025.tiff) fertig (0.3s, gesamt 46s)
+  Kachel 31/50 (grid_0.05_51.25_2025.tiff) fertig (0.3s, gesamt 46s)
+  Kachel 32/50 (grid_0.05_51.35_2025.tiff) fertig (2.2s, gesamt 49s)
+  Kachel 33/50 (grid_0.05_51.45_2025.tiff) fertig (2.2s, gesamt 51s)
+  Kachel 34/50 (grid_0.05_51.55_2025.tiff) fertig (2.2s, gesamt 53s)
+  Kachel 35/50 (grid_0.05_51.65_2025.tiff) fertig (2.0s, gesamt 55s)
+  Kachel 36/50 (grid_0.15_51.25_2025.tiff) fertig (0.2s, gesamt 55s)
+  Kachel 37/50 (grid_0.15_51.35_2025.tiff) fertig (2.1s, gesamt 57s)
+  Kachel 38/50 (grid_0.15_51.45_2025.tiff) fertig (2.2s, gesamt 59s)
+  Kachel 39/50 (grid_0.15_51.55_2025.tiff) fertig (2.2s, gesamt 62s)
+  Kachel 40/50 (grid_0.15_51.65_2025.tiff) fertig (2.1s, gesamt 64s)
+  Kachel 41/50 (grid_0.25_51.25_2025.tiff) fertig (0.2s, gesamt 64s)
+  Kachel 42/50 (grid_0.25_51.35_2025.tiff) fertig (2.1s, gesamt 66s)
+  Kachel 43/50 (grid_0.25_51.45_2025.tiff) fertig (2.1s, gesamt 68s)
+  Kachel 44/50 (grid_0.25_51.55_2025.tiff) fertig (2.2s, gesamt 70s)
+  Kachel 45/50 (grid_0.25_51.65_2025.tiff) fertig (2.1s, gesamt 72s)
+  Kachel 46/50 (grid_0.35_51.25_2025.tiff) fertig (0.1s, gesamt 72s)
+  Kachel 47/50 (grid_0.35_51.35_2025.tiff) fertig (1.1s, gesamt 73s)
+  Kachel 48/50 (grid_0.35_51.45_2025.tiff) fertig (1.0s, gesamt 74s)
+  Kachel 49/50 (grid_0.35_51.55_2025.tiff) fertig (0.7s, gesamt 75s)
+  Kachel 50/50 (grid_0.35_51.65_2025.tiff) fertig (0.6s, gesamt 76s)
+  [tessera/green_park] min=-0.3476 max=0.3148 mean=0.0252 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/green_space] min=-0.3770 max=0.4300 mean=0.0730 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/green_reserve] min=-0.4048 max=0.3943 mean=0.0303 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/qual_tourist] min=-0.2850 max=0.2712 mean=0.0405 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/qual_busy] min=-0.2231 max=0.2500 mean=0.0302 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/qual_quiet] min=-0.2925 max=0.3678 mean=0.0614 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  [tessera/qual_learn] min=-0.2559 max=0.2703 mean=0.0457 gueltig=15954158/28831211 (55.34%) NoData=44.66%
+  Rechenzeit tessera (alle 7 Queries, 50 Kacheln): 75.8s
+
+=== ae: Similarity-Felder ===
+  2 Kachel-Paare (Roh/Arm-C-dedup/Maske)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 8529.41it/s]
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+  Kachel 1/2 (xv3kz2lbcvqtied12-0000008192-0000000000.tiff) fertig (56.9s, gesamt 57s)
+  Kachel 2/2 (xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff) fertig (52.4s, gesamt 109s)
+  [ae/green_park] min=-0.2675 max=0.3479 mean=0.0826 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/green_space] min=-0.2929 max=0.4516 mean=0.0598 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/green_reserve] min=-0.4225 max=0.3698 mean=-0.0527 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/qual_tourist] min=-0.2389 max=0.3124 mean=0.0534 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/qual_busy] min=-0.2750 max=0.2531 mean=0.0347 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/qual_quiet] min=-0.2985 max=0.3446 mean=0.0800 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  [ae/qual_learn] min=-0.2842 max=0.2948 mean=0.0474 gueltig=15954033/52927982 (30.14%) NoData=69.86%
+  Rechenzeit ae (alle 7 Queries, 2 Kacheln): 109.3s
