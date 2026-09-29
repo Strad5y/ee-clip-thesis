@@ -1,0 +1,6 @@
+category_id,query,vmin_p1,vmax_p99,n_pixels_union,backbones
+art_antiques,A place with the type of Art and Antiques.,-0.1443459466099739,0.17628520876169207,31908191,"ae,tessera"
+religious_orgs,A place with the type of Religious Organisations.,-0.15862672924995422,0.16052147001028072,31908191,"ae,tessera"
+medical_supplies,"A place with the type of Medical Equipment, Supplies and Pharmaceuticals.",-0.15548871457576752,0.17145350575447083,31908191,"ae,tessera"
+sports_clubs,A place with the type of Sports Clubs and Associations.,-0.19323886334896087,0.155978935956955,31908191,"ae,tessera"
+import_export,A place with the type of Import and Export Services.,-0.1815977454185486,0.17008920013904572,31908191,"ae,tessera"

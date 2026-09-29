@@ -48,13 +48,13 @@ TESSERA z-standardisiert mit `data/processed/norm_stats_tessera_pixels_dedup.jso
 - Kein Top-Level-Verzeichnis `eval/` vorhanden (bisheriger Eval-Code liegt unter `src/eval/`).
   Instruktion nennt explizit `eval/recall_topk.py` → dort angelegt.
 
-Ende: 2026-09-30 00:05. Ergebnis: ok.
+Ende: 2026-09-30 00:03. Ergebnis: ok.
 
 ---
 
 ## Phase 1 — Klassenzuordnung
 
-Start: 2026-09-30 00:05 · Ende: 00:10 — Commit 87dc23a
+Start: 2026-09-30 00:03 · Ende: 00:05 — Commit 87dc23a
 "recall_topk: pre-registered AETHER category mapping" (nur YAML + feasibility.md).
 
 Zuordnung (`queries/aether_categories.yaml`) wurde geschrieben, BEVOR irgendeine Instanz- oder
@@ -76,7 +76,7 @@ Ergebnis: ok.
 
 ## Phase 2 — Implementierung `eval/recall_topk.py`
 
-Start: 00:10 · Ende: 00:15
+Start: 00:05 · Ende: 00:08 (Commit fd7fd83)
 
 - Kandidatenraum: Text-Query-Maske (Eindeutigkeit + AOI-Polygon) UND endliches Arm-C-Feld; N wie oben.
 - Top-Menge: K = ceil(k·N) per `np.argpartition`, k ∈ {0.01, 0.05, 0.10}; Schwelle immer über ganz London.
@@ -100,6 +100,27 @@ Ergebnis: ok.
 
 ---
 
+## Phase 3 — Lauf
+
+Start: 00:08 · Ende: 00:17
+
+- AlphaEarth (`run_ae.log`): Gate ok, Preflight-Reprojektion min. Kosinus 0,9999999 (≥ 0,9999), Echtdaten-Selbsttest
+  (Zufall ≈ K/N, Orakel = min(1,K/|GT|)) für alle 3 Kategorien mit GT und alle k PASS, 196 s. ok.
+- TESSERA (`run_tessera.log`): Gate ok, Preflight 1,000000, Echtdaten-Selbsttest PASS, 203 s. ok.
+- Prototyp-Stützpixel (Train-GT): AE 808 / 30.949 / 2.637, TESSERA siehe `run_meta_tessera.json`.
+- `finalize`: `recall_topk.csv`, `diffs_recall_topk.csv`, `table_aether_style.md`, 10 Karten `maps/`,
+  Skalengrenzen `map_scale_limits.csv` (1./99. Perzentil über die Vereinigung beider Backbones je Query). ok.
+- Freier Speicher vor Feldschreiben: 2,3 TB (> 50 GB). Felder `fields/` (1,4 GB: Similarity-T + GT-GeoTIFFs je
+  Kachel, `scoresT_*.npy`) werden NICHT committet (Größe).
+- Konzentrationsbefund (nur markiert, nichts entfernt): Test-GT von art_antiques liegt zu 73 % (AE) / 74 % (TESSERA)
+  in EINER 1-km-Zelle, Top-3-Zellen 87 % / 89 % (16 Testzellen). Die Test-Recall-Werte dieser Kategorie spiegeln
+  daher überwiegend einen Ort; die Bootstrap-CIs sind entsprechend breit/schief. religious_orgs: größte Zelle 5 %,
+  medical_supplies: 8 %.
+
+Ergebnis: ok.
+
+---
+
 ## Probleme / Entscheidungen
 
 Format: Problem | Ursache | Entscheidung | verworfene Alternative | betroffene Dateien
@@ -114,3 +135,6 @@ Format: Problem | Ursache | Entscheidung | verworfene Alternative | betroffene D
 | Split „val“ | Instruktion nennt nur train/test/all | val-Pixel gehen nur in „all“ ein, kein eigener Block | eigener val-Block | recall_topk.csv |
 | Welche Zellen werden im Bootstrap gezogen? | Zellen ohne GT tragen 0/0 bei | Resampling über die Zellen mit ≥1 GT-Pixel der Kategorie im jeweiligen Split (n_gt_cells), mit Zurücklegen, B=1000, Seed 0; identische Gewichte für T und P und alle k (gepaart) | Resampling über alle Zellen des Splits (fügt nur Nullzellen hinzu, ändert Gewichtung der GT-Zellzahl) | eval/recall_topk.py |
 | feasibility.csv | Hilfsdatei zum Report | in Phase 1 nicht committet (Vorgabe „nur YAML + Report“), wird mit Phase 3 committet | – | outputs/recall_topk/feasibility.csv |
+| Karten-GT bei 50-m-Darstellungsgitter | Punkt-POIs (1 Pixel) verschwinden bei nearest-Resampling | GT-Panel mit Resampling.max (50-m-Zelle grün, wenn ≥1 GT-Pixel); nur Darstellung, Kennzahlen auf nativem Raster | nearest wie bei Referenzkarten der AETHER-Karten | eval/recall_topk.py, maps/ |
+| Kartenlayout | Instruktion: Similarity (T) neben GT | eine PNG je Kategorie×Backbone mit 2 Panels; no_gt-Kategorien: GT-Panel leer mit Vermerk | getrennte PNGs | maps/ |
+| art_antiques Test-GT konzentriert (73–74 % in einer Zelle) | wenige, räumlich geballte Test-POIs | Status bleibt regelgemäß „ok“, Befund in Log/Report markiert | Kategorie als thin umdeklarieren (nicht durch Regel gedeckt) | REPORT.md |

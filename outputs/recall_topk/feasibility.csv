@@ -1,0 +1,11 @@
+backbone,category_id,N,n_pois_london,n_pois_with_gt,gt_dropped_outside_candidates,status,gt_pixels_train,gt_cells_train,gt_pixels_val,gt_cells_val,gt_pixels_test,gt_cells_test,gt_pixels_all,gt_cells_all
+ae,art_antiques,15954033,579,579,0,ok,808,131,100,17,351,16,1259,164
+ae,religious_orgs,15954033,3339,3339,0,ok,30949,854,3891,94,3269,105,38109,1053
+ae,medical_supplies,15954033,1299,1298,0,ok,2637,528,365,62,218,63,3220,653
+ae,sports_clubs,15954033,0,0,0,no_gt,0,0,0,0,0,0,0,0
+ae,import_export,15954033,0,0,0,no_gt,0,0,0,0,0,0,0,0
+tessera,art_antiques,15954158,579,579,0,ok,787,133,104,18,358,16,1249,167
+tessera,religious_orgs,15954158,3339,3339,0,ok,31030,855,3903,95,3210,105,38143,1055
+tessera,medical_supplies,15954158,1299,1299,0,ok,2601,529,358,60,221,62,3180,651
+tessera,sports_clubs,15954158,0,0,0,no_gt,0,0,0,0,0,0,0,0
+tessera,import_export,15954158,0,0,0,no_gt,0,0,0,0,0,0,0,0
