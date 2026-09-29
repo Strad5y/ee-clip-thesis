@@ -138,3 +138,9 @@ Format: Problem | Ursache | Entscheidung | verworfene Alternative | betroffene D
 | Karten-GT bei 50-m-Darstellungsgitter | Punkt-POIs (1 Pixel) verschwinden bei nearest-Resampling | GT-Panel mit Resampling.max (50-m-Zelle grün, wenn ≥1 GT-Pixel); nur Darstellung, Kennzahlen auf nativem Raster | nearest wie bei Referenzkarten der AETHER-Karten | eval/recall_topk.py, maps/ |
 | Kartenlayout | Instruktion: Similarity (T) neben GT | eine PNG je Kategorie×Backbone mit 2 Panels; no_gt-Kategorien: GT-Panel leer mit Vermerk | getrennte PNGs | maps/ |
 | art_antiques Test-GT konzentriert (73–74 % in einer Zelle) | wenige, räumlich geballte Test-POIs | Status bleibt regelgemäß „ok“, Befund in Log/Report markiert | Kategorie als thin umdeklarieren (nicht durch Regel gedeckt) | REPORT.md |
+
+---
+
+## Phase 4 — Abschlussbericht (nachgetragen unter der Problemtabelle)
+
+Start: 00:17 · Ende: 00:20. `REPORT.md` geschrieben, Commit "recall_topk: overnight report", Push des Branches `recall-topk`. Ergebnis: ok.
