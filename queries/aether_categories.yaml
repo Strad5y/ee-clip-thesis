@@ -1,0 +1,103 @@
+# queries/aether_categories.yaml
+#
+# Pre-registered mapping of the five AETHER categories (Liu et al., arXiv 2510.09894v2,
+# Sec. 4.6 / Tab. 3) to classes (key=value) of our class table
+# ("wikidata tags/osm_wikidata_keys.xlsx", config.CLASS_TABLE, 780 classes).
+#
+# Written 2026-09-30 BEFORE any instance count, GT pixel count or score was looked at.
+# Rule (INSTRUCTIONS_recall_topk_overnight.md, Phase 1):
+#   - a class is assigned if its OSM-wiki meaning denotes, at its core, what the category
+#     name describes; criterion = function of the place;
+#   - only classes from the class table; no new classes, no tags outside the pipeline;
+#   - in doubt: NOT assigned, but listed under uncertain_classes for review by Jakob
+#     (uncertain_classes are NOT part of the ground truth);
+#   - no counterpart -> osm_classes stays empty, category is still evaluated (status no_gt).
+# Ground truth of a category = union of its osm_classes.
+
+categories:
+  - id: art_antiques
+    aether_name: "Art and Antiques"
+    query: "A place with the type of Art and Antiques."
+    osm_classes: ["shop=art", "shop=antiques"]
+    uncertain_classes: ["tourism=gallery", "shop=collector", "shop=frame", "shop=craft", "shop=pottery"]
+    rationale:
+      "shop=art": "OSM-Wiki: Laden, der Kunstwerke verkauft - Kernbedeutung der Kategorie."
+      "shop=antiques": "OSM-Wiki: Laden, der Antiquitäten verkauft - Kernbedeutung der Kategorie."
+      "tourism=gallery": "Unsicher: Ort zur Ausstellung von Kunst; verkaufende Galerien werden laut Wiki eher als shop=art getaggt, Funktion ist primär Ausstellen."
+      "shop=collector": "Unsicher: Sammlerartikel (Münzen, Briefmarken, Comics) - überschneidet sich mit Antiquitäten, ist aber nicht deren Kernbedeutung."
+      "shop=frame": "Unsicher: Bilderrahmen/Rahmung - kunstnahes Handwerk, aber kein Verkauf von Kunst oder Antiquitäten."
+      "shop=craft": "Unsicher: Bastel- und Künstlerbedarf (Material), nicht Kunstwerke selbst."
+      "shop=pottery": "Unsicher: Keramik-/Töpferwaren - kann Kunsthandwerk sein, ist aber laut Wiki allgemein Keramikverkauf."
+
+  - id: religious_orgs
+    aether_name: "Religious Organisations"
+    query: "A place with the type of Religious Organisations."
+    osm_classes: ["amenity=place_of_worship", "amenity=monastery", "office=religion"]
+    uncertain_classes: ["building=church", "building=chapel", "building=cathedral", "building=mosque",
+                        "building=synagogue", "building=temple", "building=shrine", "building=religious",
+                        "building=kingdom_hall", "building=monastery", "building=presbytery",
+                        "historic=church", "historic=monastery", "historic=mosque", "historic=temple",
+                        "shop=religion"]
+    rationale:
+      "amenity=place_of_worship": "OSM-Wiki: Ort, an dem eine Religionsgemeinschaft Gottesdienst/Andacht hält - Funktion ist die religiöse Organisation."
+      "amenity=monastery": "OSM-Wiki: Kloster als aktive Gemeinschaft von Mönchen/Nonnen - religiöse Organisation."
+      "office=religion": "OSM-Wiki: Büro einer religiösen Organisation (z.B. Diözese, Gemeindebüro) - Kernbedeutung."
+      "building=church": "Unsicher: building=* beschreibt laut Wiki die Bauform (als Kirche gebaut), nicht die aktuelle Funktion; Funktion wird über amenity=place_of_worship getaggt."
+      "building=chapel": "Unsicher: Bauform, nicht Funktion (wie building=church)."
+      "building=cathedral": "Unsicher: Bauform, nicht Funktion (wie building=church)."
+      "building=mosque": "Unsicher: Bauform, nicht Funktion (wie building=church)."
+      "building=synagogue": "Unsicher: Bauform, nicht Funktion (wie building=church)."
+      "building=temple": "Unsicher: Bauform, nicht Funktion (wie building=church)."
+      "building=shrine": "Unsicher: Bauform, nicht Funktion (wie building=church)."
+      "building=religious": "Unsicher: generische religiöse Bauform, nicht Funktion."
+      "building=kingdom_hall": "Unsicher: Bauform (Königreichssaal), Funktion über amenity=place_of_worship."
+      "building=monastery": "Unsicher: Bauform, nicht Funktion; aktive Klöster tragen amenity=monastery."
+      "building=presbytery": "Unsicher: Pfarrhaus - Wohngebäude eines Geistlichen, nicht Ort der Organisation im Kern."
+      "historic=church": "Unsicher: historisches Objekt, aktuelle religiöse Nutzung nicht impliziert."
+      "historic=monastery": "Unsicher: historisches Objekt, aktuelle religiöse Nutzung nicht impliziert."
+      "historic=mosque": "Unsicher: historisches Objekt, aktuelle religiöse Nutzung nicht impliziert."
+      "historic=temple": "Unsicher: historisches Objekt, aktuelle religiöse Nutzung nicht impliziert."
+      "shop=religion": "Unsicher: Einzelhandel mit religiösen Artikeln - Verkauf, keine religiöse Organisation."
+
+  - id: medical_supplies
+    aether_name: "Medical Equipment, Supplies and Pharmaceuticals"
+    query: "A place with the type of Medical Equipment, Supplies and Pharmaceuticals."
+    osm_classes: ["shop=medical_supply", "amenity=pharmacy", "healthcare=pharmacy"]
+    uncertain_classes: ["shop=chemist", "shop=hearing_aids", "shop=optician", "shop=nutrition_supplements",
+                        "shop=herbalist"]
+    rationale:
+      "shop=medical_supply": "OSM-Wiki: Laden für medizinischen Bedarf (Hilfsmittel, Geräte) - Kernbedeutung."
+      "amenity=pharmacy": "OSM-Wiki: Apotheke, gibt Arzneimittel ab - Kernbedeutung 'Pharmaceuticals'."
+      "healthcare=pharmacy": "OSM-Wiki: gleiche Einrichtung wie amenity=pharmacy im healthcare-Schema."
+      "shop=chemist": "Unsicher: Drogerie (Körperpflege/Haushalt, rezeptfreie Artikel) - laut Wiki ausdrücklich keine Apotheke."
+      "shop=hearing_aids": "Unsicher: Verkauf von Hörgeräten (Medizinprodukt), aber primär Hörakustik-Dienstleistung."
+      "shop=optician": "Unsicher: Brillen/Kontaktlinsen plus Sehtest - Sehhilfen, Grenzfall zu Medizinprodukten."
+      "shop=nutrition_supplements": "Unsicher: Nahrungsergänzungsmittel sind keine Arzneimittel."
+      "shop=herbalist": "Unsicher: Kräuter/Naturheilmittel - keine Apotheke, Grenzfall zu Pharmazeutika."
+
+  - id: sports_clubs
+    aether_name: "Sports Clubs and Associations"
+    query: "A place with the type of Sports Clubs and Associations."
+    osm_classes: []
+    uncertain_classes: ["leisure=sports_centre", "leisure=pitch", "leisure=stadium", "leisure=sports_hall",
+                        "leisure=golf_course", "office=association", "sport=*"]
+    rationale:
+      "(leer)": "Die Kategorie bezeichnet Organisationen (Vereine/Verbände); OSM taggt diese als club=sport, und der Schlüssel club ist nicht in der Klassentabelle. Keine Klasse bezeichnet im Kern einen Sportverein."
+      "leisure=sports_centre": "Unsicher: Sportanlage (Einrichtung), nicht der Verein - Vereine nutzen sie häufig, Kernbedeutung ist aber die Anlage."
+      "leisure=pitch": "Unsicher: Spielfeld (Anlage), nicht Verein."
+      "leisure=stadium": "Unsicher: Stadion (Anlage), nicht Verein."
+      "leisure=sports_hall": "Unsicher: Sporthalle (Anlage), nicht Verein."
+      "leisure=golf_course": "Unsicher: Golfplatz (Anlage), in UK oft von einem Club betrieben, Kernbedeutung ist die Anlage."
+      "office=association": "Unsicher: Büro eines Vereins/Verbands beliebiger Art, nicht spezifisch Sport."
+      "sport=*": "Unsicher (ganzer Schlüssel, 134 Werte): sport=* gibt die Sportart einer Anlage an, bezeichnet keinen Verein."
+
+  - id: import_export
+    aether_name: "Import and Export Services"
+    query: "A place with the type of Import and Export Services."
+    osm_classes: []
+    uncertain_classes: ["office=logistics", "shop=wholesale", "office=courier"]
+    rationale:
+      "(leer)": "Keine Klasse der Klassentabelle bezeichnet im Kern Import-/Export-Dienstleistungen (Außenhandel, Zollabwicklung)."
+      "office=logistics": "Unsicher: Logistikunternehmen (Transport/Lager) - kann Außenhandel einschließen, ist aber nicht dessen Kernbedeutung."
+      "shop=wholesale": "Unsicher: Großhandel - Handel mit Gewerbekunden, nicht Import/Export."
+      "office=courier": "Unsicher: Kurier-/Paketdienst - Transport, nicht Außenhandel."
