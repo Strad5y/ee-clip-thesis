@@ -1,0 +1,66 @@
+{
+  "backbone": "tessera",
+  "N": 15954158,
+  "n_tiles": 50,
+  "checkpoint": "checkpoints/tessera_v1_dedup/best.pt",
+  "preflight_min_cos": 0.9999999403953552,
+  "n_proto_train_pixels": {
+    "art_antiques": 787,
+    "religious_orgs": 84,
+    "medical_supplies": 14,
+    "sports_clubs": 12683,
+    "import_export": 28
+  },
+  "gt_dropped_outside_candidates": {
+    "art_antiques": 0,
+    "religious_orgs": 0,
+    "medical_supplies": 0,
+    "sports_clubs": 2317,
+    "import_export": 0
+  },
+  "gt_unknown_tile": 0,
+  "extra_tags": {
+    "club=sport": {
+      "n_objects": 328,
+      "n_made_valid": 0,
+      "geom_types": {
+        "Polygon": 236,
+        "Point": 92
+      },
+      "n_pairs": 18622,
+      "n_pois_joined": 328
+    }
+  },
+  "n_extra_pixels_without_split_cell": 0,
+  "categories_yaml": "queries/aether_categories_v2_jakob.yaml",
+  "queries": {
+    "art_antiques": "A place with the type of Art and Antiques.",
+    "religious_orgs": "A place with the type of Religious Organisations.",
+    "medical_supplies": "A place with the type of Medical Equipment, Supplies and Pharmaceuticals.",
+    "sports_clubs": "A place with the type of Sports Clubs and Associations.",
+    "import_export": "A place with the type of Import and Export Services."
+  },
+  "score_T_range": {
+    "art_antiques": [
+      -0.2887222468852997,
+      0.23902468383312225
+    ],
+    "religious_orgs": [
+      -0.2521856129169464,
+      0.20811879634857178
+    ],
+    "medical_supplies": [
+      -0.24239134788513184,
+      0.22989915311336517
+    ],
+    "sports_clubs": [
+      -0.25821009278297424,
+      0.2993887662887573
+    ],
+    "import_export": [
+      -0.29850515723228455,
+      0.235775887966156
+    ]
+  },
+  "runtime_s": 327.17760396003723
+}

@@ -105,6 +105,9 @@ def load_categories() -> list[dict]:
     ct = load_class_table(cfg.CLASS_TABLE)
     known = set(ct["key"] + "=" + ct["value"])
     for c in cats:
+        c.setdefault("extra_osm_tags", [])
+        for tag in c["extra_osm_tags"]:
+            assert tag.count("=") == 1 and tag not in known, f"{c['id']}: bad extra tag {tag}"
         missing = [k for k in c["osm_classes"] if k not in known]
         if missing:
             raise SystemExit(f"{c['id']}: classes not in class table: {missing}")
@@ -160,8 +163,40 @@ def candidate_masks(tiles: list[Tile]) -> list[np.ndarray]:
     return out
 
 
+def extract_extra_tag(tag: str):
+    """POIs with an OSM tag OUTSIDE the class table (e.g. club=sport), straight from the same
+    London PBF the pipeline was built from (config.PBF_LONDON). poi_id = '{osm_type}/{id}' as in
+    pois_london_full_filtered.parquet. Invalid polygons are repaired with make_valid."""
+    import geopandas as gpd
+    import shapely
+    from pyrosm import OSM
+    k, v = tag.split("=")
+    g = OSM(str(cfg.PBF_LONDON)).get_data_by_custom_criteria(
+        custom_filter={k: [v]}, filter_type="keep", keep_nodes=True, keep_ways=True,
+        keep_relations=True)
+    g = g[g[k] == v].copy()
+    g["poi_id"] = g["osm_type"].astype(str) + "/" + g["id"].astype(str)
+    g = gpd.GeoDataFrame(g[["poi_id", "geometry"]], geometry="geometry", crs="EPSG:4326")
+    bad = ~g.geometry.is_valid
+    g.loc[bad, "geometry"] = shapely.make_valid(g.loc[bad, "geometry"].values)
+    g = g.drop_duplicates(subset="poi_id").reset_index(drop=True)
+    info = {"n_objects": len(g), "n_made_valid": int(bad.sum()),
+            "geom_types": g.geometry.geom_type.value_counts().to_dict()}
+    return g, info
+
+
+_EXTRA_CACHE: dict = {}
+
+
+def extra_tag_gdf(tag: str):
+    if tag not in _EXTRA_CACHE:
+        _EXTRA_CACHE[tag] = extract_extra_tag(tag)
+    return _EXTRA_CACHE[tag]
+
+
 def category_poi_sets(cats: list[dict]) -> tuple[dict, dict]:
-    """poi_id sets per category (POI has >=1 tag in osm_classes) + #POIs in London per class."""
+    """poi_id sets per category (POI has >=1 tag in osm_classes or extra_osm_tags) + #POIs in
+    London per class/tag."""
     pois = pd.read_parquet(POIS_PATH, columns=["poi_id", "key", "value"])
     pois["kv"] = pois["key"].astype(str).str.strip() + "=" + pois["value"].astype(str).str.strip()
     sets, per_class = {}, {}
@@ -170,6 +205,10 @@ def category_poi_sets(cats: list[dict]) -> tuple[dict, dict]:
         sets[c["id"]] = set(sub["poi_id"])
         for kv in c["osm_classes"]:
             per_class[kv] = int(pois.loc[pois["kv"] == kv, "poi_id"].nunique())
+        for tag in c["extra_osm_tags"]:
+            g, info = extra_tag_gdf(tag)
+            sets[c["id"]] |= set(g["poi_id"])
+            per_class[tag] = info["n_objects"]
     return sets, per_class
 
 
@@ -187,6 +226,27 @@ def build_gt(bb: str, cats: list[dict], tiles: list[Tile], cand: list[np.ndarray
     hit = ids.map(lambda l: not all_ids.isdisjoint(l))
     px = px[hit.to_numpy()].copy()
     px["poi_list"] = ids[hit.to_numpy()]
+    px["source"] = "pixel_table"
+
+    # tags outside the class table: same rasterisation rule as the pairs (spatial_join:
+    # zone assignment, points -> containing pixel, polygons -> exactextract coverage > 0,
+    # lines skipped), joined against exactly the raw tiles used here
+    extra_info = {}
+    extra_tags = sorted({t for c in cats for t in c["extra_osm_tags"]})
+    if extra_tags:
+        import spatial_join as sj
+        for tag in extra_tags:
+            g, info = extra_tag_gdf(tag)
+            pairs = sj.join_pois_to_tiles(g, [t.raw_path for t in tiles])
+            info = {**info, "n_pairs": len(pairs),
+                    "n_pois_joined": int(pairs["poi_id"].nunique()) if len(pairs) else 0}
+            extra_info[tag] = info
+            if len(pairs):
+                e = pairs[["tile", "row", "col", "poi_id"]].copy()
+                e["poi_list"] = e["poi_id"].map(lambda x: [x])
+                e["split"] = None
+                e["source"] = "extra"
+                px = pd.concat([px, e.drop(columns="poi_id")], ignore_index=True)
 
     tile_idx = {t.name: i for i, t in enumerate(tiles)}
     px["tile_idx"] = px["tile"].map(tile_idx)
@@ -211,22 +271,30 @@ def build_gt(bb: str, cats: list[dict], tiles: list[Tile], cand: list[np.ndarray
     cells = compute_pixel_cells(px[["tile", "row", "col"]], [t.raw_path for t in tiles],
                                 utm_crs, minx, miny)
     px = px.merge(cells, on=["tile", "row", "col"], how="left")
-    rec_split = [cell_to_split.get((int(a), int(b))) for a, b in zip(px["cell_row"], px["cell_col"])]
-    n_split_mismatch = int((pd.Series(rec_split, index=px.index) != px["split"]).sum())
+    rec_split = pd.Series([cell_to_split.get((int(a), int(b))) for a, b in
+                           zip(px["cell_row"], px["cell_col"])], index=px.index)
+    is_tab = (px["source"] == "pixel_table").to_numpy()
+    n_split_mismatch = int((rec_split[is_tab] != px.loc[is_tab, "split"]).sum())
     if n_split_mismatch:
         raise SystemExit(f"{bb}: {n_split_mismatch} GT pixels whose reconstructed cell split != "
                          f"split column of {PIXELS_TEMPLATE} - provenance mismatch, abort.")
+    px.loc[~is_tab, "split"] = rec_split[~is_tab]
+    n_extra_no_split = int(((~is_tab) & px["split"].isna().to_numpy() & in_cand).sum())
+    px["split"] = px["split"].fillna("none")   # cell not in splits_london.csv -> only in 'all'
     px["cell"] = px["cell_row"].astype(np.int64) * 100000 + px["cell_col"].astype(np.int64)
     px["in_cand"] = in_cand
 
-    out = {"_meta": {"n_unknown_tile": n_unknown_tile}}
+    out = {"_meta": {"n_unknown_tile": n_unknown_tile, "extra_tags": extra_info,
+                     "n_extra_pixels_without_split_cell": n_extra_no_split}}
     for c in cats:
         s = poi_sets[c["id"]]
         m = px["poi_list"].map(lambda l: not s.isdisjoint(l)).to_numpy() if s else np.zeros(len(px), bool)
         sub = px[m]
         pois_hit = sub.loc[sub["in_cand"], "poi_list"].map(lambda l: s.intersection(l))
+        df = sub.loc[sub["in_cand"], ["tile_idx", "r", "c", "split", "cell"]]
+        df = df.drop_duplicates(subset=["tile_idx", "r", "c"])  # pixel table + extra join overlap
         out[c["id"]] = {
-            "df": sub.loc[sub["in_cand"], ["tile_idx", "r", "c", "split", "cell"]].reset_index(drop=True),
+            "df": df.reset_index(drop=True),
             "n_dropped_outside_candidates": int((~sub["in_cand"]).sum()),
             "n_pois_with_gt": len(set().union(*pois_hit)) if len(pois_hit) else 0,
         }
@@ -309,11 +377,20 @@ def write_feasibility_md(cats, per_class, res) -> None:
          "+ gültiges Arm-C-Feld). Zellen = 1-km-Zellen aus `data/splits/splits_london.csv`.", ""]
     L += ["## Klassen", "", "| Kategorie | Klasse | POIs in London (Tabelle) |", "|---|---|---|"]
     for c in cats:
-        if not c["osm_classes"]:
+        if not c["osm_classes"] and not c["extra_osm_tags"]:
             L.append(f"| {c['aether_name']} | — (keine Klasse) | — |")
         for kv in c["osm_classes"]:
             L.append(f"| {c['aether_name']} | `{kv}` | {per_class[kv]} |")
+        for tag in c["extra_osm_tags"]:
+            L.append(f"| {c['aether_name']} | `{tag}` (außerhalb der Klassentabelle, direkt aus dem PBF) "
+                     f"| {per_class[tag]} |")
     L += ["", "Unsichere Klassen (nicht in der GT, nur zur Prüfung): siehe YAML `uncertain_classes`.", ""]
+    for tag, info in _EXTRA_CACHE.items():
+        L.append(f"Extra-Tag `{tag}`: {info[1]['n_objects']} Objekte, Geometrietypen {info[1]['geom_types']}, "
+                 f"{info[1]['n_made_valid']} per make_valid repariert. Gerastert mit spatial_join.join_pois_to_tiles "
+                 "(Punkte → Pixel, Polygone → exactextract Coverage > 0, Linien übersprungen).")
+    if _EXTRA_CACHE:
+        L.append("")
     for bb in BACKBONES:
         sub = res[res["backbone"] == bb]
         L += [f"## {bb} (N = {int(sub['N'].iloc[0]):,} Kandidatenpixel)".replace(",", "."), "",
@@ -649,6 +726,9 @@ def run_backbone(bb: str, write_fields: bool = True) -> None:
             "preflight_min_cos": min_cos, "n_proto_train_pixels": n_proto,
             "gt_dropped_outside_candidates": {c["id"]: gt[c["id"]]["n_dropped_outside_candidates"] for c in cats},
             "gt_unknown_tile": gt["_meta"]["n_unknown_tile"],
+            "extra_tags": gt["_meta"]["extra_tags"],
+            "n_extra_pixels_without_split_cell": gt["_meta"]["n_extra_pixels_without_split_cell"],
+            "categories_yaml": str(CATEGORIES_YAML.relative_to(ROOT)),
             "queries": {c["id"]: c["query"] for c in cats},
             "score_T_range": {c["id"]: [float(sT[:, j].min()), float(sT[:, j].max())] for j, c in enumerate(cats)},
             "runtime_s": time.time() - t_all}
@@ -801,7 +881,7 @@ def make_maps(cats) -> None:
             gcm = ListedColormap(["white", "green"]); gcm.set_bad((0, 0, 0, 0))
             axes[1].imshow(gtf, cmap=gcm, vmin=0, vmax=1, extent=_extent(transform, shape),
                            interpolation="nearest")
-            gt_title = f"GT: {', '.join(c['osm_classes']) or '— keine Klasse (no_gt)'}"
+            gt_title = f"GT: {', '.join(c['osm_classes'] + c['extra_osm_tags']) or '— keine Klasse (no_gt)'}"
             axes[1].set_title(gt_title + f"\n(50-m-Kartenzellen mit ≥1 GT-Pixel: {n_gt_cells50})", fontsize=8)
             for ax in axes:
                 aoi_gdf.boundary.plot(ax=ax, color="black", linewidth=0.4)
@@ -816,11 +896,18 @@ def make_maps(cats) -> None:
 
 
 def main():
+    global OUT, FIELDS, CATEGORIES_YAML
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["feasibility", "selftest", "run", "finalize"])
     ap.add_argument("--backbone", choices=BACKBONES)
     ap.add_argument("--no-fields", action="store_true")
+    ap.add_argument("--categories", default=str(CATEGORIES_YAML),
+                    help="category YAML (default: pre-registered queries/aether_categories.yaml)")
+    ap.add_argument("--out", default=str(OUT), help="output dir (default: outputs/recall_topk)")
     a = ap.parse_args()
+    CATEGORIES_YAML = Path(a.categories).resolve()
+    OUT = Path(a.out).resolve()
+    FIELDS = OUT / "fields"
     OUT.mkdir(parents=True, exist_ok=True)
     if a.cmd == "feasibility":
         feasibility()

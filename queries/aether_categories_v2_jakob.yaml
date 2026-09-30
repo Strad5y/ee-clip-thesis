@@ -1,0 +1,61 @@
+# queries/aether_categories_v2_jakob.yaml
+#
+# Ground-truth mapping v2, set by Jakob on 2026-09-30 AFTER the pre-registered run
+# (queries/aether_categories.yaml, results in outputs/recall_topk/) had been computed and
+# reported. This is a post-hoc amendment by the user, not derived from the results by Claude.
+# The pre-registered mapping and its results stay unchanged; v2 results go to
+# outputs/recall_topk/v2_jakob/.
+#
+# Only used as evaluation ground truth for this Recall@Top-k% analysis - no change to the
+# class table, the training pairs or any other evaluation.
+#
+# extra_osm_tags: tags OUTSIDE the class table, extracted directly from the same London PBF
+# as the pipeline (config.PBF_LONDON) and rasterised with the pairing rule
+# (spatial_join.join_pois_to_tiles: points -> containing pixel, polygons -> exactextract
+# coverage > 0, lines skipped, no buffer).
+
+categories:
+  - id: art_antiques
+    aether_name: "Art and Antiques"
+    query: "A place with the type of Art and Antiques."
+    osm_classes: ["shop=art", "shop=antiques"]
+    extra_osm_tags: []
+    uncertain_classes: []
+    rationale:
+      "v2": "Unverändert gegenüber der Vorregistrierung (Vorgabe Jakob)."
+
+  - id: religious_orgs
+    aether_name: "Religious Organisations"
+    query: "A place with the type of Religious Organisations."
+    osm_classes: ["office=religion"]
+    extra_osm_tags: []
+    uncertain_classes: []
+    rationale:
+      "v2": "Nur office=religion (Vorgabe Jakob); amenity=place_of_worship und amenity=monastery aus v1 entfallen."
+
+  - id: medical_supplies
+    aether_name: "Medical Equipment, Supplies and Pharmaceuticals"
+    query: "A place with the type of Medical Equipment, Supplies and Pharmaceuticals."
+    osm_classes: ["shop=medical_supply"]
+    extra_osm_tags: []
+    uncertain_classes: []
+    rationale:
+      "v2": "Nur shop=medical_supply (Vorgabe Jakob); amenity=pharmacy und healthcare=pharmacy aus v1 entfallen."
+
+  - id: sports_clubs
+    aether_name: "Sports Clubs and Associations"
+    query: "A place with the type of Sports Clubs and Associations."
+    osm_classes: []
+    extra_osm_tags: ["club=sport"]
+    uncertain_classes: []
+    rationale:
+      "v2": "club=sport (Vorgabe Jakob), nicht in der Klassentabelle, direkt aus dem PBF; club=yes u. a. ausdrücklich nicht."
+
+  - id: import_export
+    aether_name: "Import and Export Services"
+    query: "A place with the type of Import and Export Services."
+    osm_classes: ["office=logistics"]
+    extra_osm_tags: []
+    uncertain_classes: []
+    rationale:
+      "v2": "office=logistics als Annäherung (Vorgabe Jakob); kein eigenes OSM-Tag für Import/Export bekannt."

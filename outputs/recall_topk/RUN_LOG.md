@@ -144,3 +144,23 @@ Format: Problem | Ursache | Entscheidung | verworfene Alternative | betroffene D
 ## Phase 4 — Abschlussbericht (nachgetragen unter der Problemtabelle)
 
 Start: 00:17 · Ende: 00:20. `REPORT.md` geschrieben, Commit "recall_topk: overnight report", Push des Branches `recall-topk`. Ergebnis: ok.
+
+---
+
+## Nachtrag v2 (2026-09-30 abends) — GT-Zuordnung nach Vorgabe Jakob
+
+Nach Vorlage der vorregistrierten Ergebnisse hat Jakob eine andere GT-Zuordnung festgelegt
+(`queries/aether_categories_v2_jakob.yaml`): Art = shop=art, shop=antiques (unverändert); Religious = nur
+office=religion; Medical = nur shop=medical_supply; Sports Clubs = club=sport (außerhalb der Klassentabelle);
+Import/Export = office=logistics. Nur als Evaluations-GT dieser Auswertung, keine Änderung an Klassentabelle/Training.
+Die vorregistrierten Ergebnisse in `outputs/recall_topk/` bleiben unverändert; v2 liegt in `outputs/recall_topk/v2_jakob/`.
+
+Code: `eval/recall_topk.py` um `extra_osm_tags` (Extraktion aus `config.PBF_LONDON` per pyrosm, Rasterung mit
+`spatial_join.join_pois_to_tiles` = Paarbildungsregel) sowie `--categories/--out` erweitert. Konsistenzcheck: art_antiques
+in v2 zahlengleich mit v1. Gate, Preflight (Kosinus 1,000000) und Echtdaten-Selbsttest beide Backbones PASS.
+
+| Problem | Ursache | Entscheidung | verworfene Alternative | betroffene Dateien |
+|---|---|---|---|---|
+| Jakobs Tabelle nahm an, `shop` sei kein aktiver Key | veralteter Stand (früher 4 Keys) | Korrigiert gemeldet: shop ist aktiv, shop=art/antiques/medical_supply sind in der Pipeline; Zuordnung trotzdem wie vorgegeben | – | – |
+| club=sport nicht in den Trainingspixeln | club ist kein aktiver Key | eigene Rasterung mit der Paarbildungsregel gegen dieselben Rohkacheln; Pixel außerhalb des Kandidatenraums (Kachelüberlappung/AOI) verworfen: 1266 AE / 2317 TESSERA; 322 von 328 Objekten mit GT-Pixel; 0 Pixel ohne Split-Zelle | GT aus Pixeltabelle (unmöglich) | eval/recall_topk.py |
+| religious_orgs, medical_supplies, import_export in v2 `thin` (Test 0–3 Pixel) | nur 13–25 POIs je Klasse in London | nach Regel markiert, nichts entfernt; Test-Werte nicht aussagekräftig, all-Split zusätzlich berichtet (Prototyp dort nicht unabhängig) | – | v2_jakob/ |
