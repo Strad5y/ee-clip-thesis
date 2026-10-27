@@ -1,0 +1,123 @@
+=== Konfigurationen aufbauen (tessera) ===
+  tessera_dedup: 4359468 -> 4358064 Zeilen (-1404: 1136 Klasse 12400, 268 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/tessera_v1_dedup.yaml): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/tessera_v1_dedup/best.pt, Epoche 48)
+  Normalisierung (trainiert, aus Checkpoint-Config): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+
+### Arm 'roh' (dim=128): train=3528644 sub=10002 val=412565 test=416855
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  logreg/subsample (C=0.1): test_oa=0.5850 test_macro_f1=0.2358 test_macro_precision=0.2576 test_macro_recall=0.2519
+Warning: less than 75% GPU memory available for training. Free: 88653.83984 Total: 122570.2813
+  catboost/subsample (best_iter=307/1000, 13s): test_oa=0.5747 test_macro_f1=0.2168 test_macro_precision=0.2704 test_macro_recall=0.2122
+Warning: less than 75% GPU memory available for training. Free: 86829.39844 Total: 122570.2813
+  catboost/full (best_iter=499/500 LIMIT, 176s): test_oa=0.6085 test_macro_f1=0.2611 test_macro_precision=0.3497 test_macro_recall=0.2443
+  mlp/subsample (epochs=54/100, 6s): test_oa=0.5822 test_macro_f1=0.2438 test_macro_precision=0.2540 test_macro_recall=0.2632
+  mlp/full (epochs=30/30 LIMIT, 475s): test_oa=0.6315 test_macro_f1=0.2964 test_macro_precision=0.3566 test_macro_recall=0.2844
+
+### Arm 'zufaellig_projiziert' (dim=256): train=3528644 sub=10002 val=412565 test=416855
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  logreg/subsample (C=0.1): test_oa=0.5752 test_macro_f1=0.2285 test_macro_precision=0.2447 test_macro_recall=0.2478
+Warning: less than 75% GPU memory available for training. Free: 82020.35547 Total: 122570.2813
+  catboost/subsample (best_iter=427/1000, 19s): test_oa=0.5711 test_macro_f1=0.2125 test_macro_precision=0.2624 test_macro_recall=0.2042
+Warning: less than 75% GPU memory available for training. Free: 78350.38672 Total: 122570.2813
+  catboost/full (best_iter=306/500, 180s): test_oa=0.5956 test_macro_f1=0.2360 test_macro_precision=0.2951 test_macro_recall=0.2220
+  mlp/subsample (epochs=30/100, 4s): test_oa=0.5757 test_macro_f1=0.2283 test_macro_precision=0.2511 test_macro_recall=0.2422
+  mlp/full (epochs=30/30 LIMIT, 486s): test_oa=0.6262 test_macro_f1=0.2882 test_macro_precision=0.3524 test_macro_recall=0.2762
+
+### Arm 'trainiert_projiziert' (dim=256): train=3528644 sub=10002 val=412565 test=416855
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  logreg/subsample (C=0.01 GRID-RAND): test_oa=0.5991 test_macro_f1=0.2529 test_macro_precision=0.2698 test_macro_recall=0.2697
+Warning: less than 75% GPU memory available for training. Free: 81234.46875 Total: 122570.2813
+  catboost/subsample (best_iter=329/1000, 17s): test_oa=0.5986 test_macro_f1=0.2503 test_macro_precision=0.2830 test_macro_recall=0.2591
+Warning: less than 75% GPU memory available for training. Free: 77524.30859 Total: 122570.2813
+  catboost/full (best_iter=397/500, 223s): test_oa=0.6205 test_macro_f1=0.2679 test_macro_precision=0.3149 test_macro_recall=0.2598
+  mlp/subsample (epochs=21/100, 3s): test_oa=0.5969 test_macro_f1=0.2537 test_macro_precision=0.2646 test_macro_recall=0.2733
+  mlp/full (epochs=30/30 LIMIT, 484s): test_oa=0.6284 test_macro_f1=0.2875 test_macro_precision=0.3382 test_macro_recall=0.2763
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_heads_results_tessera_dedup_std.csv
+                 arm     head    regime  n_train                         extra   val_oa  val_macro_f1  val_macro_precision  val_macro_recall  test_oa  test_macro_f1  test_macro_precision  test_macro_recall
+                 roh catboost      full  3528644 best_iter=499/500 LIMIT, 176s 0.610394      0.235616             0.353047          0.224270 0.608521       0.261077              0.349686           0.244282
+trainiert_projiziert catboost      full  3528644       best_iter=397/500, 223s 0.619345      0.264174             0.344009          0.251442 0.620523       0.267860              0.314897           0.259810
+zufaellig_projiziert catboost      full  3528644       best_iter=306/500, 180s 0.597911      0.221284             0.351988          0.209409 0.595562       0.235978              0.295131           0.221957
+                 roh catboost subsample    10002       best_iter=307/1000, 13s 0.577167      0.204364             0.260199          0.205606 0.574706       0.216790              0.270429           0.212185
+trainiert_projiziert catboost subsample    10002       best_iter=329/1000, 17s 0.594541      0.235584             0.272766          0.255849 0.598645       0.250349              0.283027           0.259053
+zufaellig_projiziert catboost subsample    10002       best_iter=427/1000, 19s 0.572712      0.202844             0.263250          0.208240 0.571117       0.212488              0.262375           0.204207
+                 roh   logreg subsample    10002                         C=0.1 0.587595      0.228374             0.250079          0.241506 0.585019       0.235832              0.257610           0.251911
+trainiert_projiziert   logreg subsample    10002              C=0.01 GRID-RAND 0.595652      0.243900             0.258492          0.266012 0.599057       0.252901              0.269773           0.269659
+zufaellig_projiziert   logreg subsample    10002                         C=0.1 0.576006      0.216312             0.228914          0.232965 0.575248       0.228506              0.244658           0.247782
+                 roh      mlp      full  3528644      epochs=30/30 LIMIT, 475s 0.628080      0.282240             0.351297          0.266843 0.631507       0.296398              0.356622           0.284425
+trainiert_projiziert      mlp      full  3528644      epochs=30/30 LIMIT, 484s 0.629094      0.284384             0.364822          0.269314 0.628355       0.287477              0.338169           0.276283
+zufaellig_projiziert      mlp      full  3528644      epochs=30/30 LIMIT, 486s 0.622353      0.277887             0.351936          0.263181 0.626151       0.288246              0.352386           0.276239
+                 roh      mlp subsample    10002             epochs=54/100, 6s 0.580883      0.234811             0.243879          0.258438 0.582154       0.243761              0.253951           0.263209
+trainiert_projiziert      mlp subsample    10002             epochs=21/100, 3s 0.594207      0.247236             0.252837          0.274734 0.596941       0.253746              0.264574           0.273318
+zufaellig_projiziert      mlp subsample    10002             epochs=30/100, 4s 0.575921      0.219799             0.240374          0.231106 0.575673       0.228319              0.251130           0.242171
+
+=== Zellebenen-Bootstrap (Test, 1000x), roh + trainiert ===
+  Resamples mit >=1 fehlenden Testklasse(n): 163 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  logreg_subsample_roh: Zell-Bootstrap 1000x fertig
+  catboost_subsample_roh: Zell-Bootstrap 1000x fertig
+  catboost_full_roh: Zell-Bootstrap 1000x fertig
+  mlp_subsample_roh: Zell-Bootstrap 1000x fertig
+  mlp_full_roh: Zell-Bootstrap 1000x fertig
+  logreg_subsample_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  catboost_subsample_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  catboost_full_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  mlp_subsample_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  mlp_full_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+
+=== Gepaarte Differenz trainiert - roh ===
+     backbone        head_regime          metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+tessera_dedup      catboost_full              oa                       0.012098   0.009057    0.015218         True
+tessera_dedup      catboost_full        macro_f1                       0.008529   0.001184    0.020775         True
+tessera_dedup      catboost_full macro_precision                      -0.027592  -0.051615    0.006535        False
+tessera_dedup      catboost_full    macro_recall                       0.017277   0.007428    0.042109         True
+tessera_dedup catboost_subsample              oa                       0.024060   0.019345    0.029150         True
+tessera_dedup catboost_subsample        macro_f1                       0.034042   0.027053    0.040845         True
+tessera_dedup catboost_subsample macro_precision                       0.012035  -0.005443    0.026455        False
+tessera_dedup catboost_subsample    macro_recall                       0.052320   0.037392    0.076569         True
+tessera_dedup   logreg_subsample              oa                       0.014075   0.010784    0.017374         True
+tessera_dedup   logreg_subsample        macro_f1                       0.017058   0.011223    0.022866         True
+tessera_dedup   logreg_subsample macro_precision                       0.012202   0.005221    0.019655         True
+tessera_dedup   logreg_subsample    macro_recall                       0.021615   0.012488    0.036285         True
+tessera_dedup           mlp_full              oa                      -0.003211  -0.005404   -0.001079         True
+tessera_dedup           mlp_full        macro_f1                      -0.008802  -0.015353   -0.000641         True
+tessera_dedup           mlp_full macro_precision                      -0.016745  -0.035491    0.004143        False
+tessera_dedup           mlp_full    macro_recall                      -0.006683  -0.013655    0.016698        False
+tessera_dedup      mlp_subsample              oa                       0.014791   0.011653    0.018458         True
+tessera_dedup      mlp_subsample        macro_f1                       0.009711   0.004369    0.015261         True
+tessera_dedup      mlp_subsample macro_precision                       0.010552   0.004213    0.016756         True
+tessera_dedup      mlp_subsample    macro_recall                       0.012860   0.004195    0.027196         True

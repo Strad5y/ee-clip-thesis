@@ -1,0 +1,58 @@
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/ae_v1_dedup.yaml): none
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/ae_v1_dedup/best.pt, Epoche 32)
+  Normalisierung (trainiert, aus Checkpoint-Config): none
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+Warning: less than 75% GPU memory available for training. Free: 81366.125 Total: 122570.2813
+Warning: less than 75% GPU memory available for training. Free: 77539.75 Total: 122570.2813
+  logreg/subsample: test_macro_f1=0.2911 (gespeichert 0.2911), max. Abweichung 5.55e-17
+  catboost/subsample: test_macro_f1=0.2689 (gespeichert 0.2689), max. Abweichung 5.55e-17
+  catboost/full: test_macro_f1=0.2947 (gespeichert 0.2947), max. Abweichung 0.00e+00
+  mlp/subsample: test_macro_f1=0.2925 (gespeichert 0.2925), max. Abweichung 5.55e-17
+  mlp/full: test_macro_f1=0.3167 (gespeichert 0.3167), max. Abweichung 5.55e-17
+  Resamples mit >=1 fehlenden Testklasse(n): 161 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  logreg_subsample_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  catboost_subsample_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  catboost_full_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  mlp_subsample_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  mlp_full_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_heads_cell_bootstrap_ae_dedup_std_random.csv
+                                 config          metric     mean   ci_low  ci_high
+  logreg_subsample_zufaellig_projiziert              oa 0.625947 0.603418 0.651608
+  logreg_subsample_zufaellig_projiziert        macro_f1 0.287890 0.263764 0.316140
+  logreg_subsample_zufaellig_projiziert macro_precision 0.300472 0.277926 0.325738
+  logreg_subsample_zufaellig_projiziert    macro_recall 0.327068 0.292772 0.375883
+catboost_subsample_zufaellig_projiziert              oa 0.619159 0.596597 0.644117
+catboost_subsample_zufaellig_projiziert        macro_f1 0.266337 0.243623 0.290107
+catboost_subsample_zufaellig_projiziert macro_precision 0.308895 0.282502 0.336907
+catboost_subsample_zufaellig_projiziert    macro_recall 0.283439 0.253684 0.328784
+     catboost_full_zufaellig_projiziert              oa 0.644106 0.621265 0.669448
+     catboost_full_zufaellig_projiziert        macro_f1 0.294106 0.262981 0.330192
+     catboost_full_zufaellig_projiziert macro_precision 0.375600 0.326196 0.422006
+     catboost_full_zufaellig_projiziert    macro_recall 0.282753 0.258500 0.313989
+     mlp_subsample_zufaellig_projiziert              oa 0.625274 0.603070 0.650490
+     mlp_subsample_zufaellig_projiziert        macro_f1 0.289962 0.266212 0.314213
+     mlp_subsample_zufaellig_projiziert macro_precision 0.297396 0.275872 0.320078
+     mlp_subsample_zufaellig_projiziert    macro_recall 0.330232 0.296730 0.376958
+          mlp_full_zufaellig_projiziert              oa 0.660482 0.639706 0.683053
+          mlp_full_zufaellig_projiziert        macro_f1 0.315382 0.288249 0.349896
+          mlp_full_zufaellig_projiziert macro_precision 0.371297 0.331406 0.414745
+          mlp_full_zufaellig_projiziert    macro_recall 0.302777 0.279951 0.334700

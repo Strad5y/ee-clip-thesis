@@ -1,5 +1,0 @@
-=== verify_provenance.py: Split-Konsistenz ueber gemeinsame Pixelschluessel ===
-  [pixels_ae <-> landuse_pairs_ae] OK - 1934728 gemeinsame Pixel, split stimmt exakt ueberein.
-  [pixels_tessera <-> landuse_pairs_tessera] OK - 1959700 gemeinsame Pixel, split stimmt exakt ueberein.
-
-Alle vorhandenen Paare konsistent.

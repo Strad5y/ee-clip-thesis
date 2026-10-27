@@ -1,0 +1,96 @@
+=== Konfigurationen aufbauen ===
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/ae_v1_dedup.yaml): none
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/ae_v1_dedup/best.pt, Epoche 32)
+  Normalisierung (trainiert, aus Checkpoint-Config): none
+
+=== ae_dedup_roh === dim=64 Std/Dim (Median) roh=0.0579 -> 1
+  C=0.01: val_macro_f1(K)=0.2779 n_iter=271 (223.6s)
+  C=0.1: val_macro_f1(K)=0.2817 n_iter=308 (255.7s)
+  C=1.0: val_macro_f1(K)=0.2808 n_iter=327 (286.1s)
+  C=10.0: val_macro_f1(K)=0.2768 n_iter=332 (279.2s)
+  C=100.0: val_macro_f1(K)=0.2703 n_iter=357 (320.6s)
+  -> C=0.1: test_oa=0.6354 test_macro_f1=0.2932 test_macro_precision=0.3574 test_macro_recall=0.2775
+
+=== ae_dedup_zufaellig_projiziert === dim=256 Std/Dim (Median) roh=0.0131 -> 1
+  C=0.01: val_macro_f1(K)=0.2809 n_iter=746 (794.7s)
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  C=0.1: val_macro_f1(K)=0.3054 n_iter=1000 (952.4s)
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  C=1.0: val_macro_f1(K)=0.3057 n_iter=1000 (946.8s)
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  C=10.0: val_macro_f1(K)=0.3022 n_iter=1000 (946.3s)
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  C=100.0: val_macro_f1(K)=0.3042 n_iter=1000 (945.8s)
+  -> C=1.0: test_oa=0.6456 test_macro_f1=0.2995 test_macro_precision=0.3579 test_macro_recall=0.2859
+
+=== ae_dedup_trainiert_projiziert === dim=256 Std/Dim (Median) roh=0.0361 -> 1
+  C=0.01: val_macro_f1(K)=0.3247 n_iter=337 (398.1s)
+  C=0.1: val_macro_f1(K)=0.3302 n_iter=398 (456.7s)
+  C=1.0: val_macro_f1(K)=0.3283 n_iter=374 (430.3s)
+  C=10.0: val_macro_f1(K)=0.3308 n_iter=430 (418.6s)
+  C=100.0: val_macro_f1(K)=0.3276 n_iter=390 (317.1s)
+  -> C=10.0: test_oa=0.6462 test_macro_f1=0.3002 test_macro_precision=0.3484 test_macro_recall=0.2939
+                       config  dim    C  n_iter  n_classes_test   val_oa  val_macro_f1  val_macro_precision  val_macro_recall  test_oa  test_macro_f1  test_macro_precision  test_macro_recall
+                 ae_dedup_roh   64  0.1     308              23 0.633259      0.281724             0.374232          0.265670 0.635382       0.293150              0.357419           0.277502
+ae_dedup_zufaellig_projiziert  256  1.0    1000              23 0.644025      0.305713             0.371071          0.293605 0.645578       0.299501              0.357911           0.285938
+ae_dedup_trainiert_projiziert  256 10.0     430              23 0.646072      0.330787             0.386678          0.339330 0.646216       0.300225              0.348357           0.293883
+
+=== Zellebenen-Bootstrap (Test, 1000x) ===
+  Resamples mit >=1 fehlenden Testklasse(n): 161 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  ae_dedup_roh: Zell-Bootstrap 1000x fertig
+  ae_dedup_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  ae_dedup_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+                       config          metric     mean   ci_low  ci_high
+                 ae_dedup_roh              oa 0.634780 0.611811 0.660711
+                 ae_dedup_roh        macro_f1 0.291076 0.262433 0.328121
+                 ae_dedup_roh macro_precision 0.353621 0.315575 0.398471
+                 ae_dedup_roh    macro_recall 0.278903 0.254694 0.314862
+ae_dedup_zufaellig_projiziert              oa 0.645043 0.623395 0.669717
+ae_dedup_zufaellig_projiziert        macro_f1 0.297766 0.272681 0.329325
+ae_dedup_zufaellig_projiziert macro_precision 0.355564 0.320096 0.394488
+ae_dedup_zufaellig_projiziert    macro_recall 0.287074 0.265779 0.316505
+ae_dedup_trainiert_projiziert              oa 0.645620 0.623145 0.670843
+ae_dedup_trainiert_projiziert        macro_f1 0.297406 0.271099 0.326580
+ae_dedup_trainiert_projiziert macro_precision 0.345060 0.310376 0.381872
+ae_dedup_trainiert_projiziert    macro_recall 0.294226 0.271723 0.323019
+
+=== Gepaarte Differenz trainiert - roh ===
+backbone          metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+ae_dedup              oa                       0.010840   0.006645    0.014917         True
+ae_dedup        macro_f1                       0.006330  -0.009155    0.016969        False
+ae_dedup macro_precision                      -0.008561  -0.038061    0.020248        False
+ae_dedup    macro_recall                       0.015323   0.003639    0.023929         True

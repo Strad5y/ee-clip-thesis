@@ -1,0 +1,2 @@
+config,majority_class,val_oa,val_macro_f1,test_oa,test_macro_f1
+tessera_dedup_haeufigkeitsniveau,11210,0.474034394580248,0.026799148215445583,0.4570965923402622,0.0272785826126183

@@ -126,7 +126,8 @@ def _extent(transform, shape) -> tuple:
 
 
 def render_similarity_map(backbone: str, query_name: str, vmin: float, vmax: float,
-                           transform, shape, aoi_gdf, aoi_mask, out_path: Path) -> None:
+                           transform, shape, aoi_gdf, aoi_mask, out_path: Path,
+                           title: str | None = None) -> None:
     tile_paths = sorted((SIM_ROOT / backbone / query_name).glob("*.tif"))
     grid = mosaic_to_common_grid(tile_paths, shape, transform, GRID_CRS,
                                   Resampling.average, fill=np.nan)
@@ -144,7 +145,7 @@ def render_similarity_map(backbone: str, query_name: str, vmin: float, vmax: flo
         spine.set_visible(False)
     cbar = fig.colorbar(im, ax=ax, shrink=0.75, pad=0.02)
     cbar.set_label("cosine similarity")
-    ax.set_title(f"{backbone} — {query_name}", fontsize=10)
+    ax.set_title(title or f"{backbone} — {query_name}", fontsize=10)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=DPI, bbox_inches="tight", transparent=True)
     plt.close(fig)

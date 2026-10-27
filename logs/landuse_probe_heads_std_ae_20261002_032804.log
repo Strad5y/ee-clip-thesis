@@ -1,0 +1,114 @@
+=== Konfigurationen aufbauen (ae) ===
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/ae_v1_dedup.yaml): none
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/ae_v1_dedup/best.pt, Epoche 32)
+  Normalisierung (trainiert, aus Checkpoint-Config): none
+
+### Arm 'roh' (dim=64): train=3528281 sub=10000 val=412869 test=417308
+  logreg/subsample (C=1.0): test_oa=0.6246 test_macro_f1=0.2927 test_macro_precision=0.3075 test_macro_recall=0.3139
+Warning: less than 75% GPU memory available for training. Free: 90351.36719 Total: 122570.2813
+  catboost/subsample (best_iter=623/1000, 15s): test_oa=0.6188 test_macro_f1=0.2782 test_macro_precision=0.3118 test_macro_recall=0.2809
+Warning: less than 75% GPU memory available for training. Free: 89425.42188 Total: 122570.2813
+  catboost/full (best_iter=484/500, 138s): test_oa=0.6451 test_macro_f1=0.2960 test_macro_precision=0.3855 test_macro_recall=0.2796
+  mlp/subsample (epochs=81/100, 8s): test_oa=0.6295 test_macro_f1=0.2938 test_macro_precision=0.3058 test_macro_recall=0.3122
+  mlp/full (epochs=30/30 LIMIT, 474s): test_oa=0.6597 test_macro_f1=0.3216 test_macro_precision=0.3782 test_macro_recall=0.3070
+
+### Arm 'zufaellig_projiziert' (dim=256): train=3528281 sub=10000 val=412869 test=417308
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  logreg/subsample (C=1.0): test_oa=0.6265 test_macro_f1=0.2911 test_macro_precision=0.3018 test_macro_recall=0.3177
+Warning: less than 75% GPU memory available for training. Free: 81514.42578 Total: 122570.2813
+  catboost/subsample (best_iter=551/1000, 23s): test_oa=0.6198 test_macro_f1=0.2689 test_macro_precision=0.3084 test_macro_recall=0.2733
+Warning: less than 75% GPU memory available for training. Free: 77902.92578 Total: 122570.2813
+  catboost/full (best_iter=494/500, 234s): test_oa=0.6447 test_macro_f1=0.2947 test_macro_precision=0.3815 test_macro_recall=0.2810
+  mlp/subsample (epochs=41/100, 5s): test_oa=0.6258 test_macro_f1=0.2925 test_macro_precision=0.2978 test_macro_recall=0.3175
+  mlp/full (epochs=30/30 LIMIT, 483s): test_oa=0.6611 test_macro_f1=0.3167 test_macro_precision=0.3772 test_macro_recall=0.3018
+
+### Arm 'trainiert_projiziert' (dim=256): train=3528281 sub=10000 val=412869 test=417308
+/home/minorai/miniforge3/envs/eeclip/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+  logreg/subsample (C=0.1): test_oa=0.6235 test_macro_f1=0.2869 test_macro_precision=0.2875 test_macro_recall=0.3277
+Warning: less than 75% GPU memory available for training. Free: 80756.74219 Total: 122570.2813
+  catboost/subsample (best_iter=376/1000, 18s): test_oa=0.6312 test_macro_f1=0.2809 test_macro_precision=0.3054 test_macro_recall=0.2853
+Warning: less than 75% GPU memory available for training. Free: 77080.98047 Total: 122570.2813
+  catboost/full (best_iter=492/500, 240s): test_oa=0.6551 test_macro_f1=0.3139 test_macro_precision=0.4276 test_macro_recall=0.2962
+  mlp/subsample (epochs=27/100, 4s): test_oa=0.6255 test_macro_f1=0.2930 test_macro_precision=0.2954 test_macro_recall=0.3178
+  mlp/full (epochs=30/30 LIMIT, 480s): test_oa=0.6618 test_macro_f1=0.3192 test_macro_precision=0.3667 test_macro_recall=0.3055
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_heads_results_ae_dedup_std.csv
+                 arm     head    regime  n_train                    extra   val_oa  val_macro_f1  val_macro_precision  val_macro_recall  test_oa  test_macro_f1  test_macro_precision  test_macro_recall
+                 roh catboost      full  3528281  best_iter=484/500, 138s 0.646597      0.301467             0.386934          0.296231 0.645140       0.295952              0.385470           0.279587
+trainiert_projiziert catboost      full  3528281  best_iter=492/500, 240s 0.657877      0.342000             0.424667          0.326713 0.655099       0.313917              0.427572           0.296153
+zufaellig_projiziert catboost      full  3528281  best_iter=494/500, 234s 0.646488      0.307697             0.384973          0.300375 0.644728       0.294716              0.381494           0.280998
+                 roh catboost subsample    10000  best_iter=623/1000, 15s 0.619259      0.256190             0.283175          0.298451 0.618835       0.278202              0.311753           0.280881
+trainiert_projiziert catboost subsample    10000  best_iter=376/1000, 18s 0.629427      0.284207             0.298995          0.320486 0.631160       0.280919              0.305363           0.285273
+zufaellig_projiziert catboost subsample    10000  best_iter=551/1000, 23s 0.618182      0.262446             0.282809          0.306473 0.619818       0.268931              0.308358           0.273254
+                 roh   logreg subsample    10000                    C=1.0 0.619901      0.274474             0.282455          0.318956 0.624570       0.292743              0.307517           0.313945
+trainiert_projiziert   logreg subsample    10000                    C=0.1 0.621572      0.281893             0.277001          0.361837 0.623482       0.286880              0.287548           0.327716
+zufaellig_projiziert   logreg subsample    10000                    C=1.0 0.621509      0.274764             0.277683          0.335767 0.626532       0.291141              0.301763           0.317651
+                 roh      mlp      full  3528281 epochs=30/30 LIMIT, 474s 0.662571      0.353281             0.420949          0.337472 0.659714       0.321577              0.378242           0.306968
+trainiert_projiziert      mlp      full  3528281 epochs=30/30 LIMIT, 480s 0.659454      0.366166             0.417626          0.352399 0.661797       0.319174              0.366708           0.305519
+zufaellig_projiziert      mlp      full  3528281 epochs=30/30 LIMIT, 483s 0.662823      0.339596             0.446643          0.324378 0.661070       0.316683              0.377208           0.301760
+                 roh      mlp subsample    10000        epochs=81/100, 8s 0.627896      0.292859             0.294920          0.353543 0.629466       0.293763              0.305825           0.312241
+trainiert_projiziert      mlp subsample    10000        epochs=27/100, 4s 0.623631      0.293683             0.286513          0.366182 0.625538       0.292991              0.295383           0.317760
+zufaellig_projiziert      mlp subsample    10000        epochs=41/100, 5s 0.619160      0.289234             0.288170          0.356637 0.625794       0.292525              0.297839           0.317510
+
+=== Zellebenen-Bootstrap (Test, 1000x), roh + trainiert ===
+  Resamples mit >=1 fehlenden Testklasse(n): 161 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  logreg_subsample_roh: Zell-Bootstrap 1000x fertig
+  catboost_subsample_roh: Zell-Bootstrap 1000x fertig
+  catboost_full_roh: Zell-Bootstrap 1000x fertig
+  mlp_subsample_roh: Zell-Bootstrap 1000x fertig
+  mlp_full_roh: Zell-Bootstrap 1000x fertig
+  logreg_subsample_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  catboost_subsample_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  catboost_full_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  mlp_subsample_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+  mlp_full_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+
+=== Gepaarte Differenz trainiert - roh ===
+backbone        head_regime          metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+ae_dedup      catboost_full              oa                       0.010015   0.005816    0.014110         True
+ae_dedup      catboost_full        macro_f1                       0.017823   0.009997    0.025440         True
+ae_dedup      catboost_full macro_precision                       0.027787  -0.019415    0.066850        False
+ae_dedup      catboost_full    macro_recall                       0.020017   0.010646    0.033785         True
+ae_dedup catboost_subsample              oa                       0.012363   0.007771    0.016729         True
+ae_dedup catboost_subsample        macro_f1                       0.003364  -0.007630    0.013294        False
+ae_dedup catboost_subsample macro_precision                      -0.006407  -0.023251    0.010734        False
+ae_dedup catboost_subsample    macro_recall                       0.003738  -0.011535    0.018446        False
+ae_dedup   logreg_subsample              oa                      -0.001023  -0.004673    0.002602        False
+ae_dedup   logreg_subsample        macro_f1                      -0.004793  -0.015413    0.005430        False
+ae_dedup   logreg_subsample macro_precision                      -0.018065  -0.030975   -0.005563         True
+ae_dedup   logreg_subsample    macro_recall                       0.013426   0.001776    0.025726         True
+ae_dedup           mlp_full              oa                       0.002001  -0.001037    0.005319        False
+ae_dedup           mlp_full        macro_f1                      -0.002549  -0.017152    0.009264        False
+ae_dedup           mlp_full macro_precision                      -0.015456  -0.049259    0.010376        False
+ae_dedup           mlp_full    macro_recall                       0.000031  -0.016356    0.018251        False
+ae_dedup      mlp_subsample              oa                      -0.003892  -0.008170    0.000232        False
+ae_dedup      mlp_subsample        macro_f1                      -0.000793  -0.012007    0.009259        False
+ae_dedup      mlp_subsample macro_precision                      -0.008674  -0.020566    0.003388        False
+ae_dedup      mlp_subsample    macro_recall                       0.002991  -0.014229    0.017591        False

@@ -1,20 +1,0 @@
-=== verify_provenance.py: Split-Konsistenz ueber gemeinsame Pixelschluessel ===
-  [pixels_ae <-> landuse_pairs_ae] OK - 1915903 gemeinsame Pixel, split stimmt exakt ueberein.
-  [pixels_tessera <-> landuse_pairs_tessera] OK - 1945979 gemeinsame Pixel, split stimmt exakt ueberein.
-
-Alle vorhandenen Paare konsistent.
-[21:26:39] ae: 2 tiles, N=15954033
-  ae: trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/ae_v1_dedup/best.pt, Epoche 32)
-[21:27:11] ae: preflight re-projection min cosine = 1.000000
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-    Kachel 1/2: xv3kz2lbcvqtied12-0000008192-0000000000.tiff (Zone 30N, 276/328 POIs zugeordnet)
-    Kachel 2/2: xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff (Zone 31N, 52/328 POIs zugeordnet)
-Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 11201.25it/s]
-Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
-[21:28:09] ae: queries encoded (5, 256)
-[21:29:13]   T xv3kz2lbcvqtied12-0000008192-0000000000.tiff: 10928987 px (64s)
-[21:30:03]   T xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff: 5025046 px (50s)
-[21:30:11]   P-read xv3kz2lbcvqtied12-0000008192-0000000000.tiff: 10928987 px (8s)
-[21:30:13]   P-read xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff: 5025046 px (2s)
-[21:30:15] ae: real-data selftest OK=True
-[21:30:22] ae: done in 224s

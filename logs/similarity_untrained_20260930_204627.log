@@ -1,0 +1,102 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Queries: {'green_space': 'green space', 'airport': 'Airport and Transportation Hub.', 'qual_quiet': 'a place that is quiet', 'qual_busy': 'a place that is busy', 'qual_tourist': 'a place that is a tourist attraction', 'cbd': 'Central Business District'}
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 12800.46it/s]
+Modell geladen: checkpoints/tessera_v1_dedup/best.pt (Epoche 48, cfg backbone=tessera)
+Modell geladen: checkpoints/ae_v1_dedup/best.pt (Epoche 32, cfg backbone=ae)
+
+=== tessera (Arm B, untrainiert): Similarity-Felder ===
+  50 Kachel-Paare (Roh/Arm-B/Maske)
+  Kachel 1/50 (grid_-0.05_51.25_2025.tiff) fertig (0.4s, gesamt 0s)
+  Kachel 2/50 (grid_-0.05_51.35_2025.tiff) fertig (3.0s, gesamt 3s)
+  Kachel 3/50 (grid_-0.05_51.45_2025.tiff) fertig (2.9s, gesamt 6s)
+  Kachel 4/50 (grid_-0.05_51.55_2025.tiff) fertig (3.0s, gesamt 9s)
+  Kachel 5/50 (grid_-0.05_51.65_2025.tiff) fertig (2.6s, gesamt 12s)
+  Kachel 6/50 (grid_-0.15_51.25_2025.tiff) fertig (0.3s, gesamt 12s)
+  Kachel 7/50 (grid_-0.15_51.35_2025.tiff) fertig (2.9s, gesamt 15s)
+  Kachel 8/50 (grid_-0.15_51.45_2025.tiff) fertig (3.0s, gesamt 18s)
+  Kachel 9/50 (grid_-0.15_51.55_2025.tiff) fertig (3.0s, gesamt 21s)
+  Kachel 10/50 (grid_-0.15_51.65_2025.tiff) fertig (2.7s, gesamt 24s)
+  Kachel 11/50 (grid_-0.25_51.25_2025.tiff) fertig (0.3s, gesamt 24s)
+  Kachel 12/50 (grid_-0.25_51.35_2025.tiff) fertig (2.9s, gesamt 27s)
+  Kachel 13/50 (grid_-0.25_51.45_2025.tiff) fertig (3.0s, gesamt 30s)
+  Kachel 14/50 (grid_-0.25_51.55_2025.tiff) fertig (2.9s, gesamt 33s)
+  Kachel 15/50 (grid_-0.25_51.65_2025.tiff) fertig (2.7s, gesamt 36s)
+  Kachel 16/50 (grid_-0.35_51.25_2025.tiff) fertig (0.2s, gesamt 36s)
+  Kachel 17/50 (grid_-0.35_51.35_2025.tiff) fertig (3.0s, gesamt 39s)
+  Kachel 18/50 (grid_-0.35_51.45_2025.tiff) fertig (3.1s, gesamt 42s)
+  Kachel 19/50 (grid_-0.35_51.55_2025.tiff) fertig (3.1s, gesamt 45s)
+  Kachel 20/50 (grid_-0.35_51.65_2025.tiff) fertig (2.9s, gesamt 48s)
+  Kachel 21/50 (grid_-0.45_51.25_2025.tiff) fertig (0.2s, gesamt 48s)
+  Kachel 22/50 (grid_-0.45_51.35_2025.tiff) fertig (3.0s, gesamt 51s)
+  Kachel 23/50 (grid_-0.45_51.45_2025.tiff) fertig (3.1s, gesamt 54s)
+  Kachel 24/50 (grid_-0.45_51.55_2025.tiff) fertig (3.2s, gesamt 57s)
+  Kachel 25/50 (grid_-0.45_51.65_2025.tiff) fertig (2.8s, gesamt 60s)
+  Kachel 26/50 (grid_-0.55_51.25_2025.tiff) fertig (0.0s, gesamt 60s)
+  Kachel 27/50 (grid_-0.55_51.35_2025.tiff) fertig (0.9s, gesamt 61s)
+  Kachel 28/50 (grid_-0.55_51.45_2025.tiff) fertig (0.8s, gesamt 62s)
+  Kachel 29/50 (grid_-0.55_51.55_2025.tiff) fertig (0.6s, gesamt 62s)
+  Kachel 30/50 (grid_-0.55_51.65_2025.tiff) fertig (0.5s, gesamt 63s)
+  Kachel 31/50 (grid_0.05_51.25_2025.tiff) fertig (0.3s, gesamt 63s)
+  Kachel 32/50 (grid_0.05_51.35_2025.tiff) fertig (2.9s, gesamt 66s)
+  Kachel 33/50 (grid_0.05_51.45_2025.tiff) fertig (3.0s, gesamt 69s)
+  Kachel 34/50 (grid_0.05_51.55_2025.tiff) fertig (2.9s, gesamt 72s)
+  Kachel 35/50 (grid_0.05_51.65_2025.tiff) fertig (2.8s, gesamt 75s)
+  Kachel 36/50 (grid_0.15_51.25_2025.tiff) fertig (0.2s, gesamt 75s)
+  Kachel 37/50 (grid_0.15_51.35_2025.tiff) fertig (3.1s, gesamt 78s)
+  Kachel 38/50 (grid_0.15_51.45_2025.tiff) fertig (3.1s, gesamt 81s)
+  Kachel 39/50 (grid_0.15_51.55_2025.tiff) fertig (3.1s, gesamt 84s)
+  Kachel 40/50 (grid_0.15_51.65_2025.tiff) fertig (2.8s, gesamt 87s)
+  Kachel 41/50 (grid_0.25_51.25_2025.tiff) fertig (0.2s, gesamt 87s)
+  Kachel 42/50 (grid_0.25_51.35_2025.tiff) fertig (2.9s, gesamt 90s)
+  Kachel 43/50 (grid_0.25_51.45_2025.tiff) fertig (2.9s, gesamt 93s)
+  Kachel 44/50 (grid_0.25_51.55_2025.tiff) fertig (2.9s, gesamt 96s)
+  Kachel 45/50 (grid_0.25_51.65_2025.tiff) fertig (2.9s, gesamt 99s)
+  Kachel 46/50 (grid_0.35_51.25_2025.tiff) fertig (0.1s, gesamt 99s)
+  Kachel 47/50 (grid_0.35_51.35_2025.tiff) fertig (1.6s, gesamt 101s)
+  Kachel 48/50 (grid_0.35_51.45_2025.tiff) fertig (1.4s, gesamt 102s)
+  Kachel 49/50 (grid_0.35_51.55_2025.tiff) fertig (1.2s, gesamt 103s)
+  Kachel 50/50 (grid_0.35_51.65_2025.tiff) fertig (1.1s, gesamt 104s)
+
+=== ae (Arm B, untrainiert): Similarity-Felder ===
+  2 Kachel-Paare (Roh/Arm-B/Maske)
+  Kachel 1/2 (xv3kz2lbcvqtied12-0000008192-0000000000.tiff) fertig (56.8s, gesamt 57s)
+  Kachel 2/2 (xxoxxdt2k4ayimzh1-0000008192-0000008192.tiff) fertig (54.2s, gesamt 111s)
+Gemeinsames Kartengitter: 902x1166 Pixel, 50.0m, EPSG:32630, AOI-Pixel: 638213
+
+[green_space] Skalengrenzen (untrainiert, 1./99. Perzentil, n=31908191): vmin=-0.1078 vmax=0.2202
+  [tessera/green_space] min=-0.2396 max=0.3708 mean=0.0429 n_valid=15954158/28831211 NoData=44.66%
+  [ae/green_space] min=0.0452 max=0.2092 mean=0.1352 n_valid=15954033/52927982 NoData=69.86%
+
+[airport] Skalengrenzen (untrainiert, 1./99. Perzentil, n=31908191): vmin=-0.1614 vmax=0.0493
+  [tessera/airport] min=-0.2857 max=0.1624 mean=-0.0532 n_valid=15954158/28831211 NoData=44.66%
+  [ae/airport] min=-0.1937 max=-0.0457 mean=-0.1281 n_valid=15954033/52927982 NoData=69.86%
+
+[qual_quiet] Skalengrenzen (untrainiert, 1./99. Perzentil, n=31908191): vmin=-0.0855 vmax=0.1334
+  [tessera/qual_quiet] min=-0.2005 max=0.2489 mean=0.0078 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_quiet] min=0.0201 max=0.1463 mean=0.0966 n_valid=15954033/52927982 NoData=69.86%
+
+[qual_busy] Skalengrenzen (untrainiert, 1./99. Perzentil, n=31908191): vmin=-0.1068 vmax=0.0903
+  [tessera/qual_busy] min=-0.2227 max=0.2297 mean=-0.0118 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_busy] min=-0.0450 max=0.0613 mean=0.0204 n_valid=15954033/52927982 NoData=69.86%
+
+[qual_tourist] Skalengrenzen (untrainiert, 1./99. Perzentil, n=31908191): vmin=-0.1196 vmax=0.0910
+  [tessera/qual_tourist] min=-0.2538 max=0.2258 mean=-0.0184 n_valid=15954158/28831211 NoData=44.66%
+  [ae/qual_tourist] min=-0.0448 max=0.0484 mean=0.0050 n_valid=15954033/52927982 NoData=69.86%
+
+[cbd] Skalengrenzen (untrainiert, 1./99. Perzentil, n=31908191): vmin=-0.1652 vmax=0.0652
+  [tessera/cbd] min=-0.3034 max=0.1913 mean=-0.0443 n_valid=15954158/28831211 NoData=44.66%
+  [ae/cbd] min=-0.1097 max=0.0198 mean=-0.0413 n_valid=15954033/52927982 NoData=69.86%
+
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/similarity_value_ranges_untrained.csv
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_tessera_green_space.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_tessera_airport.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_tessera_qual_quiet.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_tessera_qual_busy.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_tessera_qual_tourist.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_tessera_cbd.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_ae_green_space.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_ae_airport.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_ae_qual_quiet.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_ae_qual_busy.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_ae_qual_tourist.png
+  /home/minorai/PycharmProjects/ee-clip-thesis/outputs/text_query/maps_untrained/similarity_untrained_ae_cbd.png

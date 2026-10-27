@@ -1,0 +1,67 @@
+Mittelwertsvorhersage (seed-unabhaengig, unveraendert): KL=0.0696 (CI Zelle (0.06077441796660423, 0.07876063846051692))
+
+=== tessera/a: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  tessera/a: kl=0.03330 CI=(0.028114021103829146, 0.03954315837472677), l1_sum=0.18777 CI=(0.17517222054302692, 0.20047986172139645), l1_mean=0.02086 CI=(0.019463580613955856, 0.022275541769340636), chebyshev=0.05697 CI=(0.0518546337261796, 0.061984986718744035)
+
+=== tessera/b: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  tessera/b: kl=0.03355 CI=(0.028478843485936524, 0.03904787413775921), l1_sum=0.18841 CI=(0.1765266664326191, 0.20017004273831845), l1_mean=0.02093 CI=(0.019614075031131505, 0.022241114918142558), chebyshev=0.05778 CI=(0.05276413867250085, 0.06288866940885782)
+
+=== tessera/c: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  tessera/c: kl=0.03107 CI=(0.02636161199770868, 0.03619569689035416), l1_sum=0.17962 CI=(0.16785553582012652, 0.19178849682211876), l1_mean=0.01996 CI=(0.018650615494698285, 0.0213098356500268), chebyshev=0.05522 CI=(0.0504504045471549, 0.06027932548895478)
+
+=== tessera: gepaarter Zell-Bootstrap C-A (Seed-Mittel) ===
+  kl: Punktdiff (C-A)=-0.00223  95%-CI=[-0.00430, -0.00005]  signifikant=True
+  l1_sum: Punktdiff (C-A)=-0.00814  95%-CI=[-0.01333, -0.00245]  signifikant=True
+  l1_mean: Punktdiff (C-A)=-0.00090  95%-CI=[-0.00148, -0.00027]  signifikant=True
+  chebyshev: Punktdiff (C-A)=-0.00175  95%-CI=[-0.00363, +0.00019]  signifikant=False
+
+=== ae/a: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  ae/a: kl=0.04453 CI=(0.03853329559788108, 0.05141295902431011), l1_sum=0.22080 CI=(0.20660668574273586, 0.2350001312792301), l1_mean=0.02453 CI=(0.022956297639757393, 0.02611112305894494), chebyshev=0.06551 CI=(0.06002855161204934, 0.0710088899359107)
+
+=== ae/b: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  ae/b: kl=0.04490 CI=(0.038967001251876354, 0.05169888427481055), l1_sum=0.22108 CI=(0.20747641809284686, 0.2353560347110033), l1_mean=0.02456 CI=(0.023052938003093004, 0.0261506715323776), chebyshev=0.06610 CI=(0.060692858044058086, 0.0718137189745903)
+
+=== ae/c: 5 Seeds fitten + Seed-Mittel-Bootstrap (1000x) ===
+  ae/c: kl=0.04191 CI=(0.03612399771809578, 0.04841148257255554), l1_sum=0.21269 CI=(0.19957356713712215, 0.22656706348061562), l1_mean=0.02363 CI=(0.02217484046705067, 0.025174115551635623), chebyshev=0.06450 CI=(0.05902639431878924, 0.07043228540569543)
+
+=== ae: gepaarter Zell-Bootstrap C-A (Seed-Mittel) ===
+  kl: Punktdiff (C-A)=-0.00263  95%-CI=[-0.00503, -0.00048]  signifikant=True
+  l1_sum: Punktdiff (C-A)=-0.00811  95%-CI=[-0.01436, -0.00183]  signifikant=True
+  l1_mean: Punktdiff (C-A)=-0.00090  95%-CI=[-0.00160, -0.00020]  signifikant=True
+  chebyshev: Punktdiff (C-A)=-0.00102  95%-CI=[-0.00329, +0.00104]  signifikant=False
+
+=== Backbone-Differenz (TESSERA - AE), Seed-Mittel ===
+  [a/kl] TESSERA-AE = -0.01123  95%-CI=[-0.01563, -0.00724]  signifikant=True
+  [a/l1_sum] TESSERA-AE = -0.03303  95%-CI=[-0.04465, -0.02278]  signifikant=True
+  [a/l1_mean] TESSERA-AE = -0.00367  95%-CI=[-0.00496, -0.00253]  signifikant=True
+  [a/chebyshev] TESSERA-AE = -0.00854  95%-CI=[-0.01241, -0.00511]  signifikant=True
+  [b/kl] TESSERA-AE = -0.01135  95%-CI=[-0.01597, -0.00757]  signifikant=True
+  [b/l1_sum] TESSERA-AE = -0.03267  95%-CI=[-0.04427, -0.02258]  signifikant=True
+  [b/l1_mean] TESSERA-AE = -0.00363  95%-CI=[-0.00492, -0.00251]  signifikant=True
+  [b/chebyshev] TESSERA-AE = -0.00832  95%-CI=[-0.01209, -0.00518]  signifikant=True
+  [c/kl] TESSERA-AE = -0.01084  95%-CI=[-0.01487, -0.00742]  signifikant=True
+  [c/l1_sum] TESSERA-AE = -0.03307  95%-CI=[-0.04311, -0.02392]  signifikant=True
+  [c/l1_mean] TESSERA-AE = -0.00367  95%-CI=[-0.00479, -0.00266]  signifikant=True
+  [c/chebyshev] TESSERA-AE = -0.00927  95%-CI=[-0.01299, -0.00586]  signifikant=True
+
+Gespeichert: /tmp/tmpaqd0kuwt/sdm_phase7_metrics_tessera_seedmean.csv
+
+Gespeichert: /tmp/tmpaqd0kuwt/sdm_phase7_metrics_ae_seedmean.csv
+Gespeichert: /tmp/tmpaqd0kuwt/sdm_paired_bootstrap_tessera_seedmean_c_minus_a.csv
+Gespeichert: /tmp/tmpaqd0kuwt/sdm_paired_bootstrap_ae_seedmean_c_minus_a.csv
+Gespeichert: /tmp/tmpaqd0kuwt/diag_backbone_paired_bootstrap_sdm_seedmean.csv
+Verschoben: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_paired_bootstrap_tessera_seedmean_std_c_minus_a.csv
+Verschoben: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_paired_bootstrap_ae_seedmean_std_c_minus_a.csv
+Verschoben: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase7_metrics_tessera_seedmean_std.csv
+Verschoben: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/diag_backbone_paired_bootstrap_sdm_seedmean_std.csv
+Verschoben: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_phase7_metrics_ae_seedmean_std.csv
+
+Epochen Hauptlaeufe (30 Fits): [420, 409, 440, 500, 500, 331, 310, 342, 361, 292, 230, 241, 247, 210, 276, 390, 456, 345, 434, 283, 225, 241, 234, 274, 270, 235, 154, 232, 188, 170]  -> am Limit 500: 2
+Random-Embedding (tessera/a-dim): kl=0.07630 CI=(0.06764979232102633, 0.08535131718963385)
+Random-Embedding (tessera/b-dim): kl=0.07966 CI=(0.07082335874438286, 0.08883644361048937)
+Random-Embedding (tessera/c-dim): kl=0.07966 CI=(0.07082335874438286, 0.08883644361048937)
+Random-Embedding (ae/a-dim): kl=0.07475 CI=(0.06636433489620686, 0.08371395375579596)
+Random-Embedding (ae/b-dim): kl=0.07989 CI=(0.07102439031004906, 0.08918583039194346)
+Random-Embedding (ae/c-dim): kl=0.07989 CI=(0.07102439031004906, 0.08918583039194346)
+Gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/sdm_random_embedding_seedmean_std.csv
+Epochen Random-Baseline: [67, 63, 76, 83, 80, 57, 44, 68, 42, 42, 57, 44, 68, 42, 42, 78, 53, 73, 123, 88, 55, 43, 70, 42, 43, 55, 43, 70, 42, 43]

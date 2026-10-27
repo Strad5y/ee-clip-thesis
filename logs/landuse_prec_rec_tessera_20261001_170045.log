@@ -1,0 +1,43 @@
+=== Konfigurationen aufbauen ===
+  tessera_dedup: 4359468 -> 4358064 Zeilen (-1404: 1136 Klasse 12400, 268 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/tessera_v1_dedup.yaml): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/tessera_v1_dedup/best.pt, Epoche 48)
+  Normalisierung (trainiert, aus Checkpoint-Config): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+  tessera_dedup_roh (C=10.0): Reproduktion OK
+  tessera_dedup_zufaellig_projiziert (C=10.0): Reproduktion OK
+  tessera_dedup_trainiert_projiziert (C=10.0): Reproduktion OK
+Vorhersagen gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_preds_tessera_dedup_ckpt.npz
+  tessera_dedup_roh: test_oa=0.6042 test_macro_f1=0.2620 test_macro_precision=0.3197 test_macro_recall=0.2499 | sklearn-ohne-labels macro_f1=0.2511
+  tessera_dedup_zufaellig_projiziert: test_oa=0.5993 test_macro_f1=0.2501 test_macro_precision=0.2968 test_macro_recall=0.2404 | sklearn-ohne-labels macro_f1=0.2397
+  tessera_dedup_trainiert_projiziert: test_oa=0.6158 test_macro_f1=0.2642 test_macro_precision=0.3041 test_macro_recall=0.2550 | sklearn-ohne-labels macro_f1=0.2532
+                            config  dim    C  n_classes_test   val_oa  val_macro_f1  val_macro_precision  val_macro_recall  test_oa  test_macro_f1  test_macro_precision  test_macro_recall  test_macro_f1_sklearn_ohne_labels  n_classes_never_predicted_test  n_pred_classes_outside_test
+                 tessera_dedup_roh  128 10.0              23 0.607087      0.240552             0.308121          0.228760 0.604241       0.261986              0.319722           0.249870                           0.251070                               1                            1
+tessera_dedup_zufaellig_projiziert  256 10.0              23 0.601100      0.229718             0.292469          0.220947 0.599321       0.250082              0.296766           0.240429                           0.239662                               3                            1
+tessera_dedup_trainiert_projiziert  256 10.0              23 0.613784      0.251514             0.311886          0.240311 0.615816       0.264233              0.304130           0.254989                           0.253223                               2                            1
+
+=== Zellebenen-Bootstrap (Test, 1000x) ===
+  Resamples mit >=1 fehlenden Testklasse(n): 163 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  tessera_dedup_roh: Zell-Bootstrap 1000x fertig
+  tessera_dedup_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  tessera_dedup_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+                            config          metric     mean   ci_low  ci_high
+                 tessera_dedup_roh              oa 0.603545 0.580348 0.628741
+                 tessera_dedup_roh        macro_f1 0.260387 0.235672 0.290045
+                 tessera_dedup_roh macro_precision 0.313929 0.282524 0.349476
+                 tessera_dedup_roh    macro_recall 0.252585 0.231216 0.287401
+tessera_dedup_zufaellig_projiziert              oa 0.598581 0.574895 0.624855
+tessera_dedup_zufaellig_projiziert        macro_f1 0.247756 0.225414 0.273367
+tessera_dedup_zufaellig_projiziert macro_precision 0.291925 0.265910 0.323306
+tessera_dedup_zufaellig_projiziert    macro_recall 0.241266 0.221525 0.268177
+tessera_dedup_trainiert_projiziert              oa 0.615145 0.592125 0.640172
+tessera_dedup_trainiert_projiziert        macro_f1 0.262368 0.241467 0.286033
+tessera_dedup_trainiert_projiziert macro_precision 0.300872 0.275748 0.328595
+tessera_dedup_trainiert_projiziert    macro_recall 0.255732 0.240209 0.276071
+
+=== Gepaarte Differenz trainiert - roh ===
+     backbone          metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+tessera_dedup              oa                       0.011600   0.008737    0.014477         True
+tessera_dedup        macro_f1                       0.001981  -0.011169    0.010757        False
+tessera_dedup macro_precision                      -0.013057  -0.032970    0.004886        False
+tessera_dedup    macro_recall                       0.003146  -0.014611    0.013943        False

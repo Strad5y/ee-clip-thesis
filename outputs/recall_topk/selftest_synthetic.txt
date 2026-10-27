@@ -1,8 +1,0 @@
-random k=0.01: recall=0.01068 expected K/N=0.01000 (5sd=0.00157) boot-mean=0.01067 -> PASS
-oracle k=0.01: recall=0.200000 expected min(1,K/|GT|)=0.200000 -> PASS
-random k=0.05: recall=0.05001 expected K/N=0.05000 (5sd=0.00345) boot-mean=0.05001 -> PASS
-oracle k=0.05: recall=1.000000 expected min(1,K/|GT|)=1.000000 -> PASS
-random k=0.1: recall=0.10070 expected K/N=0.10000 (5sd=0.00474) boot-mean=0.10074 -> PASS
-oracle k=0.1: recall=1.000000 expected min(1,K/|GT|)=1.000000 -> PASS
-oracle |GT|>K k=0.05: recall=0.250000 expected=0.250000 -> PASS
-SELFTEST PASSED

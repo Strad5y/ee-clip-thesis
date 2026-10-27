@@ -1,0 +1,43 @@
+=== Konfigurationen aufbauen ===
+  ae_dedup: 4359867 -> 4358458 Zeilen (-1409: 1136 Klasse 12400, 273 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/ae_v1_dedup.yaml): none
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/ae_v1_dedup/best.pt, Epoche 32)
+  Normalisierung (trainiert, aus Checkpoint-Config): none
+  ae_dedup_roh (C=1.0): Reproduktion OK
+  ae_dedup_zufaellig_projiziert (C=1.0): Reproduktion OK
+  ae_dedup_trainiert_projiziert (C=1.0): Reproduktion OK
+Vorhersagen gespeichert: /home/minorai/PycharmProjects/ee-clip-thesis/data/processed/landuse_probe_preds_ae_dedup_ckpt.npz
+  ae_dedup_roh: test_oa=0.6352 test_macro_f1=0.2811 test_macro_precision=0.3761 test_macro_recall=0.2608 | sklearn-ohne-labels macro_f1=0.2811
+  ae_dedup_zufaellig_projiziert: test_oa=0.6294 test_macro_f1=0.2624 test_macro_precision=0.3379 test_macro_recall=0.2413 | sklearn-ohne-labels macro_f1=0.2624
+  ae_dedup_trainiert_projiziert: test_oa=0.6433 test_macro_f1=0.2954 test_macro_precision=0.3518 test_macro_recall=0.2885 | sklearn-ohne-labels macro_f1=0.2831
+                       config  dim   C  n_classes_test   val_oa  val_macro_f1  val_macro_precision  val_macro_recall  test_oa  test_macro_f1  test_macro_precision  test_macro_recall  test_macro_f1_sklearn_ohne_labels  n_classes_never_predicted_test  n_pred_classes_outside_test
+                 ae_dedup_roh   64 1.0              23 0.632169      0.253495             0.377706          0.242524 0.635241       0.281145              0.376057           0.260845                           0.281145                               3                            0
+ae_dedup_zufaellig_projiziert  256 1.0              23 0.626102      0.241899             0.342078          0.230368 0.629365       0.262425              0.337947           0.241267                           0.262425                               5                            0
+ae_dedup_trainiert_projiziert  256 1.0              23 0.642245      0.294741             0.364053          0.281048 0.643280       0.295445              0.351821           0.288516                           0.283135                               2                            1
+
+=== Zellebenen-Bootstrap (Test, 1000x) ===
+  Resamples mit >=1 fehlenden Testklasse(n): 161 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  ae_dedup_roh: Zell-Bootstrap 1000x fertig
+  ae_dedup_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  ae_dedup_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+                       config          metric     mean   ci_low  ci_high
+                 ae_dedup_roh              oa 0.634665 0.611851 0.660544
+                 ae_dedup_roh        macro_f1 0.280065 0.255370 0.311155
+                 ae_dedup_roh macro_precision 0.366509 0.320189 0.418474
+                 ae_dedup_roh    macro_recall 0.261470 0.240684 0.287321
+ae_dedup_zufaellig_projiziert              oa 0.628683 0.605226 0.655305
+ae_dedup_zufaellig_projiziert        macro_f1 0.262733 0.233896 0.301546
+ae_dedup_zufaellig_projiziert macro_precision 0.324965 0.278533 0.367936
+ae_dedup_zufaellig_projiziert    macro_recall 0.244399 0.219465 0.280214
+ae_dedup_trainiert_projiziert              oa 0.642692 0.619500 0.667725
+ae_dedup_trainiert_projiziert        macro_f1 0.291035 0.266941 0.315762
+ae_dedup_trainiert_projiziert macro_precision 0.346660 0.310863 0.382406
+ae_dedup_trainiert_projiziert    macro_recall 0.286827 0.264132 0.312221
+
+=== Gepaarte Differenz trainiert - roh ===
+backbone          metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+ae_dedup              oa                       0.008027   0.003903    0.011999         True
+ae_dedup        macro_f1                       0.010970  -0.009259    0.025711        False
+ae_dedup macro_precision                      -0.019849  -0.071262    0.027648        False
+ae_dedup    macro_recall                       0.025358   0.006693    0.040420         True

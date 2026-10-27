@@ -1,5 +1,0 @@
-[alt] pixels_ae.parquet Test-Split (= Galerie/Ground-Truth-Quelle von run_class_retrieval): 777608 Zeilen
-[alt] Dopplungs-Weltort-Paare im Test-Split: 31 (62 betroffene Zeilen von 777608, 0.008%)
-[neu] pixels_ae_dedup.parquet Test-Split (= Galerie/Ground-Truth-Quelle von run_class_retrieval): 728588 Zeilen
-[neu] Dopplungs-Weltort-Paare im Test-Split: 0 (0 betroffene Zeilen von 728588, 0.000%)
-[neu] 0 verbleibende Dopplungs-Weltorte in der Galerie: belegt.

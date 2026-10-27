@@ -1,9 +1,0 @@
-  tessera_dedup: 4359468 -> 4358064 Zeilen (-1404: 1136 Klasse 12400, 268 split='missing', Ueberlappung moeglich)
-    Klassen nach Ausschluss: 24
-Traceback (most recent call last):
-  File "/home/minorai/PycharmProjects/ee-clip-thesis/diag_backbone_paired_bootstrap_landuse.py", line 114, in <module>
-    main()
-  File "/home/minorai/PycharmProjects/ee-clip-thesis/diag_backbone_paired_bootstrap_landuse.py", line 43, in main
-    with open(cfg.ROOT / "configs" / f"{name}.yaml") as f:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '/home/minorai/PycharmProjects/ee-clip-thesis/configs/tessera_dedup.yaml'

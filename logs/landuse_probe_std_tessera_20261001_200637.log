@@ -1,0 +1,61 @@
+=== Konfigurationen aufbauen ===
+  tessera_dedup: 4359468 -> 4358064 Zeilen (-1404: 1136 Klasse 12400, 268 split='missing', Ueberlappung moeglich)
+    Klassen nach Ausschluss: 24
+  Normalisierung (roh/zufaellig, aus /home/minorai/PycharmProjects/ee-clip-thesis/configs/tessera_v1_dedup.yaml): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+  trainierter Kopf geladen (/home/minorai/PycharmProjects/ee-clip-thesis/checkpoints/tessera_v1_dedup/best.pt, Epoche 48)
+  Normalisierung (trainiert, aus Checkpoint-Config): zscore, Statistik=data/processed/norm_stats_tessera_pixels_dedup.json
+
+=== tessera_dedup_roh === dim=128 Std/Dim (Median) roh=0.8851 -> 1
+  C=0.01: val_macro_f1(K)=0.2399 n_iter=320 (267.3s)
+  C=0.1: val_macro_f1(K)=0.2414 n_iter=374 (315.3s)
+  C=1.0: val_macro_f1(K)=0.2418 n_iter=435 (364.3s)
+  C=10.0: val_macro_f1(K)=0.2418 n_iter=413 (357.2s)
+  C=100.0: val_macro_f1(K)=0.2423 n_iter=393 (379.7s)
+  WARNUNG: tessera_dedup_roh waehlt Grid-Rand C=100.0
+  -> C=100.0: test_oa=0.6043 test_macro_f1=0.2621 test_macro_precision=0.3171 test_macro_recall=0.2511
+
+=== tessera_dedup_zufaellig_projiziert === dim=256 Std/Dim (Median) roh=0.0522 -> 1
+  C=0.01: val_macro_f1(K)=0.2367 n_iter=543 (588.0s)
+  C=0.1: val_macro_f1(K)=0.2390 n_iter=640 (672.0s)
+  C=1.0: val_macro_f1(K)=0.2418 n_iter=657 (728.5s)
+  C=10.0: val_macro_f1(K)=0.2430 n_iter=714 (738.0s)
+  C=100.0: val_macro_f1(K)=0.2409 n_iter=673 (690.1s)
+  -> C=10.0: test_oa=0.6040 test_macro_f1=0.2636 test_macro_precision=0.3162 test_macro_recall=0.2533
+
+=== tessera_dedup_trainiert_projiziert === dim=256 Std/Dim (Median) roh=0.0380 -> 1
+  C=0.01: val_macro_f1(K)=0.2660 n_iter=306 (341.3s)
+  C=0.1: val_macro_f1(K)=0.2685 n_iter=379 (432.7s)
+  C=1.0: val_macro_f1(K)=0.2695 n_iter=430 (573.5s)
+  C=10.0: val_macro_f1(K)=0.2703 n_iter=398 (446.9s)
+  C=100.0: val_macro_f1(K)=0.2702 n_iter=391 (454.2s)
+  -> C=10.0: test_oa=0.6186 test_macro_f1=0.2763 test_macro_precision=0.3289 test_macro_recall=0.2665
+                            config  dim     C  n_iter  n_classes_test   val_oa  val_macro_f1  val_macro_precision  val_macro_recall  test_oa  test_macro_f1  test_macro_precision  test_macro_recall
+                 tessera_dedup_roh  128 100.0     393              23 0.607036      0.242319             0.306908          0.230817 0.604263       0.262076              0.317056           0.251064
+tessera_dedup_zufaellig_projiziert  256  10.0     714              23 0.605383      0.242954             0.306081          0.232267 0.603975       0.263581              0.316180           0.253284
+tessera_dedup_trainiert_projiziert  256  10.0     398              23 0.616482      0.270287             0.331761          0.258997 0.618592       0.276328              0.328909           0.266472
+
+=== Zellebenen-Bootstrap (Test, 1000x) ===
+  Resamples mit >=1 fehlenden Testklasse(n): 163 von 1000 (max. 2 fehlend) - dort Macro ueber die vorhandenen Klassen
+  tessera_dedup_roh: Zell-Bootstrap 1000x fertig
+  tessera_dedup_zufaellig_projiziert: Zell-Bootstrap 1000x fertig
+  tessera_dedup_trainiert_projiziert: Zell-Bootstrap 1000x fertig
+                            config          metric     mean   ci_low  ci_high
+                 tessera_dedup_roh              oa 0.603568 0.580471 0.628667
+                 tessera_dedup_roh        macro_f1 0.260425 0.235718 0.290197
+                 tessera_dedup_roh macro_precision 0.311351 0.279184 0.346785
+                 tessera_dedup_roh    macro_recall 0.253962 0.232428 0.289505
+tessera_dedup_zufaellig_projiziert              oa 0.603249 0.579973 0.629228
+tessera_dedup_zufaellig_projiziert        macro_f1 0.261707 0.238663 0.288853
+tessera_dedup_zufaellig_projiziert macro_precision 0.311756 0.284000 0.345272
+tessera_dedup_zufaellig_projiziert    macro_recall 0.256353 0.235713 0.287345
+tessera_dedup_trainiert_projiziert              oa 0.617923 0.595475 0.642702
+tessera_dedup_trainiert_projiziert        macro_f1 0.274300 0.248805 0.304429
+tessera_dedup_trainiert_projiziert macro_precision 0.323414 0.293745 0.352155
+tessera_dedup_trainiert_projiziert    macro_recall 0.270330 0.247997 0.303436
+
+=== Gepaarte Differenz trainiert - roh ===
+     backbone          metric  mean_diff_trainiert_minus_roh  ci_low_95  ci_high_95  significant
+tessera_dedup              oa                       0.014355   0.011416    0.017156         True
+tessera_dedup        macro_f1                       0.013875   0.006172    0.020877         True
+tessera_dedup macro_precision                       0.012063  -0.009468    0.032725        False
+tessera_dedup    macro_recall                       0.016368   0.008176    0.031223         True

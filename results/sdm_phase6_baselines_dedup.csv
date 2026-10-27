@@ -1,8 +1,0 @@
-scenario,baseline,backbone,arm,test_loss_mean,test_loss_std
-"Hauptlauf (9cat/A/pure, dedupliziert)",mean,-,-,2.108872175216675,0.0
-"Hauptlauf (9cat/A/pure, dedupliziert)",random_embedding,ae,a,2.1138048648834227,0.0009642169292812815
-"Hauptlauf (9cat/A/pure, dedupliziert)",random_embedding,ae,b,2.1192211151123046,0.0020463193279157362
-"Hauptlauf (9cat/A/pure, dedupliziert)",random_embedding,ae,c,2.1192211151123046,0.0020463193279157362
-"Hauptlauf (9cat/A/pure, dedupliziert)",random_embedding,tessera,a,2.1155927181243896,0.001046177451455481
-"Hauptlauf (9cat/A/pure, dedupliziert)",random_embedding,tessera,b,2.118877077102661,0.0010160892811579571
-"Hauptlauf (9cat/A/pure, dedupliziert)",random_embedding,tessera,c,2.118877077102661,0.0010160892811579571

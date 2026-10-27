@@ -1,0 +1,64 @@
+\begin{table}[H]
+  \centering
+  \small
+  \caption{Land-use classification results on the test split (head inputs z-standardised with training statistics). All metrics $\times 10^{2}$; macro metrics over the fixed set of 23 test classes. Brackets: 95\,\% CI from a cell-level bootstrap (1000 resamples). $\Delta$F1: paired difference Trained $-$ Raw in macro-F1 (percentage points) with 95\,\% CI; * = CI excludes zero.}
+  \label{tab:luc_results}
+  \begin{tabular}{llccccc}
+    \toprule
+    Head & Arm & OA & Macro-F1 & Macro-P & Macro-R & $\Delta$F1 \\
+    \midrule
+    \multicolumn{7}{l}{\textbf{TESSERA}} \\
+    \midrule
+    LogReg (full) & Raw & 60.4 & 26.2 [23.6, 29.0] & 31.7 & 25.1 &  \\
+     & Random & 60.4 & 26.4 [23.9, 28.9] & 31.6 & 25.3 &  \\
+     & Trained & 61.9 & 27.6 [24.9, 30.4] & 32.9 & 26.6 & $+$1.4 [$+$0.6, $+$2.1]* \\
+    \addlinespace
+    LogReg (subsample) & Raw & 58.5 & 23.6 [21.6, 25.3] & 25.8 & 25.2 &  \\
+     & Random & 57.5 & 22.9 [20.9, 24.6] & 24.5 & 24.8 &  \\
+     & Trained & 59.9 & 25.3 [23.1, 27.2] & 27.0 & 27.0 & $+$1.7 [$+$1.1, $+$2.3]* \\
+    \addlinespace
+    CatBoost (full) & Raw & 60.9 & 26.1 [23.5, 29.0] & 35.0 & 24.4 &  \\
+     & Random & 59.6 & 23.6 [21.2, 25.6] & 29.5 & 22.2 &  \\
+     & Trained & 62.1 & 26.8 [24.3, 29.8] & 31.5 & 26.0 & $+$0.9 [$+$0.1, $+$2.1]* \\
+    \addlinespace
+    CatBoost (subsample) & Raw & 57.5 & 21.7 [19.4, 23.7] & 27.0 & 21.2 &  \\
+     & Random & 57.1 & 21.2 [19.2, 23.0] & 26.2 & 20.4 &  \\
+     & Trained & 59.9 & 25.0 [22.8, 27.2] & 28.3 & 25.9 & $+$3.4 [$+$2.7, $+$4.1]* \\
+    \addlinespace
+    MLP (full)$^\dagger$ & Raw & 63.2 & 29.6 [27.0, 33.0] & 35.7 & 28.4 &  \\
+     & Random & 62.6 & 28.8 [25.9, 31.7] & 35.2 & 27.6 &  \\
+     & Trained & 62.8 & 28.7 [26.1, 32.0] & 33.8 & 27.6 & $-$0.9 [$-$1.5, $-$0.1]* \\
+    \addlinespace
+    MLP (subsample) & Raw & 58.2 & 24.4 [22.5, 26.2] & 25.4 & 26.3 &  \\
+     & Random & 57.6 & 22.8 [20.8, 24.6] & 25.1 & 24.2 &  \\
+     & Trained & 59.7 & 25.4 [23.2, 27.4] & 26.5 & 27.3 & $+$1.0 [$+$0.4, $+$1.5]* \\
+    \midrule
+    \multicolumn{7}{l}{\textbf{AlphaEarth}} \\
+    \midrule
+    LogReg (full) & Raw & 63.5 & 29.3 [26.2, 32.8] & 35.7 & 27.8 &  \\
+     & Random & 64.6 & 30.0 [27.3, 32.9] & 35.8 & 28.6 &  \\
+     & Trained & 64.6 & 30.0 [27.1, 32.7] & 34.8 & 29.4 & $+$0.6 [$-$0.9, $+$1.7] \\
+    \addlinespace
+    LogReg (subsample) & Raw & 62.5 & 29.3 [26.3, 31.9] & 30.8 & 31.4 &  \\
+     & Random & 62.7 & 29.1 [26.4, 31.6] & 30.2 & 31.8 &  \\
+     & Trained & 62.3 & 28.7 [26.2, 30.8] & 28.8 & 32.8 & $-$0.5 [$-$1.5, $+$0.5] \\
+    \addlinespace
+    CatBoost (full) & Raw & 64.5 & 29.6 [26.7, 33.5] & 38.5 & 28.0 &  \\
+     & Random & 64.5 & 29.5 [26.3, 33.0] & 38.1 & 28.1 &  \\
+     & Trained & 65.5 & 31.4 [28.5, 35.3] & 42.8 & 29.6 & $+$1.8 [$+$1.0, $+$2.5]* \\
+    \addlinespace
+    CatBoost (subsample) & Raw & 61.9 & 27.8 [25.0, 30.5] & 31.2 & 28.1 &  \\
+     & Random & 62.0 & 26.9 [24.4, 29.0] & 30.8 & 27.3 &  \\
+     & Trained & 63.1 & 28.1 [25.5, 30.4] & 30.5 & 28.5 & $+$0.3 [$-$0.8, $+$1.3] \\
+    \addlinespace
+    MLP (full)$^\dagger$ & Raw & 66.0 & 32.2 [29.2, 35.9] & 37.8 & 30.7 &  \\
+     & Random & 66.1 & 31.7 [28.8, 35.0] & 37.7 & 30.2 &  \\
+     & Trained & 66.2 & 31.9 [29.1, 34.9] & 36.7 & 30.6 & $-$0.3 [$-$1.7, $+$0.9] \\
+    \addlinespace
+    MLP (subsample) & Raw & 62.9 & 29.4 [26.5, 31.8] & 30.6 & 31.2 &  \\
+     & Random & 62.6 & 29.3 [26.6, 31.4] & 29.8 & 31.8 &  \\
+     & Trained & 62.6 & 29.3 [26.6, 31.3] & 29.5 & 31.8 & $-$0.1 [$-$1.2, $+$0.9] \\
+    \bottomrule
+  \end{tabular}
+  \par\smallskip\footnotesize $^\dagger$ All MLP (full) runs reached the 30-epoch limit; convergence not guaranteed.
+\end{table}

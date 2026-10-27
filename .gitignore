@@ -1,25 +1,210 @@
+# ---------------------------------------------------------------------------
+# Umgebung / Caches
+# ---------------------------------------------------------------------------
 .venv/
 __pycache__/
 *.pyc
 .idea/
+.mcp.json
+catboost_info/
+*.cache
+
+# Große bzw. lizenzpflichtige Daten (OSM-abgeleitet = ODbL, nicht weiterverteilt;
+# siehe BA Abschnitt 8.1). Werden von der Pipeline lokal erzeugt.
 *.parquet
 *.tif
 *.tiff
 *.npy
+*.npz
 *.osm.pbf
-*.cache
 
+# ---------------------------------------------------------------------------
+# Daten: nur kleine, für die Reproduktion nötige London-Artefakte bleiben im Repo
+# ---------------------------------------------------------------------------
 data/*
+!data/aoi/
+data/aoi/*
+!data/aoi/london.gpkg
+!data/aoi/SOURCES.txt
 !data/raw/
 data/raw/*
 !data/raw/alphaearth/
 data/raw/alphaearth/*
-!data/raw/alphaearth/ae_index_*.gpkg
-!data/raw/alphaearth/needed_*.txt
-!data/raw/alphaearth/tiles_*.txt
-!data/aoi/
+!data/raw/alphaearth/ae_index_30N.gpkg
+!data/raw/alphaearth/ae_index_31N.gpkg
+!data/raw/alphaearth/tiles_30N.txt
+!data/raw/alphaearth/tiles_31N.txt
+!data/raw/alphaearth/needed_london.txt
 !data/splits/
-!data/processed/
-data/processed/*
-!data/processed/MANIFEST.md
-.mcp.json
+data/splits/splits_london_4key.csv
+
+# ---------------------------------------------------------------------------
+# Checkpoints / Configs: nur die beiden in der BA verwendeten Läufe
+# ---------------------------------------------------------------------------
+checkpoints/*
+!checkpoints/tessera_v1_dedup/
+!checkpoints/ae_v1_dedup/
+configs/*
+!configs/tessera_v1_dedup.yaml
+!configs/ae_v1_dedup.yaml
+
+# ---------------------------------------------------------------------------
+# Queries: nur die Text-Queries aus Tabelle 4.1
+# ---------------------------------------------------------------------------
+queries/*
+!queries/text_queries.md
+
+# ---------------------------------------------------------------------------
+# Ergebnisse: nur Dateien, aus denen Zahlen der BA stammen
+# ---------------------------------------------------------------------------
+results/*
+# Abschnitt 5.2 (Test-Recall@10) + TESSERA-Normalisierungsstatistik
+!results/retrieval_baselines_tessera_v1_dedup.csv
+!results/retrieval_baselines_ae_v1_dedup.csv
+!results/norm_stats_tessera_pixels_dedup.json
+# Tabelle 6.1 (Land-Use) + Mehrheitsklassen-Baseline (Abschnitt 4.1)
+!results/luc_std_table.tex
+!results/landuse_probe_prec_rec_*_dedup_ckpt_std.csv
+!results/landuse_probe_prec_rec_cell_bootstrap_*_dedup_ckpt_std.csv
+!results/landuse_probe_prec_rec_paired_diff_cell_*_dedup_ckpt_std.csv
+!results/landuse_probe_heads_results_*_dedup_std.csv
+!results/landuse_probe_heads_cell_bootstrap_*_dedup_std.csv
+!results/landuse_probe_heads_cell_bootstrap_*_dedup_std_random.csv
+!results/landuse_probe_heads_paired_diff_cell_*_dedup_std.csv
+!results/landuse_probe_majority_baseline_*_dedup_ckpt.csv
+# Tabelle 6.2 (SDM)
+!results/sdm_phase7_metrics_*_seedmean_std.csv
+!results/sdm_paired_bootstrap_*_seedmean_std_c_minus_a.csv
+!results/diag_backbone_paired_bootstrap_sdm_seedmean_std.csv
+
+# ---------------------------------------------------------------------------
+# Abbildungen: Abb. 6.1 (Karten) und Abb. 9.1 (Anhang, untrainierte Karten)
+# ---------------------------------------------------------------------------
+outputs/*
+!outputs/text_query/
+outputs/text_query/*
+!outputs/text_query/similarity_value_ranges.csv
+!outputs/text_query/similarity_value_ranges_untrained.csv
+!outputs/text_query/maps_untrained/
+!outputs/text_query/maps/
+outputs/text_query/maps/similarity_*_green_park.png
+outputs/text_query/maps/similarity_*_green_reserve.png
+outputs/text_query/maps/similarity_*_qual_learn.png
+
+# ---------------------------------------------------------------------------
+# Logs: nur Läufe, die BA-Ergebnisse erzeugt haben
+# ---------------------------------------------------------------------------
+logs/*
+# POI-Extraktion, Joins, Pixel-Aggregation, Text-Embeddings, Dedup (Kap. 3, 5.1)
+!logs/extract_pois_full_20260902_220640.log
+!logs/build_poi_text_20260903_140441.log
+!logs/ae_full_join_20260902_221437.log
+!logs/tessera_full_join_20260902_221511.log
+!logs/aggregate_pixel_pairs_20260903_141449.log
+!logs/pixel_text_embed_20260903_150709.log
+!logs/build_pairs_tessera_dedup_20260918_191544.log
+!logs/build_pixels_tessera_dedup_20260918_204017.log
+!logs/build_pairs_ae_dedup_20260921_123126.log
+!logs/build_pixels_ae_dedup_20260921_123243.log
+# Training (Kap. 5.2): LR-Kalibrierung, Masken-Vergleich (3.6.2), finale Läufe
+!logs/train_ae_lr1e4_5ep_20260901_120353.log
+!logs/train_ae_lr3e4_5ep_20260901_121130.log
+!logs/train_ae_lr1e3_5ep_20260901_121907.log
+!logs/train_tessera_lr1e4_5ep_20260901_154443.log
+!logs/train_tessera_lr3e4_5ep_20260901_155320.log
+!logs/train_tessera_lr1e3_5ep_20260901_160159.log
+!logs/train_ae_v1_20260901_112113.log
+!logs/train_ae_v1_nomask_20260901_113925.log
+!logs/train_tessera_v1_dedup_20260918_235448.log
+!logs/train_ae_v1_dedup_20260921_142353.log
+!logs/retrieval_baselines_tessera_v1_dedup_20260919_134250.log
+!logs/retrieval_baselines_ae_v1_dedup_20260921_172137.log
+# Land-Use (Kap. 4.2, Tabelle 6.1)
+!logs/build_landuse_pairs_tessera_dedup_step3task_20260918_203538.log
+!logs/build_landuse_pairs_ae_dedup_step1task_20260921_123808.log
+!logs/build_landuse_pixel_cells_ae_dedup_20260921_172134.log
+!logs/run_landuse_probe_tessera_v1dedup_20260919_153641.log
+!logs/run_landuse_probe_ae_v1dedup_20260921_172134.log
+!logs/run_landuse_majority_baseline_ae_v1dedup_20260921_193605.log
+!logs/landuse_probe_std_tessera_20261001_200637.log
+!logs/landuse_probe_std_ae_20261001_200637.log
+!logs/landuse_prec_rec_tessera_20261001_170045.log
+!logs/landuse_prec_rec_ae_20261001_170045.log
+!logs/landuse_probe_heads_std_tessera_20261002_032804.log
+!logs/landuse_probe_heads_std_ae_20261002_032804.log
+!logs/landuse_probe_heads_std_random_ci_tessera_20261002_135837.log
+!logs/landuse_probe_heads_std_random_ci_ae_20261002_135837.log
+# SDM (Kap. 4.3, Tabelle 6.2)
+!logs/sdm_build_projected_field_20260908_181416.log
+!logs/retile_sdm_projected_20260911_202731.log
+!logs/build_sdm_arm_c_tessera_v1dedup_20260919_140257.log
+!logs/build_sdm_arm_ab_tessera_dedupnorm_20260922_115242.log
+!logs/build_sdm_ae_v1dedup_20260921_172134.log
+!logs/build_sdm_phase7_metrics_seedmean_20260922_130212.log
+!logs/build_sdm_phase7_metrics_seedmean_std_20261001_200537.log
+# Text-Query-Karten (Kap. 4.3.1, Abb. 6.1 / 9.1)
+!logs/build_greencover_valid_20260923_112036.log
+!logs/encode_phase1_20260923_121507.log
+!logs/similarity_phase2_20260923_124912.log
+!logs/reference_phase3_20260923_125839.log
+!logs/maps_phase4_20260923_131812.log
+!logs/similarity_cbd_20260923_141208.log
+!logs/maps_cbd_20260923_141304.log
+!logs/similarity_newqueries_20260923_153125.log
+!logs/maps_newqueries_20260923_153611.log
+!logs/similarity_untrained_20260930_204627.log
+
+# ---------------------------------------------------------------------------
+# Nicht in der BA verwendet (bleibt lokal, nicht im Repo)
+# ---------------------------------------------------------------------------
+# Interne Arbeitsanweisungen / Protokolle
+/CLAUDE.md
+/INSTRUCTIONS_*.md
+/environment-notes.txt
+# Nicht berichtete Auswertungen (Recall@Top-k, Klassen-Retrieval, Ablationen, HILUCS)
+/eval/
+/scripts/
+/crosswalk/
+/run_class_retrieval.py
+/run_class_retrieval_*.py
+/check_class_retrieval_duplicates*.py
+/diag_class_retrieval_ae_control.py
+/build_class_intersection.py
+/build_ablation_sets.py
+/crosswalk_coverage.py
+/eval_retrieval.py
+/eval_socioeconomic.py
+# Überholte Varianten (vor Dedup / vor Standardisierung / Kontrollläufe)
+/build_landuse_pixel_cells.py
+/build_sdm_phase6_predict_dedup.py
+/build_sdm_phase6_predict_reversed.py
+/build_sdm_phase7_metrics_dedup.py
+/build_sdm_phase7_metrics_reversed.py
+/build_sdm_phase7_metrics_ae_v1dedup.py
+/build_sdm_phase7_metrics_tessera_v1dedup.py
+/build_sdm_phase7_metrics_tessera_dedupnorm.py
+/build_sdm_pooled_embeddings_reversed_dedup.py
+/train_tessera_v1_predup_control.py
+/train_ae_v1_predup_control.py
+/wikidata_extraction.py
+/splits.py
+# Nebendiagnosen und Prüfskripte
+/check_sdm_lsoa_geometry.py
+/check_sdm_reversed_cosine.py
+/check_splits_rebuild_dedup.py
+/check_splits_rebuild_dedup_ae.py
+/diag_ae_uniqueness_loss.py
+/diag_backbone_paired_bootstrap_landuse.py
+/diag_backbone_paired_bootstrap_sdm.py
+/diag_geo_alignment.py
+/diag_knn_info_loss.py
+/diag_norm_stats_consistency.py
+/diag_sdm_paired_bootstrap_arm_diff.py
+/src/verify_provenance.py
+# Nur für Niedersachsen verwendet
+/download_tessera_tiles.py
+/export_tessera_geotiffs.py
+# Platzhalter / Setup-Tests
+/main.py
+/test_setup.py
+/filter_geometries.py
